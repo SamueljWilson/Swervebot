@@ -76,7 +76,7 @@ public final class Constants {
   }
 
   public static final class ModuleConstants {
-    public static final double kMaxModuleAngularSpeedRadiansPerSecond = Math.PI * 1/4;
+    public static final double kMaxModuleAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
 
     public static final double kDriveEncoderCPR = 2048.0;
