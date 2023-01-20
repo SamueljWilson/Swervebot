@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ModuleConstants;
 import edu.wpi.first.math.MathUtil;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -98,9 +99,11 @@ public class SwerveModule {
 
     // Calculate the drive output from the drive PID controller.
     final double driveOutput =
-        m_drivePIDController.calculate(
+        MathUtil.clamp(m_drivePIDController.calculate(
           m_driveMotor.getSelectedSensorVelocity()*ModuleConstants.kDriveEncoderDistancePerPulse,
-          state.speedMetersPerSecond
+          state.speedMetersPerSecond),
+          -1,
+          1
         );
 
     // Calculate the turning motor output from the turning PID controller.
@@ -114,6 +117,7 @@ public class SwerveModule {
 
     // Calculate the turning motor output from the turning PID controller.
     m_driveMotor.set(ControlMode.PercentOutput, driveOutput);
+    SmartDashboard.putNumber(String.format("Swerve Turning ID %d", m_turningMotor.getDeviceID()), turnOutput);
     m_turningMotor.set(ControlMode.PercentOutput, turnOutput);
   }
 
