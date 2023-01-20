@@ -13,7 +13,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import frc.robot.Constants.DriveConstants;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -82,8 +81,6 @@ public class DriveSubsystem extends SubsystemBase {
         m_gyro.getRotation2d(),
         getPositions()
         );
-    
-    SmartDashboard.putNumber("gyro reading", m_odometry.getPoseMeters().getRotation().getDegrees());
   }
 
   /**
