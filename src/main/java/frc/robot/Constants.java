@@ -100,6 +100,8 @@ public final class Constants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
+    public static final double kMaxRadPerSec = Math.PI;
+    public static final double kMaxMetersPerSec = 1;
   }
 
   public static final class AutoConstants {
