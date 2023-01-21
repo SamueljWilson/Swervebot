@@ -122,6 +122,7 @@ public class SwerveModule {
   /** Zeroes all the SwerveModule encoders. */
   public void resetEncoders() {
     m_driveMotor.setSelectedSensorPosition(0, 0, 10);
+    m_turningMotor.setSelectedSensorPosition(0, 0, 10);
     m_turningEncoder.setPosition(0, 10);
   }
 
