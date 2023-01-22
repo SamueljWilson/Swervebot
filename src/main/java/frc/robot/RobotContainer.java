@@ -67,7 +67,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     m_chooser.setDefaultOption("Red Outer", new RedOuter(m_robotDrive));
-    m_chooser.addOption("Blue Outer", new BlueOuter(m_robotDrive));
+    m_chooser.addOption("Blue Outer", BlueOuter.autoBlueOuter(m_robotDrive));
   }
 
   /**
