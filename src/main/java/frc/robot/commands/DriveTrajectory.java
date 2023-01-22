@@ -55,28 +55,9 @@ public class DriveTrajectory extends SwerveControllerCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-        // Create config for trajectory
-
-    // An example trajectory to follow.  All units in meters.
-
+    super.initialize();
     // Reset odometry to the starting pose of the trajectory.
     m_drive.resetOdometry(m_trajectory.getInitialPose());
-
-    // Run path following command, then stop at the end.
-    m_finished = true;
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return m_finished;
-  }
 }
