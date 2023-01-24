@@ -52,21 +52,21 @@ public class Auto {
     Trajectory trajectory = outerTrajectory();
     Pose2d startingPose = trajectory.getInitialPose();
     Transform2d transform = redTransform();
-    return new Auto(drive, startingPose, command(drive, trajectory, transform));
+    return new Auto(drive, startingPose, trajectoryCommand(drive, trajectory, transform));
   }
 
   public static Auto redMiddleAuto(DriveSubsystem drive) {
     Trajectory trajectory = middleTrajectory();
     Pose2d startingPose = trajectory.getInitialPose();
     Transform2d transform = redTransform();
-    return new Auto(drive, startingPose, command(drive, trajectory, transform));
+    return new Auto(drive, startingPose, trajectoryCommand(drive, trajectory, transform));
   }
   
   public static Auto redInnerAuto(DriveSubsystem drive) {
     Trajectory trajectory = innerTrajectory();
     Pose2d startingPose = trajectory.getInitialPose();
     Transform2d transform = redTransform();
-    return new Auto(drive, startingPose, command(drive, trajectory, transform));
+    return new Auto(drive, startingPose, trajectoryCommand(drive, trajectory, transform));
   }
 
 
@@ -75,21 +75,21 @@ public class Auto {
     Trajectory trajectory = outerTrajectory();
     Pose2d startingPose = trajectory.getInitialPose();
     Transform2d transform = blueTransform();
-    return new Auto(drive, startingPose, command(drive, trajectory, transform));
+    return new Auto(drive, startingPose, trajectoryCommand(drive, trajectory, transform));
   }
 
   public static Auto blueMiddleAuto(DriveSubsystem drive) {
     Trajectory trajectory = middleTrajectory();
     Pose2d startingPose = trajectory.getInitialPose();
     Transform2d transform = blueTransform();
-    return new Auto(drive, startingPose, command(drive, trajectory, transform));
+    return new Auto(drive, startingPose, trajectoryCommand(drive, trajectory, transform));
   }
 
   public static Auto blueInnerAuto(DriveSubsystem drive) {
     Trajectory trajectory = innerTrajectory();
     Pose2d startingPose = trajectory.getInitialPose();
     Transform2d transform = blueTransform();
-    return new Auto(drive, startingPose, command(drive, trajectory, transform));
+    return new Auto(drive, startingPose, trajectoryCommand(drive, trajectory, transform));
   }
 
   private static Trajectory outerTrajectory() {
@@ -122,7 +122,7 @@ public class Auto {
     );
   }
 
-  public static Command command(DriveSubsystem drive, Trajectory trajectory, Transform2d transform) {
+  public static Command trajectoryCommand(DriveSubsystem drive, Trajectory trajectory, Transform2d transform) {
     return (
       new DriveTrajectory(
         trajectory.transformBy(transform),
