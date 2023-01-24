@@ -4,15 +4,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.Blue;
-import frc.robot.commands.Red;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.Auto;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -26,7 +26,7 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
+  private final SendableChooser<Auto> m_chooser = new SendableChooser<>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -43,7 +43,7 @@ public class RobotContainer {
                     m_driverController.getLeftY()*OIConstants.kMaxMetersPerSec,
                     m_driverController.getLeftX()*OIConstants.kMaxMetersPerSec,
                     m_driverController.getRightX()*OIConstants.kMaxRadPerSec,
-                    false),
+                    true),
                 m_robotDrive));
   }
 
@@ -54,13 +54,13 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_chooser.setDefaultOption("Red Outer", Red.RedOuter(m_robotDrive));
-    m_chooser.addOption("Red Inner", Red.RedInner(m_robotDrive));
-    m_chooser.addOption("Red Middle", Red.RedMiddle(m_robotDrive));
+    m_chooser.setDefaultOption("Red Outer", Auto.redOuterAuto(m_robotDrive));
+    m_chooser.addOption("Red Inner", Auto.redInnerAuto(m_robotDrive));
+    m_chooser.addOption("Red Middle", Auto.redMiddleAuto(m_robotDrive));
 
-    m_chooser.addOption("Blue Outer", Blue.BlueOuter(m_robotDrive));
-    m_chooser.addOption("Blue Inner", Blue.BlueInner(m_robotDrive));
-    m_chooser.addOption("Blue Middle", Blue.BlueInner(m_robotDrive));
+    m_chooser.addOption("Blue Outer", Auto.blueOuterAuto(m_robotDrive));
+    m_chooser.addOption("Blue Inner", Auto.blueInnerAuto(m_robotDrive));
+    m_chooser.addOption("Blue Middle", Auto.blueMiddleAuto(m_robotDrive));
   }
 
   /**
@@ -69,6 +69,10 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_chooser.getSelected();
+    return m_chooser.getSelected().getCommand();
+  }
+
+  public Pose2d getAutonomousStartingPose() {
+    return m_chooser.getSelected().getPose();
   }
 }

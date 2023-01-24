@@ -44,13 +44,4 @@ public class DriveTrajectory extends SwerveControllerCommand {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_drive);
   }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    super.initialize();
-    // Reset odometry to the starting pose of the trajectory.
-    m_drive.resetOdometry(m_trajectory.getInitialPose());
-  }
-
 }
