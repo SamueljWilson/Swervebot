@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,6 +33,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    configureAutoRoutines();
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -44,16 +46,10 @@ public class RobotContainer {
                     m_driverController.getLeftX()*OIConstants.kMaxMetersPerSec,
                     m_driverController.getRightX()*OIConstants.kMaxRadPerSec,
                     true),
-                m_robotDrive));
+                m_robotDrive).andThen(() -> SmartDashboard.putBoolean("B Button", m_driverController.getBButton())));
   }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling passing it to a
-   * {@link JoystickButton}.
-   */
-  private void configureButtonBindings() {
+  private void configureAutoRoutines() {
     m_chooser.setDefaultOption("Red Outer Cross", Auto.redOuterCross(m_robotDrive));
     m_chooser.addOption("Red Inner Cross", Auto.redInnerCross(m_robotDrive));
     m_chooser.addOption("Red Middle Cross", Auto.redMiddleCross(m_robotDrive));
@@ -70,6 +66,16 @@ public class RobotContainer {
     m_chooser.addOption("Blue Outer Place Cross", Auto.blueOuterPlaceCross(m_robotDrive));
     m_chooser.addOption("Blue Inner Place Cross", Auto.blueInnerPlaceCross(m_robotDrive));
     m_chooser.addOption("Blue Middle Place Cross", Auto.blueMiddlePlaceCross(m_robotDrive));
+  }
+
+  /**
+   * Use this method to define your button->command mappings. Buttons can be created by
+   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its subclasses ({@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling passing it to a
+   * {@link JoystickButton}.
+   */
+  private void configureButtonBindings() {
+    
   }
 
   /**
