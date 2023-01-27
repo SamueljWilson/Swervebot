@@ -54,13 +54,22 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_chooser.setDefaultOption("Red Outer", Auto.redOuterCross(m_robotDrive));
-    m_chooser.addOption("Red Inner", Auto.redInnerCross(m_robotDrive));
-    m_chooser.addOption("Red Middle", Auto.redMiddleCross(m_robotDrive));
+    m_chooser.setDefaultOption("Red Outer Cross", Auto.redOuterCross(m_robotDrive));
+    m_chooser.addOption("Red Inner Cross", Auto.redInnerCross(m_robotDrive));
+    m_chooser.addOption("Red Middle Cross", Auto.redMiddleCross(m_robotDrive));
 
-    m_chooser.addOption("Blue Outer", Auto.blueOuterCross(m_robotDrive));
-    m_chooser.addOption("Blue Inner", Auto.blueInnerCross(m_robotDrive));
-    m_chooser.addOption("Blue Middle", Auto.blueMiddleCross(m_robotDrive));
+    m_chooser.addOption("Blue Outer Cross", Auto.blueOuterCross(m_robotDrive));
+    m_chooser.addOption("Blue Inner Cross", Auto.blueInnerCross(m_robotDrive));
+    m_chooser.addOption("Blue Middle Cross", Auto.blueMiddleCross(m_robotDrive));
+
+
+    m_chooser.addOption("Red Outer Place Cross", Auto.redOuterPlaceCross(m_robotDrive));
+    m_chooser.addOption("Red Inner Place Cross", Auto.redInnerPlaceCross(m_robotDrive));
+    m_chooser.addOption("Red Middle Place Cross", Auto.redMiddleCross(m_robotDrive));
+
+    m_chooser.addOption("Blue Outer Place Cross", Auto.blueOuterPlaceCross(m_robotDrive));
+    m_chooser.addOption("Blue Inner Place Cross", Auto.blueInnerPlaceCross(m_robotDrive));
+    m_chooser.addOption("Blue Middle Place Cross", Auto.blueMiddlePlaceCross(m_robotDrive));
   }
 
   /**
