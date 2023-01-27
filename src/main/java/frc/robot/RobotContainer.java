@@ -54,13 +54,13 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_chooser.setDefaultOption("Red Outer", Auto.redOuterAuto(m_robotDrive));
-    m_chooser.addOption("Red Inner", Auto.redInnerAuto(m_robotDrive));
-    m_chooser.addOption("Red Middle", Auto.redMiddleAuto(m_robotDrive));
+    m_chooser.setDefaultOption("Red Outer", Auto.redOuterCross(m_robotDrive));
+    m_chooser.addOption("Red Inner", Auto.redInnerCross(m_robotDrive));
+    m_chooser.addOption("Red Middle", Auto.redMiddleCross(m_robotDrive));
 
-    m_chooser.addOption("Blue Outer", Auto.blueOuterAuto(m_robotDrive));
-    m_chooser.addOption("Blue Inner", Auto.blueInnerAuto(m_robotDrive));
-    m_chooser.addOption("Blue Middle", Auto.blueMiddleAuto(m_robotDrive));
+    m_chooser.addOption("Blue Outer", Auto.blueOuterCross(m_robotDrive));
+    m_chooser.addOption("Blue Inner", Auto.blueInnerCross(m_robotDrive));
+    m_chooser.addOption("Blue Middle", Auto.blueMiddleCross(m_robotDrive));
   }
 
   /**

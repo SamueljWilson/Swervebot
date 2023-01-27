@@ -12,6 +12,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 
@@ -48,76 +49,84 @@ public class Auto {
     return new Transform2d();
   }
 
-  public static Auto redOuterAuto(DriveSubsystem drive) {
-    Trajectory trajectory = outerTrajectory();
+  public static Auto redOuterCross(DriveSubsystem drive) {
+    Trajectory trajectory = outerTrajectoryCross();
     Pose2d startingPose = trajectory.getInitialPose();
     Transform2d transform = redTransform();
     return new Auto(drive, startingPose, trajectoryCommand(drive, trajectory, transform));
   }
 
-  public static Auto redMiddleAuto(DriveSubsystem drive) {
-    Trajectory trajectory = middleTrajectory();
+  public static Auto redMiddleCross(DriveSubsystem drive) {
+    Trajectory trajectory = middleTrajectoryCross();
     Pose2d startingPose = trajectory.getInitialPose();
     Transform2d transform = redTransform();
     return new Auto(drive, startingPose, trajectoryCommand(drive, trajectory, transform));
   }
   
-  public static Auto redInnerAuto(DriveSubsystem drive) {
-    Trajectory trajectory = innerTrajectory();
+  public static Auto redInnerCross(DriveSubsystem drive) {
+    Trajectory trajectory = innerTrajectoryCross();
     Pose2d startingPose = trajectory.getInitialPose();
     Transform2d transform = redTransform();
     return new Auto(drive, startingPose, trajectoryCommand(drive, trajectory, transform));
   }
-
-
   
-  public static Auto blueOuterAuto( DriveSubsystem drive) {
-    Trajectory trajectory = outerTrajectory();
+  public static Auto blueOuterCross( DriveSubsystem drive) {
+    Trajectory trajectory = outerTrajectoryCross();
     Pose2d startingPose = trajectory.getInitialPose();
     Transform2d transform = blueTransform();
     return new Auto(drive, startingPose, trajectoryCommand(drive, trajectory, transform));
   }
 
-  public static Auto blueMiddleAuto(DriveSubsystem drive) {
-    Trajectory trajectory = middleTrajectory();
+  public static Auto blueMiddleCross(DriveSubsystem drive) {
+    Trajectory trajectory = middleTrajectoryCross();
     Pose2d startingPose = trajectory.getInitialPose();
     Transform2d transform = blueTransform();
     return new Auto(drive, startingPose, trajectoryCommand(drive, trajectory, transform));
   }
 
-  public static Auto blueInnerAuto(DriveSubsystem drive) {
-    Trajectory trajectory = innerTrajectory();
+  public static Auto blueInnerCross(DriveSubsystem drive) {
+    Trajectory trajectory = innerTrajectoryCross();
     Pose2d startingPose = trajectory.getInitialPose();
     Transform2d transform = blueTransform();
     return new Auto(drive, startingPose, trajectoryCommand(drive, trajectory, transform));
   }
 
-  private static Trajectory outerTrajectory() {
+  private static Trajectory outerTrajectoryCross() {
     return (
     TrajectoryGenerator.generateTrajectory(
-          new Pose2d(1.91, 0.53, new Rotation2d(90)),
+          new Pose2d(1.908, 0.530, new Rotation2d(90)),
           List.of(),
-          new Pose2d(5.789, 0.53, new Rotation2d(270)),
+          new Pose2d(5.789, 0.530, new Rotation2d(270)),
           AutoConstants.kDriveTrajectoryConfig)
     );
   }
 
-  private static Trajectory middleTrajectory() {
+  private static Trajectory outerTrajectoryPlaceCross() {
+    return (
+      TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0, 0, new Rotation2d(90)),
+        List.of(),
+        new Pose2d(0, 0, new Rotation2d(270)),
+        AutoConstants.kDriveTrajectoryConfig)
+    );
+  }
+
+  private static Trajectory middleTrajectoryCross() {
     return (
     TrajectoryGenerator.generateTrajectory(
-          new Pose2d(0, 0, new Rotation2d(90)),
-          List.of(),
-          new Pose2d(0, 0, new Rotation2d(270)),
+          new Pose2d(1.908, 3.130, new Rotation2d(90)),
+          List.of(new Translation2d(5.939, 3.130)),
+          new Pose2d(4.375, 3.130, new Rotation2d(90)),
           AutoConstants.kDriveTrajectoryConfig)
     );
   }
 
-  private static Trajectory innerTrajectory() {
+  private static Trajectory innerTrajectoryCross() {
     return (
     TrajectoryGenerator.generateTrajectory(
-          new Pose2d(0, 0, new Rotation2d(90)),
+          new Pose2d(1.908, 4.969, new Rotation2d(90)),
           List.of(),
-          new Pose2d(0, 0, new Rotation2d(270)),
+          new Pose2d(4.243, 4.969, new Rotation2d(270)),
           AutoConstants.kDriveTrajectoryConfig)
     );
   }
