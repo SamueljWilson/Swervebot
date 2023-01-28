@@ -76,7 +76,7 @@ public final class Constants {
     public static int kFrontLeftTurningEncoderPorts;
   }
 
-  public static final class ModuleConstants {
+  public static final class SwerveModuleConstants {
     public static final double kMaxModuleAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
 

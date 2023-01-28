@@ -10,7 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.SwerveModuleConstants;
 import edu.wpi.first.math.MathUtil;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
@@ -24,20 +24,20 @@ public class SwerveModule {
 
   private final PIDController m_drivePIDController =
       new PIDController(
-        ModuleConstants.kPModuleDriveController,
-        ModuleConstants.kIModuleDriveController,
-        ModuleConstants.kDModuleDriveController
+        SwerveModuleConstants.kPModuleDriveController,
+        SwerveModuleConstants.kIModuleDriveController,
+        SwerveModuleConstants.kDModuleDriveController
       );
 
   // Using a TrapezoidProfile PIDController to allow for smooth turning
   private final ProfiledPIDController m_turningPIDController =
       new ProfiledPIDController(
-          ModuleConstants.kPModuleTurningController,
-          ModuleConstants.kIModuleTurningController,
-          ModuleConstants.kDModuleTurningController,
+          SwerveModuleConstants.kPModuleTurningController,
+          SwerveModuleConstants.kIModuleTurningController,
+          SwerveModuleConstants.kDModuleTurningController,
           new TrapezoidProfile.Constraints(
-              ModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond,
-              ModuleConstants.kMaxModuleAngularAccelerationRadiansPerSecondSquared));
+              SwerveModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond,
+              SwerveModuleConstants.kMaxModuleAngularAccelerationRadiansPerSecondSquared));
 
   private final double m_encoderOffset;
 
@@ -81,7 +81,7 @@ public class SwerveModule {
    */
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
-      m_driveMotor.getSelectedSensorVelocity()*ModuleConstants.kDriveEncoderDistancePerPulse,
+      m_driveMotor.getSelectedSensorVelocity()*SwerveModuleConstants.kDriveEncoderDistancePerPulse,
       getPosR2d()
     );
   }
@@ -99,7 +99,7 @@ public class SwerveModule {
     // Calculate the drive output from the drive PID controller.
     final double driveOutput =
         MathUtil.clamp(m_drivePIDController.calculate(
-          m_driveMotor.getSelectedSensorVelocity()*ModuleConstants.kDriveEncoderDistancePerPulse,
+          m_driveMotor.getSelectedSensorVelocity()*SwerveModuleConstants.kDriveEncoderDistancePerPulse,
           state.speedMetersPerSecond),
           -1,
           1
