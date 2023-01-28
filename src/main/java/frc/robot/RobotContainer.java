@@ -7,10 +7,12 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.GripperConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.GripperSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Auto;
@@ -24,6 +26,7 @@ import frc.robot.commands.Auto;
 public class RobotContainer {
   // The robot's subsystems
   public final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  public final GripperSubsystem m_gripper = new GripperSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -37,16 +40,34 @@ public class RobotContainer {
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
-        // The left stick controls translation of the robot.
-        // Turning is controlled by the X axis of the right stick.
+      // The left stick controls translation of the robot.
+      // Turning is controlled by the X axis of the right stick.
+      Commands.parallel(
         new RunCommand(
-            () ->
-                m_robotDrive.drive(
-                    m_driverController.getLeftY()*OIConstants.kMaxMetersPerSec,
-                    m_driverController.getLeftX()*OIConstants.kMaxMetersPerSec,
-                    m_driverController.getRightX()*OIConstants.kMaxRadPerSec,
-                    true),
-                m_robotDrive).andThen(() -> SmartDashboard.putBoolean("B Button", m_driverController.getBButton())));
+          () -> {
+            m_robotDrive.drive(
+              m_driverController.getLeftY()*OIConstants.kMaxMetersPerSec,
+              m_driverController.getLeftX()*OIConstants.kMaxMetersPerSec,
+              m_driverController.getRightX()*OIConstants.kMaxRadPerSec,
+              true);
+          }, m_robotDrive
+        ),
+        new RunCommand(
+          () -> {
+            if (m_driverController.getRawButton(GripperConstants.kOpenButtonPressed)) {
+              m_gripper.openGrippers();
+            }
+            // Checking the state so we cannot go from from closed to partially opened
+            else if (m_driverController.getRawButton(GripperConstants.kCubeButtonPressed)
+                     && m_gripper.getState() != GripperSubsystem.State.CLOSED_CONE) {
+              m_gripper.grabCube();
+            }
+            else if (m_driverController.getRawButton(GripperConstants.kConeButtonPressed)) {
+              m_gripper.grabCone();
+            }
+          }, m_gripper)
+        )
+    );
   }
 
   private void configureAutoRoutines() {

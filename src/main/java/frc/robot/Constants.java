@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.XboxController;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -74,6 +75,18 @@ public final class Constants {
 
     public static final double kMaxSpeedMetersPerSecond = 3;
     public static int kFrontLeftTurningEncoderPorts;
+  }
+
+  public static final class GripperConstants {
+    public static final int kLeftSolenoidForwardChannel = 1;
+    public static final int kLeftSolenoidBackwardChannel = 2;
+
+    public static final int kRightSolenoidForwardChannel = 3;
+    public static final int kRightSolenoidBackwardChannel = 4;
+
+    public static final int kCubeButtonPressed = XboxController.Button.kB.value;
+    public static final int kConeButtonPressed = XboxController.Button.kX.value;
+    public static final int kOpenButtonPressed = XboxController.Button.kA.value;
   }
 
   public static final class SwerveModuleConstants {
