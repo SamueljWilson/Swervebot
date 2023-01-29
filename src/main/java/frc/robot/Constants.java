@@ -89,6 +89,15 @@ public final class Constants {
     public static final int kOpenButtonPressed = XboxController.Button.kA.value;
   }
 
+  public static final class ArmConstants {
+    public static final int kArmMotorPort = 12;
+
+    public static final double kHomePosition = 0.0;
+    public static final double k1stRowPosition = 0.0;
+    public static final double k2ndRowPosition = 0.0;
+    public static final double k3rdRowPosition = 0.0;
+  }
+
   public static final class SwerveModuleConstants {
     public static final double kMaxModuleAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
