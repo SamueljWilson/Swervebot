@@ -7,8 +7,10 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.GripperConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,6 +29,7 @@ public class RobotContainer {
   // The robot's subsystems
   public final DriveSubsystem m_robotDrive = new DriveSubsystem();
   public final GripperSubsystem m_gripper = new GripperSubsystem();
+  public final ArmSubsystem m_arm = new ArmSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -54,18 +57,27 @@ public class RobotContainer {
         ),
         new RunCommand(
           () -> {
-            if (m_driverController.getRawButton(GripperConstants.kOpenButtonPressed)) {
+            if (m_driverController.getRawButton(OIConstants.kOpenButtonPressed)) {
               m_gripper.openGrippers();
             }
             // Checking the state so we cannot go from from closed to partially opened
-            else if (m_driverController.getRawButton(GripperConstants.kCubeButtonPressed)
+            else if (m_driverController.getRawButton(OIConstants.kCubeButtonPressed)
                      && m_gripper.getState() != GripperSubsystem.State.CLOSED_CONE) {
               m_gripper.grabCube();
             }
-            else if (m_driverController.getRawButton(GripperConstants.kConeButtonPressed)) {
+            else if (m_driverController.getRawButton(OIConstants.kConeButtonPressed)) {
               m_gripper.grabCone();
             }
-          }, m_gripper)
+          }, m_gripper),
+        new RunCommand(
+          () -> {
+            if (m_driverController.getRawButton(OIConstants.kArmDown)) {
+             m_arm.moveVHeight(-ArmConstants.kAdjustVelocity);
+            }
+            else if (m_driverController.getRawButton(OIConstants.kArmUp)) {
+              m_arm.moveVHeight(ArmConstants.kAdjustVelocity);
+             }
+          }, m_arm)
         )
     );
   }

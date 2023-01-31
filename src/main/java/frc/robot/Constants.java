@@ -83,10 +83,6 @@ public final class Constants {
 
     public static final int kRightSolenoidForwardChannel = 3;
     public static final int kRightSolenoidBackwardChannel = 4;
-
-    public static final int kCubeButtonPressed = XboxController.Button.kB.value;
-    public static final int kConeButtonPressed = XboxController.Button.kX.value;
-    public static final int kOpenButtonPressed = XboxController.Button.kA.value;
   }
 
   public static final class ArmConstants {
@@ -96,6 +92,8 @@ public final class Constants {
     public static final double k1stRowPosition = 0.0;
     public static final double k2ndRowPosition = 0.0;
     public static final double k3rdRowPosition = 0.0;
+
+    public static final double kAdjustVelocity = 0.8;
   }
 
   public static final class SwerveModuleConstants {
@@ -125,6 +123,18 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final double kMaxRadPerSec = Math.PI;
     public static final double kMaxMetersPerSec = 1;
+
+    public static final int kDpadUp = 12;
+    public static final int kDpadRight = 13;
+    public static final int kDpadDown = 14;
+    public static final int kDpadLeft = 15;
+    
+    public static final int kArmDown = kDpadDown;
+    public static final int kArmUp = kDpadUp;
+
+    public static final int kCubeButtonPressed = XboxController.Button.kB.value;
+    public static final int kConeButtonPressed = XboxController.Button.kX.value;
+    public static final int kOpenButtonPressed = XboxController.Button.kA.value;
   }
 
   public static final class AutoConstants {
