@@ -14,14 +14,17 @@ public class ArmInterp {
       new HtEntry(60, 10000)
   };
 
-  public static double heightToTicks(double height) {
+  public static int heightIndex(double height) {
     assert(height >= 0);
     int index = Arrays.binarySearch(htTable, new HtEntry(height, 0), (a,b) -> Double.compare(a.height, b.height));
+    assert(index < htTable.length);
+    return index;
+  }
+
+  public static double heightToTicks(double height) {
+    int index = heightIndex(height);
      if (index == 0) {
       return htTable[index].ticks;
-     }
-     else if (index == htTable.length) {
-      return htTable[index-1].ticks;
      }
      else if (htTable[index].height == height) {
        return htTable[index].ticks;
@@ -61,5 +64,23 @@ public class ArmInterp {
       double heightRange = h1 - h0;
       return h0 + scaler*heightRange;
      }
+  }
+
+  public static double getTicksPerMeter(double height) {
+    if (height == 0.0) {
+      return 0.0;
+    }
+    int indexGE = heightIndex(height);
+    assert(indexGE > 0);
+    int indexLT = indexGE - 1;
+    double deltaH = htTable[indexGE].height - htTable[indexLT].height;
+    double deltaT = htTable[indexGE].ticks - htTable[indexLT].ticks;
+    return deltaT / deltaH;
+  }
+
+  public static double vheightToTPM(double metersPerSecond, double height) {
+    double slope = getTicksPerMeter(height);
+    double secondsPerMinute = 60;
+    return slope * metersPerSecond * secondsPerMinute;
   }
 }
