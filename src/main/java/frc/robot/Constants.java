@@ -8,7 +8,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -93,7 +95,16 @@ public final class Constants {
     public static final double k2ndRowPosition = 0.0;
     public static final double k3rdRowPosition = 0.0;
 
+    public static final DoubleSolenoid.Value kWristExtended = Value.kForward;
+    public static final DoubleSolenoid.Value kWristRetracted = Value.kReverse;
+
+
     public static final double kAdjustVelocity = 0.8;
+
+    public static final int kWristSolenoidForwardChannel = 5;
+    public static final int kWristSolenoidBackwardChannel = 6;
+    public static final int kWristExtensionCycles = 2000;
+    public static final int kWristRetractionCycles = 1500;
   }
 
   public static final class SwerveModuleConstants {

@@ -8,7 +8,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.GripperConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -35,6 +34,10 @@ public class RobotContainer {
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final SendableChooser<Auto> m_chooser = new SendableChooser<>();
 
+  private Command wrapCommand(Command command) {
+    return m_arm.initComand().andThen(command);
+  }
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -45,7 +48,7 @@ public class RobotContainer {
     m_robotDrive.setDefaultCommand(
       // The left stick controls translation of the robot.
       // Turning is controlled by the X axis of the right stick.
-      Commands.parallel(
+      wrapCommand(Commands.parallel(
         new RunCommand(
           () -> {
             m_robotDrive.drive(
@@ -79,8 +82,10 @@ public class RobotContainer {
              }
           }, m_arm)
         )
+      )
     );
   }
+
 
   private void configureAutoRoutines() {
     m_chooser.setDefaultOption("Red Outer Cross", Auto.redOuterCross(m_robotDrive));
@@ -107,17 +112,14 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling passing it to a
    * {@link JoystickButton}.
    */
-  private void configureButtonBindings() {
-    
-  }
-
+  private void configureButtonBindings() {}
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_chooser.getSelected().getCommand();
+    return wrapCommand(m_chooser.getSelected().getCommand());
   }
 
   public Pose2d getAutonomousStartingPose() {
