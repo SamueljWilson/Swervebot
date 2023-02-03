@@ -20,7 +20,13 @@ public class ArmSubsystem extends SubsystemBase {
   SparkMaxLimitSwitch m_forwardLimitSwitch = m_armMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
   SparkMaxLimitSwitch m_reverseLimitSwitch = m_armMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
 
+  public enum InitState {
+    UNINITIALIZED,
+    INITIALIZED,
+  }
 
+  InitState m_initState = InitState.UNINITIALIZED;
+  
   DoubleSolenoid m_wristPiston = new DoubleSolenoid(
     PneumaticsModuleType.REVPH,
     ArmConstants.kWristSolenoidForwardChannel,
@@ -32,27 +38,52 @@ public class ArmSubsystem extends SubsystemBase {
     return m_wristPiston.get();
   }
 
-  public void moveHome() {
-    // Consider when calling moveHome to first move the wrist into the retracted position
-    m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.kHomePosition), ControlType.kPosition);
+  public Command moveHome() {
+    DoubleSolenoid.Value wristPosition = getWristPosition();
+    if (wristPosition == ArmConstants.kWristExtended) {
+      m_wristPiston.set(ArmConstants.kWristRetracted);
+    }
+    return new RunCommand(
+      () -> m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.kHomePosition),
+        ControlType.kPosition),
+      this);
   }
 
-  public void moveToBottom() {
-    m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.k1stRowPosition), ControlType.kPosition);
+  public Command moveToBottom() {
+    return new RunCommand(
+      () -> m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.k1stRowPosition),
+        ControlType.kPosition),
+      this);
   }
 
-  public void moveToMiddle() {
-    m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.k2ndRowPosition), ControlType.kPosition);
+  public Command moveToOffFloor() {
+    return new RunCommand(
+      () -> m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.kOffFloorPosition),
+        ControlType.kPosition),
+      this);
   }
 
-  public void moveToTop() {
-    m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.k3rdRowPosition), ControlType.kPosition);
+  public Command moveToMiddle() {
+    return new RunCommand(
+      () -> m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.k2ndRowPosition),
+        ControlType.kPosition),
+      this);
   }
 
-  public void moveVHeight(double metersPerSecond) {
-    double height = ArmInterp.cyclesToHeight(getCycles());
-    double velocity = ArmInterp.vheightToRPM(metersPerSecond, height);
-    m_armMotor.getPIDController().setReference(velocity, ControlType.kVelocity);
+  public Command moveToTop() {
+    return new RunCommand(
+      () -> m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.k3rdRowPosition),
+        ControlType.kPosition),
+      this);
+  }
+
+  public Command moveVHeight(double metersPerSecond) {
+    return new RunCommand(() -> {
+      double height = ArmInterp.cyclesToHeight(getCycles());
+      double velocity = ArmInterp.vheightToRPM(metersPerSecond, height);
+      m_armMotor.getPIDController().setReference(velocity, ControlType.kVelocity);
+    },
+    this);
   }
 
   public void setCycles(double cycles) {
@@ -63,14 +94,20 @@ public class ArmSubsystem extends SubsystemBase {
     return m_armMotor.getEncoder().getPosition();
   }
 
-  public Command initComand() {
-    return new RunCommand(() -> {m_armMotor.getPIDController().setReference(-0.5, ControlType.kCurrent);}, this)
-    .andThen(() -> {}, this).until(m_forwardLimitSwitch::isPressed)
-    .andThen(() -> {setCycles(0.0);}, this);
+  public Command initCommand() {
+    return new RunCommand(() -> {
+        m_armMotor.getPIDController().setReference(-0.5, ControlType.kCurrent);
+      }, this)
+      .andThen(() -> {}, this).until(m_forwardLimitSwitch::isPressed)
+      .andThen(() -> {
+        setCycles(0.0);
+        m_initState = InitState.INITIALIZED;
+      }, this);
   }
 
   @Override
   public void periodic() {
+    if (m_initState != m_initState.INITIALIZED) return;
     DoubleSolenoid.Value wristPosition = getWristPosition();
     double armPosition = getCycles();
     assert(ArmConstants.kWristRetractionCycles < ArmConstants.kWristExtensionCycles);
