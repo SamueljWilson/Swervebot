@@ -7,16 +7,14 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import frc.robot.Constants.ArmConstants;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.Auto;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.Auto;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -34,21 +32,17 @@ public class RobotContainer {
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final SendableChooser<Auto> m_chooser = new SendableChooser<>();
 
-  private Command wrapCommand(Command command) {
-    return m_arm.initComand().andThen(command);
-  }
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
     configureAutoRoutines();
+    m_arm.initCommand().schedule();
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
       // The left stick controls translation of the robot.
       // Turning is controlled by the X axis of the right stick.
-      wrapCommand(Commands.parallel(
         new RunCommand(
           () -> {
             m_robotDrive.drive(
@@ -57,33 +51,8 @@ public class RobotContainer {
               m_driverController.getRightX()*OIConstants.kMaxRadPerSec,
               true);
           }, m_robotDrive
-        ),
-        new RunCommand(
-          () -> {
-            if (m_driverController.getRawButton(OIConstants.kOpenButtonPressed)) {
-              m_gripper.openGrippers();
-            }
-            // Checking the state so we cannot go from from closed to partially opened
-            else if (m_driverController.getRawButton(OIConstants.kCubeButtonPressed)
-                     && m_gripper.getState() != GripperSubsystem.State.CLOSED_CONE) {
-              m_gripper.grabCube();
-            }
-            else if (m_driverController.getRawButton(OIConstants.kConeButtonPressed)) {
-              m_gripper.grabCone();
-            }
-          }, m_gripper),
-        new RunCommand(
-          () -> {
-            if (m_driverController.getRawButton(OIConstants.kArmDown)) {
-             m_arm.moveVHeight(-ArmConstants.kAdjustVelocity);
-            }
-            else if (m_driverController.getRawButton(OIConstants.kArmUp)) {
-              m_arm.moveVHeight(ArmConstants.kAdjustVelocity);
-             }
-          }, m_arm)
         )
-      )
-    );
+      );
   }
 
 
@@ -112,14 +81,41 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling passing it to a
    * {@link JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    // Creates the triggers for the cone and cube grab commands
+    new JoystickButton(m_driverController, OIConstants.kCubeButtonPressed)
+      .debounce(OIConstants.kDebounceSeconds)
+      .onTrue(m_gripper.grabCube());
+    new JoystickButton(m_driverController, OIConstants.kConeButtonPressed)
+      .debounce(OIConstants.kDebounceSeconds)
+      .onTrue(m_gripper.grabCone());
+    new JoystickButton(m_driverController, OIConstants.kOpenButtonPressed)
+      .debounce(OIConstants.kDebounceSeconds)
+      .onTrue(m_gripper.openGrippers());
+
+    new JoystickButton(m_driverController, OIConstants.kHomeButtonPressed)
+      .debounce(OIConstants.kDebounceSeconds)
+      .onTrue(m_arm.moveHome());
+    new JoystickButton(m_driverController, OIConstants.kPickOffFloorButtonPressed)
+      .debounce(OIConstants.kDebounceSeconds)
+      .onTrue(m_arm.moveToOffFloor());
+    new JoystickButton(m_driverController, OIConstants.k1stRowButtonPressed)
+      .debounce(OIConstants.kDebounceSeconds)
+      .onTrue(m_arm.moveToBottom());
+    new JoystickButton(m_driverController, OIConstants.k2ndRowButtonPressed)
+      .debounce(OIConstants.kDebounceSeconds)
+      .onTrue(m_arm.moveToMiddle());
+    new JoystickButton(m_driverController, OIConstants.k3rdRowButtonPressed)
+      .debounce(OIConstants.kDebounceSeconds)
+      .onTrue(m_arm.moveToTop());
+  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return wrapCommand(m_chooser.getSelected().getCommand());
+    return m_chooser.getSelected().getCommand();
   }
 
   public Pose2d getAutonomousStartingPose() {
