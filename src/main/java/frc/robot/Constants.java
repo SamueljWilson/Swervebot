@@ -92,6 +92,7 @@ public final class Constants {
 
     public static final double kHomePosition = 0.0;
     public static final double k1stRowPosition = 0.0;
+    public static final double kOffFloorPosition = 0.0;
     public static final double k2ndRowPosition = 0.0;
     public static final double k3rdRowPosition = 0.0;
 
@@ -139,13 +140,22 @@ public final class Constants {
     public static final int kDpadRight = 13;
     public static final int kDpadDown = 14;
     public static final int kDpadLeft = 15;
-    
+    public static final int kLeftTrigger = 4;
+    public static final int kRightTrigger = 5;
+
     public static final int kArmDown = kDpadDown;
     public static final int kArmUp = kDpadUp;
+    public static final int kCubeButtonPressed = kLeftTrigger;
+    public static final int kConeButtonPressed = kRightTrigger;
+    public static final int kOpenButtonPressed = XboxController.Button.kLeftBumper.value;
 
-    public static final int kCubeButtonPressed = XboxController.Button.kB.value;
-    public static final int kConeButtonPressed = XboxController.Button.kX.value;
-    public static final int kOpenButtonPressed = XboxController.Button.kA.value;
+    public static final int kHomeButtonPressed = XboxController.Button.kA.value;
+    public static final int k1stRowButtonPressed = XboxController.Button.kB.value;
+    public static final int kPickOffFloorButtonPressed = XboxController.Button.kY.value;
+    public static final int k2ndRowButtonPressed = XboxController.Button.kX.value;
+    public static final int k3rdRowButtonPressed = XboxController.Button.kRightBumper.value;
+
+    public static final double kDebounceSeconds = 0.01;
   }
 
   public static final class AutoConstants {
