@@ -107,7 +107,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (m_initState != m_initState.INITIALIZED) return;
+    if (m_initState != InitState.INITIALIZED) return;
     DoubleSolenoid.Value wristPosition = getWristPosition();
     double armPosition = getCycles();
     assert(ArmConstants.kWristRetractionCycles < ArmConstants.kWristExtensionCycles);
