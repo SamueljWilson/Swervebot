@@ -35,7 +35,7 @@ public final class Constants {
 
     public static final int kFrontLeftTurningEncoderPort = 9;
     public static final int kRearLeftTurningEncoderPorts = 10;
-    public static final int kRearRightTurningEncoderPorts = 11;
+    public static final int kRearRightTurningEncoderPorts = 11; 
     public static final int kFrontRightTurningEncoderPorts = 12;
 
 
@@ -49,14 +49,14 @@ public final class Constants {
     public static final boolean kFrontRightDriveReversed = false;
     public static final boolean kRearRightDriveReversed = false;
 
-    public static final double kFrontLeftEncoderOffset = 188.086;
-    public static final double kFrontRightEncoderOffset = 191.162 + 0;
-    public static final double kRearLeftEncoderOffset = 340.664;
-    public static final double kRearRightEncoderOffset = 275.098;
+    public static final double kFrontLeftEncoderOffset = 275.273;
+    public static final double kFrontRightEncoderOffset = 341.016;
+    public static final double kRearLeftEncoderOffset = 191.426;
+    public static final double kRearRightEncoderOffset = 189.404;
 
-    public static final double kTrackWidth = 0.564;
+    public static final double kTrackWidth = 0.431;
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = 0.546;
+    public static final double kWheelBase = 0.681;
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics =
         new SwerveDriveKinematics(
@@ -88,7 +88,7 @@ public final class Constants {
   }
 
   public static final class ArmConstants {
-    public static final int kArmMotorPort = 12;
+    public static final int kArmMotorPort = 13;
 
     public static final double kHomePosition = 0.0;
     public static final double k1stRowPosition = 0.0;
