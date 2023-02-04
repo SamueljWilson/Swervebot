@@ -11,7 +11,7 @@ public class ArmInterp {
   static class HtEntry{double cycles; double height; public HtEntry(double c, double h) {cycles = c; height = h;}}
   static final HtEntry[] htTable = {
       new HtEntry(0, 0),
-      new HtEntry(60, 10000)
+      new HtEntry(10000, 60)
   };
 
   public static int cycleIndex(double cycles) {

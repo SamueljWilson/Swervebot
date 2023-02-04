@@ -57,18 +57,25 @@ public class RobotContainer {
 
 
   private void configureAutoRoutines() {
-    m_chooser.setDefaultOption("Red Outer Cross", Auto.redOuterCross(m_robotDrive));
+    m_chooser.setDefaultOption("Red Outer Cross", Auto.redOuterPlaceCross(m_robotDrive, m_arm, m_gripper));
     m_chooser.addOption("Red Inner Cross", Auto.redInnerCross(m_robotDrive));
-    m_chooser.addOption("Red Middle Cross", Auto.redMiddleCross(m_robotDrive));
+
+    m_chooser.addOption("Red Outer Cross Charge", Auto.redOuterCrossCharge(m_robotDrive));
+    m_chooser.addOption("Red Inner Cross Charge", Auto.redInnerCrossCharge(m_robotDrive));
+    m_chooser.addOption("Red Middle Cross Charge", Auto.redMiddleCrossCharge(m_robotDrive));
+
+    m_chooser.addOption("Red Outer Place Cross", Auto.redOuterCross(m_robotDrive));
+    m_chooser.addOption("Red Inner Place Cross", Auto.redInnerPlaceCross(m_robotDrive));
+    m_chooser.addOption("Red Middle Place Cross", Auto.redMiddlePlaceCross(m_robotDrive));
+
+
 
     m_chooser.addOption("Blue Outer Cross", Auto.blueOuterCross(m_robotDrive));
     m_chooser.addOption("Blue Inner Cross", Auto.blueInnerCross(m_robotDrive));
-    m_chooser.addOption("Blue Middle Cross", Auto.blueMiddleCross(m_robotDrive));
 
-
-    m_chooser.addOption("Red Outer Place Cross", Auto.redOuterPlaceCross(m_robotDrive));
-    m_chooser.addOption("Red Inner Place Cross", Auto.redInnerPlaceCross(m_robotDrive));
-    m_chooser.addOption("Red Middle Place Cross", Auto.redMiddleCross(m_robotDrive));
+    m_chooser.addOption("Blue Inner Cross Charge", Auto.blueInnerCrossCharge(m_robotDrive));
+    m_chooser.addOption("Blue Middle Cross Charge", Auto.blueMiddleCrossCharge(m_robotDrive));
+    m_chooser.addOption("Blue Outer Cross Charge", Auto.blueOuterCrossCharge(m_robotDrive));
 
     m_chooser.addOption("Blue Outer Place Cross", Auto.blueOuterPlaceCross(m_robotDrive));
     m_chooser.addOption("Blue Inner Place Cross", Auto.blueInnerPlaceCross(m_robotDrive));
