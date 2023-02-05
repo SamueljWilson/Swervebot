@@ -50,7 +50,7 @@ public class Auto {
   }
     
   public static Auto redOuterCross(DriveSubsystem drive) {
-    Trajectory trajectory = outerTrajectoryPlaceCross();
+    Trajectory trajectory = outerTrajectoryCross();
     Pose2d startingPose = trajectory.getInitialPose();
     Transform2d transform = redTransform();
     return new Auto(drive, startingPose, trajectoryCommand(drive, trajectory, transform));
@@ -63,7 +63,7 @@ public class Auto {
   }
   
   public static Auto redOuterPlaceCross(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper) {
-    Trajectory trajectory = outerTrajectoryCross();
+    Trajectory trajectory = outerTrajectoryPlaceCross();
     Pose2d startingPose = trajectory.getInitialPose();
     Transform2d transform = redTransform();
     Command autoCommand = arm.moveToBottom()
