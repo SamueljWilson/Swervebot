@@ -34,7 +34,7 @@ public final class Constants {
 
     public static final int kFrontLeftTurningEncoderPort = 9;
     public static final int kRearLeftTurningEncoderPorts = 10;
-    public static final int kRearRightTurningEncoderPorts = 11; 
+    public static final int kRearRightTurningEncoderPorts = 11;
     public static final int kFrontRightTurningEncoderPorts = 12;
 
 
