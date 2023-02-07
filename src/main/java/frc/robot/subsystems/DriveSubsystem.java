@@ -24,7 +24,7 @@ public class DriveSubsystem extends SubsystemBase {
           DriveConstants.kFrontLeftTurningMotorPort,
           DriveConstants.kFrontLeftTurningEncoderPort,
           DriveConstants.kFrontLeftDriveReversed,
-          DriveConstants.kFrontLeftTurningEncoderReversed,
+          DriveConstants.kFrontLeftTurningMotorReversed,
           DriveConstants.kFrontLeftEncoderOffset);
 
   private final SwerveModule m_rearLeft =
@@ -33,7 +33,7 @@ public class DriveSubsystem extends SubsystemBase {
           DriveConstants.kRearLeftTurningMotorPort,
           DriveConstants.kRearLeftTurningEncoderPorts,
           DriveConstants.kRearLeftDriveReversed,
-          DriveConstants.kRearLeftTurningEncoderReversed,
+          DriveConstants.kRearLeftTurningMotorReversed,
           DriveConstants.kRearLeftEncoderOffset);
 
   private final SwerveModule m_frontRight =
@@ -42,7 +42,7 @@ public class DriveSubsystem extends SubsystemBase {
           DriveConstants.kFrontRightTurningMotorPort,
           DriveConstants.kFrontRightTurningEncoderPorts,
           DriveConstants.kFrontRightDriveReversed,
-          DriveConstants.kFrontRightTurningEncoderReversed,
+          DriveConstants.kFrontRightTurningMotorReversed,
           DriveConstants.kFrontRightEncoderOffset);
 
   private final SwerveModule m_rearRight =
@@ -51,7 +51,7 @@ public class DriveSubsystem extends SubsystemBase {
           DriveConstants.kRearRightTurningMotorPort,
           DriveConstants.kRearRightTurningEncoderPorts,
           DriveConstants.kRearRightDriveReversed,
-          DriveConstants.kRearRightTurningEncoderReversed,
+          DriveConstants.kRearRightTurningMotorReversed,
           DriveConstants.kRearRightEncoderOffset);
 
   // The gyro sensor uses NavX
@@ -123,6 +123,15 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
+    SmartDashboard.putNumber("Front Left Desired State", (swerveModuleStates[0].angle.getDegrees() + 360) % 360);
+    SmartDashboard.putNumber("Front Right Desired State", (swerveModuleStates[1].angle.getDegrees() + 360) % 360);
+    SmartDashboard.putNumber("Rear Left Desired State", (swerveModuleStates[2].angle.getDegrees() + 360) % 360);
+    SmartDashboard.putNumber("Rear Right Desired State", (swerveModuleStates[3].angle.getDegrees() + 360) % 360);
+
+    SmartDashboard.putNumber("Front Left Actual State", (m_frontLeft.getPosition().angle.getDegrees() + DriveConstants.kFrontLeftEncoderOffset) % 360);
+    SmartDashboard.putNumber("Front Right Actual State", (m_frontRight.getPosition().angle.getDegrees() + DriveConstants.kFrontRightEncoderOffset) % 360);
+    SmartDashboard.putNumber("Rear Left Actual State", (m_rearLeft.getPosition().angle.getDegrees() + DriveConstants.kRearLeftEncoderOffset) % 360);
+    SmartDashboard.putNumber("Rear Right Actual State", (m_rearRight.getPosition().angle.getDegrees() + DriveConstants.kRearRightEncoderOffset) % 360);
   }
 
   /**

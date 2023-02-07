@@ -56,7 +56,7 @@ public class SwerveModule {
       int turningMotorChannel,
       int turningEncoderChannel,
       boolean driveEncoderReversed,
-      boolean turningEncoderReversed,
+      boolean turningMotorReversed,
       double encoderOffset) {
     m_driveMotor = new WPI_TalonFX(driveMotorChannel);
     m_turningMotor = new WPI_TalonFX(turningMotorChannel);
@@ -66,7 +66,7 @@ public class SwerveModule {
     m_driveMotor.setInverted(driveEncoderReversed);
 
     // Set whether turning encoder should be reversed or not
-    m_turningMotor.setInverted(turningEncoderReversed);
+    m_turningMotor.setInverted(turningMotorReversed);
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
