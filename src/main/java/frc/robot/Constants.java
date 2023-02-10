@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -38,20 +40,30 @@ public final class Constants {
     public static final int kFrontRightTurningEncoderPorts = 12;
 
 
-    public static final boolean kFrontLeftTurningMotorReversed = true;
-    public static final boolean kRearLeftTurningMotorReversed = true;
-    public static final boolean kFrontRightTurningMotorReversed = true;
-    public static final boolean kRearRightTurningMotorReversed = true;
+    public static final boolean kFrontLeftTurningMotorReversed = false;
+    public static final boolean kRearLeftTurningMotorReversed = false;
+    public static final boolean kFrontRightTurningMotorReversed = false;
+    public static final boolean kRearRightTurningMotorReversed = false;
 
-    public static final boolean kFrontLeftDriveReversed = false;
-    public static final boolean kRearLeftDriveReversed = false;
-    public static final boolean kFrontRightDriveReversed = false;
-    public static final boolean kRearRightDriveReversed = false;
+    public static final boolean kFrontLeftDriveReversed = true;
+    public static final boolean kRearLeftDriveReversed = true;
+    public static final boolean kFrontRightDriveReversed = true;
+    public static final boolean kRearRightDriveReversed = true;
+
+    public static final boolean kFrontLeftEncoderReversed = true;
+    public static final boolean kRearLeftEncoderReversed = true;
+    public static final boolean kFrontRightEncoderReversed = true;
+    public static final boolean kRearRightEncoderReversed = true;
+
+
+
 
     public static final double kFrontLeftEncoderOffset = 275.273;
     public static final double kFrontRightEncoderOffset = 341.016;
     public static final double kRearLeftEncoderOffset = 191.426;
     public static final double kRearRightEncoderOffset = 189.404;
+
+    public static final SupplyCurrentLimitConfiguration kSupplyCurrentLimit = new SupplyCurrentLimitConfiguration(true, 30, 35, 0.5);
 
     public static final double kTrackWidth = 0.431;
     // Distance between centers of right and left wheels on robot
@@ -108,8 +120,8 @@ public final class Constants {
   }
 
   public static final class SwerveModuleConstants {
-    public static final double kMaxModuleAngularSpeedRadiansPerSecond = Math.PI;
-    public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
+    public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI;
+    public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 16 * Math.PI;
 
     public static final double kDriveEncoderCPR = 2048.0;
     public static final double kAbsoluteEncoderCPR = 4096.0;
@@ -121,19 +133,19 @@ public final class Constants {
         (kWheelDiameterMeters * Math.PI) / (double) kDriveEncoderCPR;
 
 
-    public static final double kPModuleTurningController = 0.5;
-    public static final double kIModuleTurningController = 0.01;
-    public static final double kDModuleTurningController = 0.02;
+    public static final double kPModuleTurningController = 0.25;
+    public static final double kIModuleTurningController = 0.0;
+    public static final double kDModuleTurningController = 0.0;
 
-    public static final double kPModuleDriveController = 0.5;
-    public static final double kIModuleDriveController = 0.001;
-    public static final double kDModuleDriveController = 0.008;
+    public static final double kPModuleDriveController = 0.25;
+    public static final double kIModuleDriveController = 0.0;
+    public static final double kDModuleDriveController = 0.0;
   }
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
-    public static final double kMaxRadPerSec = Math.PI;
-    public static final double kMaxMetersPerSec = 3;
+    public static final double kMaxRadPerSec = SwerveModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond;
+    public static final double kMaxMetersPerSec = DriveConstants.kMaxSpeedMetersPerSecond;
 
     public static final int kDpadUp = 12;
     public static final int kDpadRight = 13;

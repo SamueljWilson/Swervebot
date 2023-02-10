@@ -11,11 +11,14 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
 import edu.wpi.first.math.MathUtil;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 
 public class SwerveModule {
   private final WPI_TalonFX m_driveMotor;
@@ -58,6 +61,7 @@ public class SwerveModule {
       int turningEncoderChannel,
       boolean driveEncoderReversed,
       boolean turningMotorReversed,
+      boolean turningEncoderReversed,
       double encoderOffset) {
     m_driveMotor = new WPI_TalonFX(driveMotorChannel);
     m_turningMotor = new WPI_TalonFX(turningMotorChannel);
@@ -68,6 +72,10 @@ public class SwerveModule {
 
     // Set whether turning encoder should be reversed or not
     m_turningMotor.setInverted(turningMotorReversed);
+    m_turningEncoder.configSensorDirection(turningEncoderReversed, 10);
+
+    m_driveMotor.configSupplyCurrentLimit(DriveConstants.kSupplyCurrentLimit);
+    m_turningMotor.configSupplyCurrentLimit(DriveConstants.kSupplyCurrentLimit);
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
