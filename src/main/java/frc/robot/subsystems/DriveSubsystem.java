@@ -25,6 +25,7 @@ public class DriveSubsystem extends SubsystemBase {
           DriveConstants.kFrontLeftTurningEncoderPort,
           DriveConstants.kFrontLeftDriveReversed,
           DriveConstants.kFrontLeftTurningMotorReversed,
+          DriveConstants.kFrontLeftEncoderReversed,
           DriveConstants.kFrontLeftEncoderOffset);
 
   private final SwerveModule m_rearLeft =
@@ -34,6 +35,7 @@ public class DriveSubsystem extends SubsystemBase {
           DriveConstants.kRearLeftTurningEncoderPorts,
           DriveConstants.kRearLeftDriveReversed,
           DriveConstants.kRearLeftTurningMotorReversed,
+          DriveConstants.kRearLeftEncoderReversed,
           DriveConstants.kRearLeftEncoderOffset);
 
   private final SwerveModule m_frontRight =
@@ -43,6 +45,7 @@ public class DriveSubsystem extends SubsystemBase {
           DriveConstants.kFrontRightTurningEncoderPorts,
           DriveConstants.kFrontRightDriveReversed,
           DriveConstants.kFrontRightTurningMotorReversed,
+          DriveConstants.kFrontRightEncoderReversed,
           DriveConstants.kFrontRightEncoderOffset);
 
   private final SwerveModule m_rearRight =
@@ -52,6 +55,7 @@ public class DriveSubsystem extends SubsystemBase {
           DriveConstants.kRearRightTurningEncoderPorts,
           DriveConstants.kRearRightDriveReversed,
           DriveConstants.kRearRightTurningMotorReversed,
+          DriveConstants.kRearRightEncoderReversed,
           DriveConstants.kRearRightEncoderOffset);
 
   // The gyro sensor uses NavX
@@ -127,11 +131,14 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Front Right Desired State", (swerveModuleStates[1].angle.getDegrees() + 360) % 360);
     SmartDashboard.putNumber("Rear Left Desired State", (swerveModuleStates[2].angle.getDegrees() + 360) % 360);
     SmartDashboard.putNumber("Rear Right Desired State", (swerveModuleStates[3].angle.getDegrees() + 360) % 360);
+    dashboardPublish();
+  }
 
-    SmartDashboard.putNumber("Front Left Actual State", (m_frontLeft.getPosition().angle.getDegrees() + DriveConstants.kFrontLeftEncoderOffset) % 360);
-    SmartDashboard.putNumber("Front Right Actual State", (m_frontRight.getPosition().angle.getDegrees() + DriveConstants.kFrontRightEncoderOffset) % 360);
-    SmartDashboard.putNumber("Rear Left Actual State", (m_rearLeft.getPosition().angle.getDegrees() + DriveConstants.kRearLeftEncoderOffset) % 360);
-    SmartDashboard.putNumber("Rear Right Actual State", (m_rearRight.getPosition().angle.getDegrees() + DriveConstants.kRearRightEncoderOffset) % 360);
+  public void dashboardPublish() {
+    SmartDashboard.putNumber("Front Left Actual State", m_frontLeft.getPosition().angle.getDegrees());
+    SmartDashboard.putNumber("Front Right Actual State", m_frontRight.getPosition().angle.getDegrees());
+    SmartDashboard.putNumber("Rear Left Actual State", m_rearLeft.getPosition().angle.getDegrees());
+    SmartDashboard.putNumber("Rear Right Actual State", m_rearRight.getPosition().angle.getDegrees());
   }
 
   /**
@@ -151,8 +158,8 @@ public class DriveSubsystem extends SubsystemBase {
   /** Resets the drive encoders to currently read a position of 0. */
   public void resetEncoders() {
     m_frontLeft.resetEncoders();
-    m_rearLeft.resetEncoders();
     m_frontRight.resetEncoders();
+    m_rearLeft.resetEncoders();
     m_rearRight.resetEncoders();
   }
 
