@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.SPI;
 
 public class DriveSubsystem extends SubsystemBase {
   // Robot swerve modules
-  private final SwerveModule m_frontLeft =
+  private final SwerveModule m_frontLeft = //Q1
       new SwerveModule(
           DriveConstants.kFrontLeftDriveMotorPort,
           DriveConstants.kFrontLeftTurningMotorPort,
@@ -28,7 +28,7 @@ public class DriveSubsystem extends SubsystemBase {
           DriveConstants.kFrontLeftEncoderReversed,
           DriveConstants.kFrontLeftEncoderOffset);
 
-  private final SwerveModule m_rearLeft =
+  private final SwerveModule m_rearLeft = //Q2
       new SwerveModule(
           DriveConstants.kRearLeftDriveMotorPort,
           DriveConstants.kRearLeftTurningMotorPort,
@@ -38,17 +38,7 @@ public class DriveSubsystem extends SubsystemBase {
           DriveConstants.kRearLeftEncoderReversed,
           DriveConstants.kRearLeftEncoderOffset);
 
-  private final SwerveModule m_frontRight =
-      new SwerveModule(
-          DriveConstants.kFrontRightDriveMotorPort,
-          DriveConstants.kFrontRightTurningMotorPort,
-          DriveConstants.kFrontRightTurningEncoderPorts,
-          DriveConstants.kFrontRightDriveReversed,
-          DriveConstants.kFrontRightTurningMotorReversed,
-          DriveConstants.kFrontRightEncoderReversed,
-          DriveConstants.kFrontRightEncoderOffset);
-
-  private final SwerveModule m_rearRight =
+  private final SwerveModule m_rearRight = //Q3
       new SwerveModule(
           DriveConstants.kRearRightDriveMotorPort,
           DriveConstants.kRearRightTurningMotorPort,
@@ -58,15 +48,24 @@ public class DriveSubsystem extends SubsystemBase {
           DriveConstants.kRearRightEncoderReversed,
           DriveConstants.kRearRightEncoderOffset);
 
+private final SwerveModule m_frontRight = //Q4
+      new SwerveModule(
+          DriveConstants.kFrontRightDriveMotorPort,
+          DriveConstants.kFrontRightTurningMotorPort,
+          DriveConstants.kFrontRightTurningEncoderPorts,
+          DriveConstants.kFrontRightDriveReversed,
+          DriveConstants.kFrontRightTurningMotorReversed,
+          DriveConstants.kFrontRightEncoderReversed,
+          DriveConstants.kFrontRightEncoderOffset);
   // The gyro sensor uses NavX
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
   private SwerveModulePosition[] getPositions() {
     SwerveModulePosition[] positions = {
-      m_frontLeft.getPosition(),
-      m_frontRight.getPosition(),
-      m_rearLeft.getPosition(),
-      m_rearRight.getPosition()
+      m_frontLeft.getPosition(), //Q1
+      m_rearLeft.getPosition(), //Q2
+      m_rearRight.getPosition(), //Q3
+      m_frontRight.getPosition() //Q4
     };
     return positions;
   }
@@ -110,7 +109,7 @@ public class DriveSubsystem extends SubsystemBase {
    * Method to drive the robot using joystick info.
    *
    * @param xSpeed Speed of the robot in the x direction (forward).
-   * @param ySpeed Speed of the robot in the y direction (sideways).
+   * @param ySpeed Speed of the robot in the y direction (right).
    * @param rot Angular rate of the robot.
    * @param fieldRelative Whether the provided x and y speeds are relative to the field.
    */
@@ -123,22 +122,22 @@ public class DriveSubsystem extends SubsystemBase {
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
-    m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    m_frontRight.setDesiredState(swerveModuleStates[1]);
-    m_rearLeft.setDesiredState(swerveModuleStates[2]);
-    m_rearRight.setDesiredState(swerveModuleStates[3]);
-    SmartDashboard.putNumber("Front Left Desired State", (swerveModuleStates[0].angle.getDegrees() + 360) % 360);
-    SmartDashboard.putNumber("Front Right Desired State", (swerveModuleStates[1].angle.getDegrees() + 360) % 360);
-    SmartDashboard.putNumber("Rear Left Desired State", (swerveModuleStates[2].angle.getDegrees() + 360) % 360);
-    SmartDashboard.putNumber("Rear Right Desired State", (swerveModuleStates[3].angle.getDegrees() + 360) % 360);
+    m_frontLeft.setDesiredState(swerveModuleStates[0]); //Q1
+    m_rearLeft.setDesiredState(swerveModuleStates[1]); //Q2
+    m_rearRight.setDesiredState(swerveModuleStates[2]); //Q3
+    m_frontRight.setDesiredState(swerveModuleStates[3]); //Q4
+    SmartDashboard.putNumber("Front Left Desired State", (swerveModuleStates[0].angle.getDegrees() + 360) % 360); //Q1
+    SmartDashboard.putNumber("Rear Left Desired State", (swerveModuleStates[1].angle.getDegrees() + 360) % 360); //Q2
+    SmartDashboard.putNumber("Rear Right Desired State", (swerveModuleStates[2].angle.getDegrees() + 360) % 360); //Q3
+    SmartDashboard.putNumber("Front Right Desired State", (swerveModuleStates[3].angle.getDegrees() + 360) % 360); //Q4
     dashboardPublish();
   }
 
   public void dashboardPublish() {
-    SmartDashboard.putNumber("Front Left Actual State", m_frontLeft.getPosition().angle.getDegrees());
-    SmartDashboard.putNumber("Front Right Actual State", m_frontRight.getPosition().angle.getDegrees());
-    SmartDashboard.putNumber("Rear Left Actual State", m_rearLeft.getPosition().angle.getDegrees());
-    SmartDashboard.putNumber("Rear Right Actual State", m_rearRight.getPosition().angle.getDegrees());
+    SmartDashboard.putNumber("Front Left Actual State", m_frontLeft.getPosition().angle.getDegrees()); //Q1
+    SmartDashboard.putNumber("Rear Left Actual State", m_rearLeft.getPosition().angle.getDegrees()); //Q2
+    SmartDashboard.putNumber("Rear Right Actual State", m_rearRight.getPosition().angle.getDegrees()); //Q3
+    SmartDashboard.putNumber("Front Right Actual State", m_frontRight.getPosition().angle.getDegrees()); //Q4
   }
 
   /**
@@ -149,18 +148,18 @@ public class DriveSubsystem extends SubsystemBase {
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
         desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
-    m_frontLeft.setDesiredState(desiredStates[0]);
-    m_frontRight.setDesiredState(desiredStates[1]);
-    m_rearLeft.setDesiredState(desiredStates[2]);
-    m_rearRight.setDesiredState(desiredStates[3]);
+    m_frontLeft.setDesiredState(desiredStates[0]); //Q1
+    m_rearLeft.setDesiredState(desiredStates[1]); //Q2
+    m_rearRight.setDesiredState(desiredStates[2]); //Q3
+    m_frontRight.setDesiredState(desiredStates[3]); //Q4
   }
 
   /** Resets the drive encoders to currently read a position of 0. */
   public void resetEncoders() {
-    m_frontLeft.resetEncoders();
-    m_frontRight.resetEncoders();
-    m_rearLeft.resetEncoders();
-    m_rearRight.resetEncoders();
+    m_frontLeft.resetEncoders(); //Q1
+    m_rearLeft.resetEncoders(); //Q2
+    m_rearRight.resetEncoders(); //Q3
+    m_frontRight.resetEncoders(); //Q4
   }
 
   /** Zeroes the heading of the robot. */

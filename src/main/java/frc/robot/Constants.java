@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -24,44 +25,40 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
  */
 public final class Constants {
   public static final class DriveConstants {
-    public static final int kFrontLeftDriveMotorPort = 1;
-    public static final int kRearLeftDriveMotorPort = 2;
-    public static final int kRearRightDriveMotorPort = 3;
-    public static final int kFrontRightDriveMotorPort = 4;
+    public static final int kFrontLeftDriveMotorPort = 1; //Q1
+    public static final int kRearLeftDriveMotorPort = 2; //Q2
+    public static final int kRearRightDriveMotorPort = 3; //Q3
+    public static final int kFrontRightDriveMotorPort = 4; //Q4
 
-    public static final int kFrontLeftTurningMotorPort = 5;
-    public static final int kRearLeftTurningMotorPort = 6;
-    public static final int kRearRightTurningMotorPort = 7;
-    public static final int kFrontRightTurningMotorPort = 8;
+    public static final int kFrontLeftTurningMotorPort = 5; //Q1
+    public static final int kRearLeftTurningMotorPort = 6; //Q2
+    public static final int kRearRightTurningMotorPort = 7; //Q3
+    public static final int kFrontRightTurningMotorPort = 8; //Q4
 
-    public static final int kFrontLeftTurningEncoderPort = 9;
-    public static final int kRearLeftTurningEncoderPorts = 10;
-    public static final int kRearRightTurningEncoderPorts = 11;
-    public static final int kFrontRightTurningEncoderPorts = 12;
+    public static final int kFrontLeftTurningEncoderPort = 9; //Q1
+    public static final int kRearLeftTurningEncoderPorts = 10; //Q2
+    public static final int kRearRightTurningEncoderPorts = 11; //Q3
+    public static final int kFrontRightTurningEncoderPorts = 12; //Q4
 
+    public static final boolean kFrontLeftTurningMotorReversed = true; //Q1
+    public static final boolean kRearLeftTurningMotorReversed = true; //Q2
+    public static final boolean kRearRightTurningMotorReversed = true; //Q3
+    public static final boolean kFrontRightTurningMotorReversed = true; //Q4
 
-    public static final boolean kFrontLeftTurningMotorReversed = false;
-    public static final boolean kRearLeftTurningMotorReversed = false;
-    public static final boolean kFrontRightTurningMotorReversed = false;
-    public static final boolean kRearRightTurningMotorReversed = false;
+    public static final boolean kFrontLeftDriveReversed = true; //Q1
+    public static final boolean kRearLeftDriveReversed = true; //Q2
+    public static final boolean kRearRightDriveReversed = true; //Q3
+    public static final boolean kFrontRightDriveReversed = true; //Q4
 
-    public static final boolean kFrontLeftDriveReversed = true;
-    public static final boolean kRearLeftDriveReversed = true;
-    public static final boolean kFrontRightDriveReversed = true;
-    public static final boolean kRearRightDriveReversed = true;
+    public static final boolean kFrontLeftEncoderReversed = false; //Q1
+    public static final boolean kRearLeftEncoderReversed = false; //Q2
+    public static final boolean kRearRightEncoderReversed = false; //Q3
+    public static final boolean kFrontRightEncoderReversed = false; //Q4
 
-    public static final boolean kFrontLeftEncoderReversed = true;
-    public static final boolean kRearLeftEncoderReversed = true;
-    public static final boolean kFrontRightEncoderReversed = true;
-    public static final boolean kRearRightEncoderReversed = true;
-
-
-
-
-    public static final double kFrontLeftEncoderOffset = 275.273;
-    public static final double kFrontRightEncoderOffset = 341.016;
-    public static final double kRearLeftEncoderOffset = 191.426;
-    public static final double kRearRightEncoderOffset = 189.404;
+    public static final Rotation2d kFrontLeftEncoderOffset = new Rotation2d(Math.toRadians(360 - 264.814)); //Q1
+    public static final Rotation2d kRearLeftEncoderOffset = new Rotation2d(Math.toRadians(360 - 348.574)); //Q2
+    public static final Rotation2d kRearRightEncoderOffset = new Rotation2d(Math.toRadians(360 - 350.859)); //Q3
+    public static final Rotation2d kFrontRightEncoderOffset = new Rotation2d(Math.toRadians(360 - 199.775)); //Q4
 
     public static final SupplyCurrentLimitConfiguration kSupplyCurrentLimit = new SupplyCurrentLimitConfiguration(true, 30, 35, 0.5);
 
@@ -70,11 +67,11 @@ public final class Constants {
     public static final double kWheelBase = 0.681;
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics =
-        new SwerveDriveKinematics(
-            new Translation2d(-kTrackWidth / 2, kWheelBase / 2),
-            new Translation2d(kTrackWidth / 2, kWheelBase / 2),
-            new Translation2d(-kTrackWidth / 2, -kWheelBase / 2),
-            new Translation2d(kTrackWidth / 2, -kWheelBase / 2));
+      new SwerveDriveKinematics(
+        new Translation2d(kWheelBase / 2, kTrackWidth / 2), //Q1
+        new Translation2d(-kWheelBase / 2, kTrackWidth / 2), //Q2
+        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), //Q3
+        new Translation2d(kWheelBase / 2, -kTrackWidth / 2)); //Q4
 
     public static final boolean kGyroReversed = false;
 

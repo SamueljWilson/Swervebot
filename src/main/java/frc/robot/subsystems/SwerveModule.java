@@ -4,6 +4,12 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
+import com.ctre.phoenix.sensors.WPI_CANCoder;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,12 +19,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
-import edu.wpi.first.math.MathUtil;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.sensors.WPI_CANCoder;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 
 public class SwerveModule {
   private final WPI_TalonFX m_driveMotor;
@@ -43,7 +43,7 @@ public class SwerveModule {
               SwerveModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond,
               SwerveModuleConstants.kMaxModuleAngularAccelerationRadiansPerSecondSquared));
 
-  private final double m_encoderOffset;
+  private final Rotation2d m_encoderOffset;
 
   /**
    * Constructs a SwerveModule.
@@ -62,7 +62,7 @@ public class SwerveModule {
       boolean driveEncoderReversed,
       boolean turningMotorReversed,
       boolean turningEncoderReversed,
-      double encoderOffset) {
+      Rotation2d encoderOffset) {
     m_driveMotor = new WPI_TalonFX(driveMotorChannel);
     m_turningMotor = new WPI_TalonFX(turningMotorChannel);
     m_turningEncoder = new WPI_CANCoder(turningEncoderChannel);
@@ -73,6 +73,7 @@ public class SwerveModule {
     // Set whether turning encoder should be reversed or not
     m_turningMotor.setInverted(turningMotorReversed);
     m_turningEncoder.configSensorDirection(turningEncoderReversed, 10);
+    m_turningEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
 
     m_driveMotor.configSupplyCurrentLimit(DriveConstants.kSupplyCurrentLimit);
     m_turningMotor.configSupplyCurrentLimit(DriveConstants.kSupplyCurrentLimit);
@@ -140,6 +141,7 @@ public class SwerveModule {
   }
 
   private Rotation2d getPosR2d() {
-  return Rotation2d.fromDegrees(m_turningEncoder.getAbsolutePosition() - m_encoderOffset);
+    Rotation2d encoderRotation = new Rotation2d(Math.toRadians(m_turningEncoder.getAbsolutePosition()));
+    return encoderRotation.minus(m_encoderOffset);
   }
 }
