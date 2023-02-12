@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -72,17 +73,20 @@ private final SwerveModule m_frontRight = //Q4
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry =
-      new SwerveDriveOdometry(DriveConstants.kDriveKinematics, m_gyro.getRotation2d(), getPositions());
+      new SwerveDriveOdometry(DriveConstants.kDriveKinematics, getRotation2d(), getPositions());
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() {}
+  public DriveSubsystem() {
+    m_gyro.enableBoardlevelYawReset(true);
+    while (m_gyro.isCalibrating()) {}
+    zeroHeading();
+  }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Gyro position", getHeading());
     // Update the odometry in the periodic block
     m_odometry.update(
-        m_gyro.getRotation2d(),
+        getRotation2d(),
         getPositions()
         );
   }
@@ -102,7 +106,7 @@ private final SwerveModule m_frontRight = //Q4
    * @param pose The pose to which to set the odometry.
    */
   public void resetOdometry(Pose2d pose) {
-    m_odometry.resetPosition(m_gyro.getRotation2d(), getPositions(), pose);
+    m_odometry.resetPosition(getRotation2d(), getPositions(), pose);
   }
 
   /**
@@ -118,7 +122,7 @@ private final SwerveModule m_frontRight = //Q4
     var swerveModuleStates =
         DriveConstants.kDriveKinematics.toSwerveModuleStates(
             fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -167,29 +171,7 @@ private final SwerveModule m_frontRight = //Q4
     m_gyro.reset();
   }
 
-  /**
-   * Sets the heading for the robot
-   * @param heading
-   */
-  public void setHeading(double heading) {
-    m_gyro.setAngleAdjustment(heading);
-  }
-
-  /**
-   * Returns the heading of the robot.
-   *
-   * @return the robot's heading in degrees, from -180 to 180
-   */
-  public double getHeading() {
-    return m_gyro.getRotation2d().getDegrees();
-  }
-
-  /**
-   * Returns the turn rate of the robot.
-   *
-   * @return The turn rate of the robot, in degrees per second
-   */
-  public double getTurnRate() {
-    return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  public Rotation2d getRotation2d() {
+    return new Rotation2d(Math.toRadians(-m_gyro.getYaw()));
   }
 }
