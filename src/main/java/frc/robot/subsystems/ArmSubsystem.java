@@ -31,6 +31,7 @@ public class ArmSubsystem extends SubsystemBase {
     PneumaticsModuleType.REVPH,
     ArmConstants.kWristSolenoidForwardChannel,
     ArmConstants.kWristSolenoidBackwardChannel);
+    
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {}
 
@@ -39,51 +40,62 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public Command moveHome() {
-    DoubleSolenoid.Value wristPosition = getWristPosition();
-    if (wristPosition == ArmConstants.kWristExtended) {
-      m_wristPiston.set(ArmConstants.kWristRetracted);
-    }
     return new RunCommand(
-      () -> m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.kHomePosition),
-        ControlType.kPosition),
-      this);
+      () -> {
+        DoubleSolenoid.Value wristPosition = getWristPosition();
+        if (wristPosition == ArmConstants.kWristExtended) {
+          m_wristPiston.set(ArmConstants.kWristRetracted);
+        }
+        m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.kHomePosition),
+        ControlType.kPosition);
+      }
+    );
   }
 
   public Command moveToBottom() {
     return new RunCommand(
-      () -> m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.k1stRowPosition),
-        ControlType.kPosition),
-      this);
+      () -> {
+        m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.k1stRowPosition),
+        ControlType.kPosition);
+      }
+    );
   }
 
   public Command moveToOffFloor() {
     return new RunCommand(
-      () -> m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.kOffFloorPosition),
-        ControlType.kPosition),
-      this);
+      () -> {
+        m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.kOffFloorPosition),
+        ControlType.kPosition);
+      }
+    );
   }
 
   public Command moveToMiddle() {
     return new RunCommand(
-      () -> m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.k2ndRowPosition),
-        ControlType.kPosition),
-      this);
+      () -> {
+        m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.k2ndRowPosition),
+        ControlType.kPosition);
+      }
+    );
   }
 
   public Command moveToTop() {
-    return new RunCommand(
-      () -> m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.k3rdRowPosition),
-        ControlType.kPosition),
-      this);
+    return runOnce(
+      () -> {
+        m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.k3rdRowPosition),
+        ControlType.kPosition);
+      }
+    );
   }
 
   public Command moveVHeight(double metersPerSecond) {
-    return new RunCommand(() -> {
-      double height = ArmInterp.cyclesToHeight(getCycles());
-      double velocity = ArmInterp.vheightToRPM(metersPerSecond, height);
-      m_armMotor.getPIDController().setReference(velocity, ControlType.kVelocity);
-    },
-    this);
+    return runOnce(
+      () -> {
+        double height = ArmInterp.cyclesToHeight(getCycles());
+        double velocity = ArmInterp.vheightToRPM(metersPerSecond, height);
+        m_armMotor.getPIDController().setReference(velocity, ControlType.kVelocity);
+      }
+    );
   }
 
   public void setCycles(double cycles) {

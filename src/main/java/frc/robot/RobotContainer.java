@@ -55,7 +55,6 @@ public class RobotContainer {
       );
   }
 
-
   private void configureAutoRoutines() {
     // m_chooser.setDefaultOption("Red Outer Cross", Auto.redOuterPlaceCross(m_robotDrive, m_arm, m_gripper));
     // m_chooser.addOption("Red Inner Cross", Auto.redInnerCross(m_robotDrive));
