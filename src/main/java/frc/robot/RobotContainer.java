@@ -70,7 +70,7 @@ public class RobotContainer {
 
 
 
-    // m_chooser.addOption("Blue Outer Cross", Auto.blueOuterCross(m_robotDrive));
+    m_chooser.setDefaultOption("Blue Outer Cross", Auto.blueOuterCross(m_robotDrive));
     // m_chooser.addOption("Blue Inner Cross", Auto.blueInnerCross(m_robotDrive));
 
     // m_chooser.addOption("Blue Inner Cross Charge", Auto.blueInnerCrossCharge(m_robotDrive));
