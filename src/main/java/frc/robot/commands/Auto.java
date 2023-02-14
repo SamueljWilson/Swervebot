@@ -83,6 +83,13 @@ public class Auto {
     Transform2d transform = redTransform();
     return new Auto(drive, startingPose, trajectoryCommand(drive, trajectory, transform));
   }
+
+  public static Auto redMiddlePlaceCrossCharge(DriveSubsystem drive) {
+    Trajectory trajectory = middleTrajectoryPlaceCrossCharge();
+    Pose2d startingPose = trajectory.getInitialPose();
+    Transform2d transform = redTransform();
+    return new Auto(drive, startingPose, trajectoryCommand(drive, trajectory, transform));
+  }
   
   public static Auto redInnerCross(DriveSubsystem drive) {
     Trajectory trajectory = innerTrajectoryCross();
@@ -135,6 +142,13 @@ public class Auto {
   
   public static Auto blueMiddlePlaceCross(DriveSubsystem drive) {
     Trajectory trajectory = middleTrajectoryPlaceCross();
+    Pose2d startingPose = trajectory.getInitialPose();
+    Transform2d transform = blueTransform();
+    return new Auto(drive, startingPose, trajectoryCommand(drive, trajectory, transform));
+  }
+
+  public static Auto blueMiddlePlaceCrossCharge(DriveSubsystem drive) {
+    Trajectory trajectory = middleTrajectoryPlaceCrossCharge();
     Pose2d startingPose = trajectory.getInitialPose();
     Transform2d transform = blueTransform();
     return new Auto(drive, startingPose, trajectoryCommand(drive, trajectory, transform));
@@ -193,6 +207,16 @@ public class Auto {
   }
 
   private static Trajectory middleTrajectoryPlaceCross() {
+    return (
+      TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0, 0, new Rotation2d(Math.PI)),
+        List.of(), // Not implemented
+        new Pose2d(0, 0, new Rotation2d(0)),
+        AutoConstants.kDriveTrajectoryConfig)
+    );
+  }
+
+  private static Trajectory middleTrajectoryPlaceCrossCharge() {
     return (
       TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(Math.PI)),

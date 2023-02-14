@@ -68,6 +68,7 @@ public class RobotContainer {
     // m_chooser.addOption("Red Inner Place Cross", Auto.redInnerPlaceCross(m_robotDrive));
     // m_chooser.addOption("Red Middle Place Cross", Auto.redMiddlePlaceCross(m_robotDrive));
 
+    // m_chooser.addOption("Red Middle Place Cross Charge", Auto.redMiddlePlaceCrossCharge(m_robotDrive));
 
 
     m_chooser.setDefaultOption("Blue Outer Cross", Auto.blueOuterCross(m_robotDrive));
@@ -80,6 +81,8 @@ public class RobotContainer {
     // m_chooser.addOption("Blue Outer Place Cross", Auto.blueOuterPlaceCross(m_robotDrive));
     // m_chooser.addOption("Blue Inner Place Cross", Auto.blueInnerPlaceCross(m_robotDrive));
     // m_chooser.addOption("Blue Middle Place Cross", Auto.blueMiddlePlaceCross(m_robotDrive));
+
+    // m_chooser.addOption("Blue Middle Place Cross Charge", Auto.blueMiddlePlaceCrossCharge(m_robotDrive));
   }
 
   /**
