@@ -78,7 +78,8 @@ private final SwerveModule m_frontRight = //Q4
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     m_gyro.enableBoardlevelYawReset(true);
-    while (m_gyro.isCalibrating()) {}
+    // We have to wait for the gyro to callibrate before we can reset the gyro
+    while (m_gyro.isCalibrating()) {Thread.yield();}
     zeroHeading();
   }
 
