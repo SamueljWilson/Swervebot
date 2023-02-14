@@ -130,7 +130,6 @@ public class SwerveModule {
 
     SmartDashboard.putNumber(String.format("Drive Motor %d", m_driveMotor.getDeviceID()), driveOutput);
     SmartDashboard.putNumber(String.format("Steering Motor %d", m_turningMotor.getDeviceID()), turnOutput);
-
   }
 
   /** Zeroes all the SwerveModule encoders. */
