@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.GripperConstants;
 
@@ -18,6 +17,7 @@ public class GripperSubsystem extends SubsystemBase {
     CLOSED_CUBE,
     CLOSED_CONE
   }
+
   State m_state = State.OPEN;
   DoubleSolenoid m_leftSolenoid = new DoubleSolenoid(
     PneumaticsModuleType.REVPH,
@@ -37,33 +37,39 @@ public class GripperSubsystem extends SubsystemBase {
   }
 
   public Command openGrippers() {
-    return new RunCommand(() -> {
-      if (m_state != State.OPEN) {
-        m_state = State.OPEN;
-        m_leftSolenoid.set(Value.kForward);
-        m_rightSolenoid.set(Value.kForward);
+    return runOnce(
+      () -> {
+        if (m_state != State.OPEN) {
+          m_state = State.OPEN;
+          m_leftSolenoid.set(Value.kForward);
+          m_rightSolenoid.set(Value.kForward);
+        }
       }
-    }, this);
+    );
   }
 
   public Command grabCone() {
-    return new RunCommand(() -> {
-      if (m_state != State.CLOSED_CONE) {
-        m_state = State.CLOSED_CONE;
-        m_leftSolenoid.set(Value.kReverse);
-        m_rightSolenoid.set(Value.kReverse);
+    return runOnce(
+      () -> {
+        if (m_state != State.CLOSED_CONE) {
+          m_state = State.CLOSED_CONE;
+          m_leftSolenoid.set(Value.kReverse);
+          m_rightSolenoid.set(Value.kReverse);
+        }
       }
-    }, this);
+    );
   }
 
   public Command grabCube() {
-    return new RunCommand(() -> {
-      if (m_state != State.CLOSED_CUBE) {
-        m_state = State.CLOSED_CUBE;
-        m_leftSolenoid.set(Value.kForward);
-        m_rightSolenoid.set(Value.kReverse);
+    return runOnce(
+      () -> {
+        if (m_state != State.CLOSED_CUBE) {
+          m_state = State.CLOSED_CUBE;
+          m_leftSolenoid.set(Value.kForward);
+          m_rightSolenoid.set(Value.kReverse);
+        }
       }
-    }, this); 
+    ); 
   }
 
   public State getState() {
