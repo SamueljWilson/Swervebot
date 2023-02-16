@@ -11,7 +11,6 @@ import com.revrobotics.SparkMaxLimitSwitch;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 
@@ -40,7 +39,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public Command moveHome() {
-    return new RunCommand(
+    return runOnce(
       () -> {
         DoubleSolenoid.Value wristPosition = getWristPosition();
         if (wristPosition == ArmConstants.kWristExtended) {
@@ -53,7 +52,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public Command moveToBottom() {
-    return new RunCommand(
+    return runOnce(
       () -> {
         m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.k1stRowPosition),
         ControlType.kPosition);
@@ -62,7 +61,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public Command moveToOffFloor() {
-    return new RunCommand(
+    return runOnce(
       () -> {
         m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.kOffFloorPosition),
         ControlType.kPosition);
@@ -71,7 +70,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public Command moveToMiddle() {
-    return new RunCommand(
+    return runOnce(
       () -> {
         m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.k2ndRowPosition),
         ControlType.kPosition);
@@ -107,14 +106,19 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public Command initCommand() {
-    return new RunCommand(() -> {
-        m_armMotor.getPIDController().setReference(-0.5, ControlType.kCurrent);
-      }, this)
+    return 
+      runOnce(
+        () -> {
+          m_armMotor.getPIDController().setReference(-0.5, ControlType.kCurrent);
+        }
+      )
       .andThen(() -> {}, this).until(m_forwardLimitSwitch::isPressed)
-      .andThen(() -> {
-        setCycles(0.0);
-        m_initState = InitState.INITIALIZED;
-      }, this);
+      .andThen(
+        () -> {
+          setCycles(0.0);
+          m_initState = InitState.INITIALIZED;
+        }
+      );
   }
 
   @Override
