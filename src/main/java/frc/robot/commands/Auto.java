@@ -14,7 +14,9 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.GripperSubsystem;
 
 public class Auto {
 /** Creates a new Auto. */
@@ -126,11 +128,15 @@ public class Auto {
     return new Auto(drive, startingPose, trajectoryCommand(drive, trajectory, transform));
   }
   
-  public static Auto blueOuterPlaceCross(DriveSubsystem drive) {
+  public static Auto blueOuterPlaceCross(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper) {
     Trajectory trajectory = outerTrajectoryPlaceCross();
     Pose2d startingPose = trajectory.getInitialPose();
     Transform2d transform = blueTransform();
-    return new Auto(drive, startingPose, trajectoryCommand(drive, trajectory, transform));
+    Command command =
+      arm.moveToTop()
+      .andThen(gripper.openGrippers())
+      .andThen(trajectoryCommand(drive, trajectory, transform));
+    return new Auto(drive, startingPose, command);
   }
 
   public static Auto blueMiddleCrossCharge(DriveSubsystem drive) {
@@ -198,9 +204,9 @@ public class Auto {
   private static Trajectory outerTrajectoryPlaceCross() {
     return (
       TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0, 0, new Rotation2d(Math.PI)),
-        List.of(),
-        new Pose2d(0, 0, new Rotation2d(0)),
+        new Pose2d(2.094, 0.413, new Rotation2d(Math.PI)),
+        List.of(), //TODO: LIST OF MIDDLE TRAJECTORIES
+        new Pose2d(5.924, 0, new Rotation2d(0)), //TODO: FAKE VALUES FOR TESTING CHANGE LATER
         AutoConstants.kDriveTrajectoryConfig)
     );
   }
