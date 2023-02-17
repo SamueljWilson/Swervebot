@@ -178,9 +178,9 @@ public class Auto {
   private static Trajectory outerTrajectoryCross() {
     return (
     TrajectoryGenerator.generateTrajectory(
-          new Pose2d(1.908, 0.530, new Rotation2d(0)),
+          new Pose2d(2.094, 0.530, new Rotation2d(0)),
           List.of(),
-          new Pose2d(5.789, 0.530, new Rotation2d(0)),
+          new Pose2d(5.924, 0.530, new Rotation2d(0)),
           AutoConstants.kDriveTrajectoryConfig)
     );
   }
@@ -188,9 +188,9 @@ public class Auto {
   private static Trajectory outerTrajectoryCrossCharge() {
     return (
       TrajectoryGenerator.generateTrajectory(
-        new Pose2d(1.908, 0.530, new Rotation2d(0)),
-        List.of(new Translation2d(5.789, 0.530), new Translation2d(5.789, 3.130)),
-        new Pose2d(4.375, 3.130, new Rotation2d(0)),
+        new Pose2d(2.094, 0.530, new Rotation2d(0)),
+        List.of(new Translation2d(5.924, 0.530), new Translation2d(5.924, 3.130)),
+        new Pose2d(4.510, 3.130, new Rotation2d(0)),
         AutoConstants.kDriveTrajectoryConfig)
     );
   }
@@ -238,9 +238,9 @@ public class Auto {
   private static Trajectory middleTrajectoryCrossCharge() {
     return (
       TrajectoryGenerator.generateTrajectory(
-        new Pose2d(1.908, 3.130, new Rotation2d(0)),
+        new Pose2d(2.094, 3.130, new Rotation2d(0)),
         List.of(new Translation2d(5.939, 3.130)),
-        new Pose2d(4.375, 3.130, new Rotation2d(0)),
+        new Pose2d(4.510, 3.130, new Rotation2d(0)),
         AutoConstants.kDriveTrajectoryConfig)
     );
   }
@@ -248,9 +248,9 @@ public class Auto {
   private static Trajectory innerTrajectoryCrossCharge() {
     return (
       TrajectoryGenerator.generateTrajectory(
-        new Pose2d(1.908, 4.969, new Rotation2d(0)),
-        List.of(new Translation2d(5.789, 4.969), new Translation2d(5.789, 3.130)),
-        new Pose2d(4.375, 3.130, new Rotation2d(0)),
+        new Pose2d(2.094, 4.969, new Rotation2d(0)),
+        List.of(new Translation2d(5.924, 4.969), new Translation2d(5.924, 3.130)),
+        new Pose2d(4.510, 3.130, new Rotation2d(0)),
         AutoConstants.kDriveTrajectoryConfig)
     );
   }
@@ -258,9 +258,9 @@ public class Auto {
   private static Trajectory innerTrajectoryCross() {
     return (
       TrajectoryGenerator.generateTrajectory(
-        new Pose2d(1.908, 4.969, new Rotation2d(0)),
+        new Pose2d(2.094, 4.969, new Rotation2d(0)),
         List.of(),
-        new Pose2d(4.243, 4.969, new Rotation2d(0)),
+        new Pose2d(4.378, 4.969, new Rotation2d(0)),
         AutoConstants.kDriveTrajectoryConfig)
     );
   }
