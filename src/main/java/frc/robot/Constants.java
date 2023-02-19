@@ -98,11 +98,11 @@ public final class Constants {
   public static final class ArmConstants {
     public static final int kArmMotorPort = 13;
 
-    public static final double kHomePosition = 0.0;
-    public static final double k1stRowPosition = 0.0;
-    public static final double kOffFloorPosition = 0.0;
-    public static final double k2ndRowPosition = 0.0;
-    public static final double k3rdRowPosition = 0.0;
+    public static final double kHomeHeight = 0.0; //TODO: FIND REAL HEIGHT VALUES
+    public static final double k1stRowHeight = 0.0; //TODO: FIND REAL HEIGHT VALUES
+    public static final double kOffFloorHeight = 0.0; //TODO: FIND REAL HEIGHT VALUES
+    public static final double k2ndRowHeight = 0.0; //TODO: FIND REAL HEIGHT VALUES
+    public static final double k3rdRowHeight = 0.0; //TODO: FIND REAL HEIGHT VALUES
 
     public static final DoubleSolenoid.Value kWristExtended = Value.kForward;
     public static final DoubleSolenoid.Value kWristRetracted = Value.kReverse;
@@ -144,12 +144,12 @@ public final class Constants {
     public static final double kMaxRadPerSec = SwerveModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond;
     public static final double kMaxMetersPerSec = DriveConstants.kMaxSpeedMetersPerSecond;
 
-    public static final int kDpadUp = 12;
-    public static final int kDpadRight = 13;
-    public static final int kDpadDown = 14;
-    public static final int kDpadLeft = 15;
-    public static final int kLeftTrigger = 4;
-    public static final int kRightTrigger = 5;
+    public static final int kDpadUp = 12; //TODO: FIND OUT THE REAL VALUES OF THIS TRIGGERS
+    public static final int kDpadRight = 13; //TODO: FIND OUT THE REAL VALUES OF THIS TRIGGERS
+    public static final int kDpadDown = 14; //TODO: FIND OUT THE REAL VALUES OF THIS TRIGGERS
+    public static final int kDpadLeft = 15; //TODO: FIND OUT THE REAL VALUES OF THIS TRIGGERS
+    public static final int kLeftTrigger = 4; //TODO: FIND OUT THE REAL VALUES OF THIS TRIGGERS
+    public static final int kRightTrigger = 5; //TODO: FIND OUT THE REAL VALUES OF THIS TRIGGERS
 
     public static final int kArmDown = kDpadDown;
     public static final int kArmUp = kDpadUp;

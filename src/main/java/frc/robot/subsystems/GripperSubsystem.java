@@ -18,7 +18,7 @@ public class GripperSubsystem extends SubsystemBase {
     CLOSED_CONE
   }
 
-  State m_state = State.OPEN;
+  State m_state = State.CLOSED_CUBE;
   DoubleSolenoid m_leftSolenoid = new DoubleSolenoid(
     PneumaticsModuleType.REVPH,
     GripperConstants.kLeftSolenoidForwardChannel,
