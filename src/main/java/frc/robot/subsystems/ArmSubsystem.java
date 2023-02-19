@@ -47,46 +47,34 @@ public class ArmSubsystem extends SubsystemBase {
         if (wristPosition == ArmConstants.kWristExtended) {
           m_wristPiston.set(ArmConstants.kWristRetracted);
         }
-        m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.kHomePosition),
+        m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.kHomeHeight),
         ControlType.kPosition);
+      }
+    );
+  }
+
+  private Command moveToHeight(double height) {
+    return runOnce(
+      () -> {
+        m_armMotor.getPIDController().setReference(ArmInterp.heightToCycles(height), ControlType.kPosition);
       }
     );
   }
 
   public Command moveToBottom() {
-    return runOnce(
-      () -> {
-        m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.k1stRowPosition),
-        ControlType.kPosition);
-      }
-    );
+    return moveToHeight(ArmConstants.k1stRowHeight);
   }
 
   public Command moveToOffFloor() {
-    return runOnce(
-      () -> {
-        m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.kOffFloorPosition),
-        ControlType.kPosition);
-      }
-    );
+    return moveToHeight(ArmConstants.kOffFloorHeight);
   }
 
   public Command moveToMiddle() {
-    return runOnce(
-      () -> {
-        m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.k2ndRowPosition),
-        ControlType.kPosition);
-      }
-    );
+    return moveToHeight(ArmConstants.k2ndRowHeight);
   }
 
   public Command moveToTop() {
-    return runOnce(
-      () -> {
-        m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.k3rdRowPosition),
-        ControlType.kPosition);
-      }
-    );
+    return moveToHeight(ArmConstants.k3rdRowHeight);
   }
 
   public Command moveVHeight(double metersPerSecond) {
