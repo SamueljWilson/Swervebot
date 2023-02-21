@@ -110,6 +110,6 @@ public class RobotContainer {
   }
 
   public Pose2d getAutonomousStartingPose() {
-    return m_chooser.getSelected().getPose();
+    return m_chooser.getSelected().getInitialPose();
   }
 }
