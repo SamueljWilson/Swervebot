@@ -102,13 +102,8 @@ private final SwerveModule m_frontRight = //Q4
     return m_odometry.getPoseMeters();
   }
 
-  /**
-   * Resets the odometry to the specified pose.
-   *
-   * @param pose The pose to which to set the odometry.
-   */
-  public void resetOdometry(Pose2d pose) {
-    m_odometry.resetPosition(getRotation2d(), getPositions(), pose);
+  public void initOdometry(Pose2d initialPose) {
+    m_odometry.resetPosition(getRotation2d(), getPositions(), initialPose);
   }
 
   /**

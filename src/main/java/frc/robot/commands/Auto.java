@@ -6,6 +6,8 @@ package frc.robot.commands;
 
 import java.util.List;
 
+import org.opencv.core.Mat;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -38,11 +40,11 @@ public class Auto {
   private static final double kHGridY = kGridMaxY - kBGridY;
   private static final double kEGridY = kGridMaxY / 2;
 
-  private static final Pose2d kStartingGridB = new Pose2d(kStartingGridX, kEGridY, new Rotation2d(Math.PI));
-  private static final Pose2d kPlacingGridB = new Pose2d(kPlacingGridX, kEGridY, new Rotation2d(Math.PI));
+  private static final Pose2d kStartingGridB = new Pose2d(kStartingGridX, kBGridY, new Rotation2d(Math.PI));
+  private static final Pose2d kPlacingGridB = new Pose2d(kPlacingGridX, kBGridY, new Rotation2d(Math.PI));
 
-  private static final Pose2d kStartingGridE = new Pose2d(kStartingGridX, kBGridY, new Rotation2d(Math.PI));
-  private static final Pose2d kPlacingGridE = new Pose2d(kPlacingGridX, kBGridY, new Rotation2d(Math.PI));
+  private static final Pose2d kStartingGridE = new Pose2d(kStartingGridX, kEGridY, new Rotation2d(Math.PI));
+  private static final Pose2d kPlacingGridE = new Pose2d(kPlacingGridX, kEGridY, new Rotation2d(Math.PI));
   private static final Pose2d kCrossChargingStationE = new Pose2d(kECrossX, kEGridY, new Rotation2d(Math.PI));
   private static final Pose2d kCenterChargingStationE = new Pose2d(kEChargingStationX, kEGridY, new Rotation2d(Math.PI));
 
@@ -93,14 +95,13 @@ public class Auto {
   public Auto(DriveSubsystem drive, Pose2d pose, Command command) {
     m_pose = pose;
     m_command = command;
-    drive.resetOdometry(pose);
   }
 
   public Command getCommand() {
     return m_command;
   }
 
-  public Pose2d getPose() {
+  public Pose2d getInitialPose() {
     return m_pose;
   }
 
