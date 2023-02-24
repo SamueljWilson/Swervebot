@@ -84,8 +84,19 @@ private final SwerveModule m_frontRight = //Q4
     zeroHeading();
   }
 
+  private static void printPose(String label, Pose2d pose) {
+    System.out.printf("%s: X %f - Y %f - Yaw %f\n", label, pose.getX(), pose.getY(), pose.getRotation().getDegrees());
+  }
+
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Gyro Reading", m_gyro.getYaw());
+    SmartDashboard.putNumber("Pose X", getPose().getX());
+    SmartDashboard.putNumber("Pose Y", getPose().getY());
+    SmartDashboard.putNumber("Pose Yaw", getPose().getRotation().getDegrees());
+    // printPose("DriveSubsystem Periodic", getPose());
+    // System.out.println(getPose().getX());
+
     // Update the odometry in the periodic block
     m_odometry.update(
         getRotation2d(),
@@ -104,6 +115,10 @@ private final SwerveModule m_frontRight = //Q4
 
   public void initOdometry(Pose2d initialPose) {
     m_odometry.resetPosition(getRotation2d(), getPositions(), initialPose);
+    SmartDashboard.putNumber("Odometry Pose X", getPose().getX());
+    SmartDashboard.putNumber("Odometry Pose Y", getPose().getY());
+    SmartDashboard.putNumber("Odometry Pose Yaw", getPose().getRotation().getDegrees());
+    System.out.println("Reset Odometry");
   }
 
   /**
