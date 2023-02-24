@@ -80,10 +80,14 @@ public class Auto {
   private static Command trajectoryCommand(DriveSubsystem drive, Trajectory trajectory, Transform2d transform) {
     return (
       new DriveTrajectory(
-        trajectory,//.transformBy(transform),
+        trajectory.transformBy(transform),
         drive)
         .andThen(() -> drive.drive(0, 0, 0, true))
     );
+  }
+
+  private static Pose2d copyPose(Pose2d pose) {
+    return new Pose2d (pose.getX(), pose.getY(), pose.getRotation());
   }
 
   private static void printStates(List<Trajectory.State> states) {
@@ -101,7 +105,7 @@ public class Auto {
     List<Trajectory.State> states = trajectory.getStates();
     Trajectory.State state = states.get(states.size()-1);
     printPose("getFinalPose", state.poseMeters);
-    return state.poseMeters;
+    return copyPose(state.poseMeters);
   }
   
   public Auto(DriveSubsystem drive, Pose2d pose, Command command) {
@@ -229,123 +233,136 @@ public class Auto {
     return hPlaceCross(drive, arm, gripper, redTransform());
   }
 
+  private static Rotation2d orientation(Translation2d fr, Translation2d to) {
+    // Compute the angle of the fr->to vector.
+    Translation2d orientationVector = to.minus(fr);
+    return new Rotation2d(orientationVector.getX(), orientationVector.getY());
+  }
+
+  private static Trajectory generateTrajectory(Pose2d start, List<Translation2d> waypoints, Pose2d end) {
+    Translation2d next = waypoints.isEmpty() ? end.getTranslation() : waypoints.get(0);
+    Rotation2d startOrientation = orientation(start.getTranslation(), next);
+
+    Translation2d prev = waypoints.isEmpty() ? start.getTranslation() : waypoints.get(waypoints.size() - 1);
+    Rotation2d endOrientation = orientation(prev, end.getTranslation());
+
+    List<Trajectory.State> states = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(start.getTranslation(), startOrientation),
+      waypoints,
+      new Pose2d(end.getTranslation(), endOrientation),
+      AutoConstants.kDriveTrajectoryConfig
+    ).getStates();
+
+    Trajectory.State startStateOrig = states.get(0);
+    Trajectory.State startState = new Trajectory.State(
+      startStateOrig.timeSeconds,
+      startStateOrig.velocityMetersPerSecond,
+      startStateOrig.accelerationMetersPerSecondSq,
+      start,
+      startStateOrig.curvatureRadPerMeter);
+    states.set(0, startState);
+
+    Trajectory.State endStateOrig = states.get(states.size() - 1);
+    Trajectory.State endState = new Trajectory.State(
+      endStateOrig.timeSeconds,
+      endStateOrig.velocityMetersPerSecond,
+      endStateOrig.accelerationMetersPerSecondSq,
+      end,
+      endStateOrig.curvatureRadPerMeter);
+    states.set(states.size() - 1, endState);
+
+    return new Trajectory(states);
+  }
+
   private static Trajectory bTrajectoryPlaceCross0() {
-    Trajectory trajectory =       TrajectoryGenerator.generateTrajectory(
+    return generateTrajectory(
       kStartingGridB,
       List.of(),
-      kPlacingGridB,
-      AutoConstants.kDriveTrajectoryConfig);
-      printStates(trajectory.getStates());
-    return (
-      trajectory
-    );
+      kPlacingGridB);
   }
 
   private static Trajectory bTrajectoryPlaceCross1(Trajectory prevTrajectory) {
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+    return generateTrajectory(
       getFinalPose(prevTrajectory),
       List.of(),
-      kStartingGridB,
-      AutoConstants.kDriveTrajectoryConfigReversed);
-    printStates(trajectory.getStates());
-    return (
-      trajectory
-    );
+      kStartingGridB);
   }
 
   private static Trajectory bTrajectoryPlaceCross2(Trajectory prevTrajectory) {
-    return (
-      TrajectoryGenerator.generateTrajectory(
+    return
+        generateTrajectory(
         getFinalPose(prevTrajectory),
         List.of(
           new Translation2d(kChargingStationMinEdgeX, kChargingStationMinEdgeY / 2),
           new Translation2d(kChargingStationMaxEdgeX, kChargingStationMinEdgeY / 2)
         ),
-        kPickupStagingMarker1,
-        AutoConstants.kDriveTrajectoryConfig)
-    );
+        kPickupStagingMarker1);
   }
 
   private static Trajectory eTrajectoryPlaceCross0() {
-    return (
-      TrajectoryGenerator.generateTrajectory(
+    return
+      generateTrajectory(
         kStartingGridE,
         List.of(),
-        kPlacingGridE,
-        AutoConstants.kDriveTrajectoryConfig)
-    );
+        kPlacingGridE);
   }
 
   private static Trajectory eTrajectoryPlaceCross1(Trajectory prevTrajectory) {
-    return (
-      TrajectoryGenerator.generateTrajectory(
+    return
+      generateTrajectory(
         getFinalPose(prevTrajectory),
         List.of(),
-        kStartingGridE,
-        AutoConstants.kDriveTrajectoryConfig)
-    );
+        kStartingGridE);
   }
 
   private static Trajectory eTrajectoryPlaceCross2(Trajectory prevTrajectory) {
-    return (
-      TrajectoryGenerator.generateTrajectory(
+    return
+      generateTrajectory(
         getFinalPose(prevTrajectory),
         List.of(),
-        kCrossChargingStationE,
-        AutoConstants.kDriveTrajectoryConfig)
-    );
+        kCrossChargingStationE);
   }
 
   private static Trajectory eTrajectoryPlaceCross3(Trajectory prevTrajectory) {
-    return (
-      TrajectoryGenerator.generateTrajectory(
+    return
+      generateTrajectory(
         getFinalPose(prevTrajectory),
         List.of(),
-        kPickupStagingMarker2,
-        AutoConstants.kDriveTrajectoryConfig)
-    );
+        kPickupStagingMarker2);
   }
 
   private static Trajectory eTrajectoryPlaceCrossCharge3(Trajectory prevTrajectory) {
-    return (
-      TrajectoryGenerator.generateTrajectory(
+    return
+      generateTrajectory(
         getFinalPose(prevTrajectory),
         List.of(),
-        kCenterChargingStationE,
-        AutoConstants.kDriveTrajectoryConfig)
-    );
+        kCenterChargingStationE);
   }
 
   private static Trajectory hTrajectoryPlaceCross0() {
-    return (
-      TrajectoryGenerator.generateTrajectory(
+    return
+      generateTrajectory(
         kStartingGridH,
         List.of(),
-        kPlacingGridH,
-        AutoConstants.kDriveTrajectoryConfig)
-    );
+        kPlacingGridH);
   }
 
   private static Trajectory hTrajectoryPlaceCross1(Trajectory prevTrajectory) {
-    return (
-      TrajectoryGenerator.generateTrajectory(
+    return
+      generateTrajectory(
         getFinalPose(prevTrajectory),
         List.of(),
-        kStartingGridH,
-        AutoConstants.kDriveTrajectoryConfig)
-    );
+        kStartingGridH);
   }
 
   private static Trajectory hTrajectoryPlaceCross2(Trajectory prevTrajectory) {
-    return (
-      TrajectoryGenerator.generateTrajectory(
+    return
+      generateTrajectory(
         getFinalPose(prevTrajectory),
         List.of(
           new Translation2d(kChargingStationMinEdgeX, (kGridMaxY + kChargingStationMaxEdgeY) / 2),
           new Translation2d(kChargingStationMaxEdgeX, (kGridMaxY + kChargingStationMaxEdgeY) / 2)
         ),
-        kPickupStagingMarker4,
-        AutoConstants.kDriveTrajectoryConfig)
-    );
+        kPickupStagingMarker4);
   }
 }
