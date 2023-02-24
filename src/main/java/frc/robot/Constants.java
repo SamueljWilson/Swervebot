@@ -55,10 +55,10 @@ public final class Constants {
     public static final boolean kRearRightEncoderReversed = false; //Q3
     public static final boolean kFrontRightEncoderReversed = false; //Q4
 
-    public static final Rotation2d kFrontLeftEncoderOffset = new Rotation2d(Math.toRadians(360 - 264.814)); //Q1
-    public static final Rotation2d kRearLeftEncoderOffset = new Rotation2d(Math.toRadians(360 - 348.574)); //Q2
-    public static final Rotation2d kRearRightEncoderOffset = new Rotation2d(Math.toRadians(360 - 350.859)); //Q3
-    public static final Rotation2d kFrontRightEncoderOffset = new Rotation2d(Math.toRadians(360 - 199.775)); //Q4
+    public static final Rotation2d kFrontLeftEncoderOffset = new Rotation2d(Math.toRadians(275.186)); //Q1
+    public static final Rotation2d kRearLeftEncoderOffset = new Rotation2d(Math.toRadians(191.426)); //Q2
+    public static final Rotation2d kRearRightEncoderOffset = new Rotation2d(Math.toRadians(189.141)); //Q3
+    public static final Rotation2d kFrontRightEncoderOffset = new Rotation2d(Math.toRadians(340.225)); //Q4
 
     public static final SupplyCurrentLimitConfiguration kSupplyCurrentLimit = new SupplyCurrentLimitConfiguration(true, 30, 35, 0.5);
 
