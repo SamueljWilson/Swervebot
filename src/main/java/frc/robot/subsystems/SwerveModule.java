@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
@@ -26,22 +28,15 @@ public class SwerveModule {
 
   private final WPI_CANCoder m_turningEncoder;
 
-  private final PIDController m_drivePIDController =
-      new PIDController(
-        SwerveModuleConstants.kPModuleDriveController,
-        SwerveModuleConstants.kIModuleDriveController,
-        SwerveModuleConstants.kDModuleDriveController
-      );
-
   // Using a TrapezoidProfile PIDController to allow for smooth turning
   private final ProfiledPIDController m_turningPIDController =
-      new ProfiledPIDController(
-          SwerveModuleConstants.kPModuleTurningController,
-          SwerveModuleConstants.kIModuleTurningController,
-          SwerveModuleConstants.kDModuleTurningController,
-          new TrapezoidProfile.Constraints(
-              SwerveModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond,
-              SwerveModuleConstants.kMaxModuleAngularAccelerationRadiansPerSecondSquared));
+    new ProfiledPIDController(
+      SwerveModuleConstants.kPModuleTurningController,
+      SwerveModuleConstants.kIModuleTurningController,
+      SwerveModuleConstants.kDModuleTurningController,
+      new TrapezoidProfile.Constraints(
+        SwerveModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond,
+        SwerveModuleConstants.kMaxModuleAngularAccelerationRadiansPerSecondSquared));
 
   private final Rotation2d m_encoderOffset;
 
@@ -52,23 +47,36 @@ public class SwerveModule {
    * @param turningMotorChannel The channel of the turning motor.
    * @param driveEncoderChannels The channels of the drive encoder.
    * @param turningEncoderChannels The channels of the turning encoder.
-   * @param driveEncoderReversed Whether the drive encoder is reversed.
+   * @param driveMotorReversed Whether the drive encoder is reversed.
    * @param turningEncoderReversed Whether the turning encoder is reversed.
    */
   public SwerveModule(
       int driveMotorChannel,
       int turningMotorChannel,
       int turningEncoderChannel,
-      boolean driveEncoderReversed,
+      boolean driveMotorReversed,
       boolean turningMotorReversed,
       boolean turningEncoderReversed,
       Rotation2d encoderOffset) {
+    
     m_driveMotor = new WPI_TalonFX(driveMotorChannel);
+    m_driveMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    m_driveMotor.setSensorPhase(false);
+    // Set whether drive motor should be reversed or not
+    m_driveMotor.setInverted(driveMotorReversed);
+    // m_driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10, 10);
+    m_driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 10);
+    m_driveMotor.config_kP(0, SwerveModuleConstants.kPModuleDriveController, 10);
+    m_driveMotor.config_kI(0, SwerveModuleConstants.kIModuleDriveController, 10);
+    m_driveMotor.config_kD(0, SwerveModuleConstants.kDModuleDriveController, 10);
+    m_driveMotor.config_kF(0, 0, 10);
+    m_driveMotor.configSupplyCurrentLimit(DriveConstants.kSupplyCurrentLimit);
+
     m_turningMotor = new WPI_TalonFX(turningMotorChannel);
     m_turningEncoder = new WPI_CANCoder(turningEncoderChannel);
 
     // Set whether drive encoder should be reversed or not
-    m_driveMotor.setInverted(driveEncoderReversed);
+    m_driveMotor.setInverted(driveMotorReversed);
 
     // Set whether turning encoder should be reversed or not
     m_turningMotor.setInverted(turningMotorReversed);
@@ -91,7 +99,7 @@ public class SwerveModule {
    */
   public SwerveModuleState getState() {
     return new SwerveModuleState(
-      m_driveMotor.getSelectedSensorVelocity()*SwerveModuleConstants.kDriveEncoderDistancePerPulse,
+      m_driveMotor.getSelectedSensorVelocity()*SwerveModuleConstants.kDriveEncoderDistancePerPulse*10.0,
       getPosR2d()
     );
   }
@@ -111,16 +119,10 @@ public class SwerveModule {
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
     SwerveModuleState state =
-        SwerveModuleState.optimize(desiredState, getPosR2d());
-
-    // Calculate the drive output from the drive PID controller.
-    final double driveOutput =
-        MathUtil.clamp(m_drivePIDController.calculate(
-          m_driveMotor.getSelectedSensorVelocity()*SwerveModuleConstants.kDriveEncoderDistancePerPulse,
-          state.speedMetersPerSecond),
-          -1,
-          1
-        );
+      SwerveModuleState.optimize(desiredState, getPosR2d());
+    
+    final double driveVelocityDesired = state.speedMetersPerSecond
+      / (SwerveModuleConstants.kDriveEncoderDistancePerPulse * 10.0);
 
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput =
@@ -132,11 +134,8 @@ public class SwerveModule {
           );
 
     // Calculate the turning motor output from the turning PID controller.
-    m_driveMotor.set(ControlMode.PercentOutput, driveOutput);
+    m_driveMotor.set(ControlMode.Velocity, driveVelocityDesired);
     m_turningMotor.set(ControlMode.PercentOutput, turnOutput);
-
-    SmartDashboard.putNumber(String.format("Drive Motor %d", m_driveMotor.getDeviceID()), driveOutput);
-    SmartDashboard.putNumber(String.format("Steering Motor %d", m_turningMotor.getDeviceID()), turnOutput);
   }
 
   /** Zeroes all the SwerveModule encoders. */
