@@ -135,8 +135,8 @@ public final class Constants {
     public static final double kDModuleTurningController = 0.0;
 
     public static final double kPModuleDriveController = 0.25;
-    public static final double kIModuleDriveController = 0.0;
-    public static final double kDModuleDriveController = 0.0;
+    public static final double kIModuleDriveController = 0.0001;
+    public static final double kDModuleDriveController = 7.5;
   }
 
   public static final class OIConstants {
