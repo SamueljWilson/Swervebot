@@ -32,6 +32,12 @@ public class RobotContainer {
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final SendableChooser<Auto> m_chooser = new SendableChooser<>();
+  private static double joystickDeadband(double value) {
+    if (value >= -OIConstants.kJoystickDeadband && value <= OIConstants.kJoystickDeadband) {
+      return 0;
+    }
+    return value;
+  }
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -47,9 +53,9 @@ public class RobotContainer {
         new RunCommand(
           () -> {
             m_robotDrive.drive(
-              m_driverController.getLeftY()*OIConstants.kMaxMetersPerSec,
-              m_driverController.getLeftX()*OIConstants.kMaxMetersPerSec,
-              m_driverController.getRightX()*OIConstants.kMaxRadPerSec,
+              joystickDeadband(m_driverController.getLeftY())*OIConstants.kMaxMetersPerSec,
+              joystickDeadband(m_driverController.getLeftX())*OIConstants.kMaxMetersPerSec,
+              joystickDeadband(m_driverController.getRightX())*OIConstants.kMaxRadPerSec,
               true);
           }, m_robotDrive
         )
