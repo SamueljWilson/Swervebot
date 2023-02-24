@@ -124,10 +124,10 @@ public final class Constants {
     public static final double kAbsoluteEncoderCPR = 4096.0;
     public static final double kWheelDiameterMeters = 0.09525;
 
+    public static final double kDriveGearRatio = 6.75;
 
     public static final double kDriveEncoderDistancePerPulse =
-        // Assumes the encoders are directly mounted on the wheel shafts
-        (kWheelDiameterMeters * Math.PI) / (double) kDriveEncoderCPR;
+        (kWheelDiameterMeters * Math.PI) / (kDriveEncoderCPR * kDriveGearRatio);
 
 
     public static final double kPModuleTurningController = 0.25;
