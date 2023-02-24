@@ -89,9 +89,16 @@ public class SwerveModule {
    *
    * @return The current state of the module.
    */
+  public SwerveModuleState getState() {
+    return new SwerveModuleState(
+      m_driveMotor.getSelectedSensorVelocity()*SwerveModuleConstants.kDriveEncoderDistancePerPulse,
+      getPosR2d()
+    );
+  }
+
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
-      m_driveMotor.getSelectedSensorVelocity()*SwerveModuleConstants.kDriveEncoderDistancePerPulse,
+      m_driveMotor.getSelectedSensorPosition()*SwerveModuleConstants.kDriveEncoderDistancePerPulse,
       getPosR2d()
     );
   }

@@ -34,7 +34,7 @@ public class Auto {
   private static final double kECrossX = 6.074;
   private static final double kEChargingStationX = 4.515;
 
-  private static final double kStartingGridX = kGridMaxX + kRobotHalfLength + 0.15;
+  private static final double kStartingGridX = kGridMaxX + kRobotHalfLength + 0.15 + 1;
   private static final double kPlacingGridX = kGridMaxX + kRobotHalfLength;
   private static final double kBGridY = 0.413;
   private static final double kHGridY = kGridMaxY - kBGridY;
@@ -80,15 +80,27 @@ public class Auto {
   private static Command trajectoryCommand(DriveSubsystem drive, Trajectory trajectory, Transform2d transform) {
     return (
       new DriveTrajectory(
-        trajectory.transformBy(transform),
+        trajectory,//.transformBy(transform),
         drive)
         .andThen(() -> drive.drive(0, 0, 0, true))
     );
+  }
+
+  private static void printStates(List<Trajectory.State> states) {
+    for (int i = 0; i < states.size(); i++) {
+      Trajectory.State state = states.get(i);
+      System.out.printf("State %d: X %f - Y %f - Yaw %f\n", i, state.poseMeters.getX(), state.poseMeters.getY(), state.poseMeters.getRotation().getDegrees());
+    }
+  }
+
+  private static void printPose(String label, Pose2d pose) {
+    System.out.printf("%s: X %f - Y %f - Yaw %f\n", label, pose.getX(), pose.getY(), pose.getRotation().getDegrees());
   }
   
   private static Pose2d getFinalPose(Trajectory trajectory) {
     List<Trajectory.State> states = trajectory.getStates();
     Trajectory.State state = states.get(states.size()-1);
+    printPose("getFinalPose", state.poseMeters);
     return state.poseMeters;
   }
   
@@ -124,10 +136,12 @@ public class Auto {
     Command command =
       arm.moveToTop()
       .andThen(trajectoryCommand(drive, trajectory0, transform))
+      .andThen(() -> System.out.println("xxxa"))
       .andThen(gripper.openGrippers())
-      .andThen(trajectoryCommand(drive, trajectory1, transform))
+      // .andThen(trajectoryCommand(drive, trajectory1, transform))
+      .andThen(() -> System.out.println("xxxb"))
       .andThen(arm.moveHome())
-      .andThen(trajectoryCommand(drive, trajectory2, transform))
+      // .andThen(trajectoryCommand(drive, trajectory2, transform))
       .andThen(arm.moveToOffFloor());
     return new Auto(drive, startingPose, command);
   }
@@ -216,22 +230,26 @@ public class Auto {
   }
 
   private static Trajectory bTrajectoryPlaceCross0() {
+    Trajectory trajectory =       TrajectoryGenerator.generateTrajectory(
+      kStartingGridB,
+      List.of(),
+      kPlacingGridB,
+      AutoConstants.kDriveTrajectoryConfig);
+      printStates(trajectory.getStates());
     return (
-      TrajectoryGenerator.generateTrajectory(
-        kStartingGridB,
-        List.of(),
-        kPlacingGridB,
-        AutoConstants.kDriveTrajectoryConfig)
+      trajectory
     );
   }
 
   private static Trajectory bTrajectoryPlaceCross1(Trajectory prevTrajectory) {
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+      getFinalPose(prevTrajectory),
+      List.of(),
+      kStartingGridB,
+      AutoConstants.kDriveTrajectoryConfigReversed);
+    printStates(trajectory.getStates());
     return (
-      TrajectoryGenerator.generateTrajectory(
-        getFinalPose(prevTrajectory),
-        List.of(),
-        kStartingGridB,
-        AutoConstants.kDriveTrajectoryConfig)
+      trajectory
     );
   }
 
