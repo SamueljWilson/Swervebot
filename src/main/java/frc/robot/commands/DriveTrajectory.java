@@ -4,15 +4,18 @@
 
 package frc.robot.commands;
 
+import java.util.List;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class DriveTrajectory extends SwerveControllerCommand {
+public class DriveTrajectory extends SwerveCommand {
   DriveSubsystem m_drive;
   ProfiledPIDController m_thetaController;
   Trajectory m_trajectory;
