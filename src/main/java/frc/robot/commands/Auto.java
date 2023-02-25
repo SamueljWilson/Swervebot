@@ -17,6 +17,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 
 public class Auto {
   /** Creates a new Auto. */
@@ -134,12 +135,35 @@ public class Auto {
     return new Auto(drive, startingPose, command);
   }
 
+  public static Auto bPlaceCrossWrist(DriveSubsystem drive, WristSubsystem wrist, GripperSubsystem gripper, Transform2d transform) {
+    Trajectory trajectory0 = bTrajectoryPlaceCross0();
+    Trajectory trajectory1 = bTrajectoryPlaceCross1(trajectory0);
+    Trajectory trajectory2 = bTrajectoryPlaceCross2(trajectory1);
+    Pose2d startingPose = trajectory0.getInitialPose();
+    Command command =
+      wrist.extendWrist()
+      .andThen(trajectoryCommand(drive, trajectory0, transform))
+      .andThen(gripper.openGrippers())
+      .andThen(trajectoryCommand(drive, trajectory1, transform))
+      .andThen(wrist.retractWrist())
+      .andThen(trajectoryCommand(drive, trajectory2, transform));
+    return new Auto(drive, startingPose, command);
+  }
+
   public static Auto blueBPlaceCross(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper) {
     return bPlaceCross(drive, arm, gripper, blueTransform());
   }
 
   public static Auto redBPlaceCross(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper) {
     return bPlaceCross(drive, arm, gripper, redTransform());
+  }
+
+  public static Auto blueBPlaceCrossWrist(DriveSubsystem drive, WristSubsystem wrist, GripperSubsystem gripper) {
+    return bPlaceCrossWrist(drive, wrist, gripper, blueTransform());
+  }
+
+  public static Auto redBPlaceCrossWrist(DriveSubsystem drive, WristSubsystem wrist, GripperSubsystem gripper) {
+    return bPlaceCrossWrist(drive, wrist, gripper, redTransform());
   }
 
   public static Auto ePlaceCross(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Transform2d transform) {
@@ -159,6 +183,23 @@ public class Auto {
       .andThen(arm.moveToOffFloor());
     return new Auto(drive, startingPose, command);
   }
+
+  public static Auto ePlaceCrossWrist(DriveSubsystem drive, WristSubsystem wrist, GripperSubsystem gripper, Transform2d transform) {
+    Trajectory trajectory0 = eTrajectoryPlaceCross0();
+    Trajectory trajectory1 = eTrajectoryPlaceCross1(trajectory0);
+    Trajectory trajectory2 = eTrajectoryPlaceCross2(trajectory1);
+    Trajectory trajectory3 = eTrajectoryPlaceCross3(trajectory2);
+    Pose2d startingPose = trajectory0.getInitialPose();
+    Command command =
+      wrist.extendWrist()
+      .andThen(trajectoryCommand(drive, trajectory0, transform))
+      .andThen(gripper.openGrippers())
+      .andThen(trajectoryCommand(drive, trajectory1, transform))
+      .andThen(wrist.retractWrist())
+      .andThen(trajectoryCommand(drive, trajectory2, transform))
+      .andThen(trajectoryCommand(drive, trajectory3, transform));
+    return new Auto(drive, startingPose, command);
+  }
   
   public static Auto blueEPlaceCross(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper) {
     return ePlaceCross(drive, arm, gripper, blueTransform());
@@ -166,6 +207,14 @@ public class Auto {
    
   public static Auto redEPlaceCross(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper) {
     return ePlaceCross(drive, arm, gripper, redTransform());
+  }
+
+  public static Auto blueEPlaceCrossWrist(DriveSubsystem drive, WristSubsystem wrist, GripperSubsystem gripper) {
+    return ePlaceCrossWrist(drive, wrist, gripper, blueTransform());
+  }
+
+  public static Auto redEPlaceCrossWrist(DriveSubsystem drive, WristSubsystem wrist, GripperSubsystem gripper) {
+    return ePlaceCrossWrist(drive, wrist, gripper, redTransform());
   }
 
   public static Auto ePlaceCrossCharge(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Transform2d transform) {
@@ -209,12 +258,35 @@ public class Auto {
     return new Auto(drive, startingPose, command);
   }
 
+  public static Auto hPlaceCrossWrist(DriveSubsystem drive, WristSubsystem wrist, GripperSubsystem gripper, Transform2d transform) {
+    Trajectory trajectory0 = hTrajectoryPlaceCross0();
+    Trajectory trajectory1 = hTrajectoryPlaceCross1(trajectory0);
+    Trajectory trajectory2 = hTrajectoryPlaceCross2(trajectory1);
+    Pose2d startingPose = trajectory0.getInitialPose();
+    Command command =
+      wrist.extendWrist()
+      .andThen(trajectoryCommand(drive, trajectory0, transform))
+      .andThen(gripper.openGrippers())
+      .andThen(trajectoryCommand(drive, trajectory1, transform))
+      .andThen(wrist.retractWrist())
+      .andThen(trajectoryCommand(drive, trajectory2, transform));
+    return new Auto(drive, startingPose, command);
+  }
+
   public static Auto blueHPlaceCross(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper) {
     return hPlaceCross(drive, arm, gripper, blueTransform());
   }
 
   public static Auto redHPlaceCross(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper) {
     return hPlaceCross(drive, arm, gripper, redTransform());
+  }
+
+  public static Auto blueHPlaceCrossWrist(DriveSubsystem drive, WristSubsystem wrist, GripperSubsystem gripper) {
+    return hPlaceCrossWrist(drive, wrist, gripper, blueTransform());
+  }
+
+  public static Auto redHPlaceCrossWrist(DriveSubsystem drive, WristSubsystem wrist, GripperSubsystem gripper) {
+    return hPlaceCrossWrist(drive, wrist, gripper, redTransform());
   }
 
   private static Rotation2d orientation(Translation2d fr, Translation2d to) {
