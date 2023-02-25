@@ -157,8 +157,8 @@ public final class Constants {
     public static final int kCubeButtonPressed = kLeftTrigger;
     public static final int kConeButtonPressed = kRightTrigger;
     public static final int kOpenButtonPressed = XboxController.Button.kLeftBumper.value;
-    public static final int kExtendWristPressed = XboxController.Button.kY.value;
-    public static final int kRetractWristPressed = XboxController.Button.kA.value;
+    public static final int kExtendWristButtonPressed = XboxController.Button.kY.value;
+    public static final int kRetractWristButtonPressed = XboxController.Button.kA.value;
 
 
     public static final int kHomeButtonPressed = XboxController.Button.kA.value;
@@ -166,10 +166,12 @@ public final class Constants {
     public static final int kPickOffFloorButtonPressed = XboxController.Button.kY.value;
     public static final int k2ndRowButtonPressed = XboxController.Button.kX.value;
     public static final int k3rdRowButtonPressed = XboxController.Button.kRightBumper.value;
+    public static final int kSlowButtonPressed = XboxController.Button.kRightBumper.value;
 
     public static final double kDebounceSeconds = 0.01;
 
     public static final double kJoystickDeadband = 0.05;
+    public static final double kSlowCoef = 0.25;
   }
 
   public static final class AutoConstants {
