@@ -17,6 +17,7 @@ import frc.robot.commands.Auto;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -29,6 +30,7 @@ public class RobotContainer {
   public final DriveSubsystem m_robotDrive = new DriveSubsystem();
   public final GripperSubsystem m_gripper = new GripperSubsystem();
   public final ArmSubsystem m_arm = new ArmSubsystem();
+  public final WristSubsystem m_wrist = new WristSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -43,6 +45,7 @@ public class RobotContainer {
     configureButtonBindings();
     configureAutoRoutines();
     m_arm.initCommand().schedule();
+    m_wrist.initCommand().schedule();
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -80,6 +83,7 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+    boolean armStubOut = true;
     // Creates the triggers for the cone and cube grab commands
     new JoystickButton(m_driverController, OIConstants.kCubeButtonPressed)
       .debounce(OIConstants.kDebounceSeconds)
@@ -90,21 +94,30 @@ public class RobotContainer {
     new JoystickButton(m_driverController, OIConstants.kOpenButtonPressed)
       .debounce(OIConstants.kDebounceSeconds)
       .onTrue(m_gripper.openGrippers());
-    new JoystickButton(m_driverController, OIConstants.kHomeButtonPressed)
-      .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_arm.moveHome());
-    new JoystickButton(m_driverController, OIConstants.kPickOffFloorButtonPressed)
-      .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_arm.moveToOffFloor());
-    new JoystickButton(m_driverController, OIConstants.k1stRowButtonPressed)
-      .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_arm.moveToBottom());
-    new JoystickButton(m_driverController, OIConstants.k2ndRowButtonPressed)
-      .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_arm.moveToMiddle());
-    new JoystickButton(m_driverController, OIConstants.k3rdRowButtonPressed)
-      .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_arm.moveToTop());
+    if (armStubOut == false) {
+      new JoystickButton(m_driverController, OIConstants.kHomeButtonPressed)
+        .debounce(OIConstants.kDebounceSeconds)
+        .onTrue(m_arm.moveHome());
+      new JoystickButton(m_driverController, OIConstants.kPickOffFloorButtonPressed)
+        .debounce(OIConstants.kDebounceSeconds)
+        .onTrue(m_arm.moveToOffFloor());
+      new JoystickButton(m_driverController, OIConstants.k1stRowButtonPressed)
+        .debounce(OIConstants.kDebounceSeconds)
+        .onTrue(m_arm.moveToBottom());
+      new JoystickButton(m_driverController, OIConstants.k2ndRowButtonPressed)
+        .debounce(OIConstants.kDebounceSeconds)
+        .onTrue(m_arm.moveToMiddle());
+      new JoystickButton(m_driverController, OIConstants.k3rdRowButtonPressed)
+        .debounce(OIConstants.kDebounceSeconds)
+        .onTrue(m_arm.moveToTop());
+    } else {
+      new JoystickButton(m_driverController, OIConstants.kExtendWristPressed)
+        .debounce(OIConstants.kDebounceSeconds)
+        .onTrue(m_wrist.extendWrist());
+      new JoystickButton(m_driverController, OIConstants.kRetractWristPressed)
+        .debounce(OIConstants.kDebounceSeconds)
+        .onTrue(m_wrist.retractWrist());
+    }
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

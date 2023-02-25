@@ -108,6 +108,14 @@ public final class Constants {
     public static final int kWristRetractionCycles = 1500; //TODO: FIND REAL VALUES
   }
 
+  public static final class WristConstants {
+    public static final int kWristSolenoidForwardChannel = 5;
+    public static final int kWristSolenoidBackwardChannel = 6;
+
+    public static final DoubleSolenoid.Value kWristExtended = Value.kForward;
+    public static final DoubleSolenoid.Value kWristRetracted = Value.kReverse;
+  }
+
   public static final class SwerveModuleConstants {
     public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI;
     public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 16 * Math.PI;
@@ -147,6 +155,9 @@ public final class Constants {
     public static final int kCubeButtonPressed = kLeftTrigger;
     public static final int kConeButtonPressed = kRightTrigger;
     public static final int kOpenButtonPressed = XboxController.Button.kLeftBumper.value;
+    public static final int kExtendWristPressed = XboxController.Button.kY.value;
+    public static final int kRetractWristPressed = XboxController.Button.kA.value;
+
 
     public static final int kHomeButtonPressed = XboxController.Button.kA.value;
     public static final int k1stRowButtonPressed = XboxController.Button.kB.value;
