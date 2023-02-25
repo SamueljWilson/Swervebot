@@ -32,6 +32,8 @@ public class RobotContainer {
   public final ArmSubsystem m_arm = new ArmSubsystem();
   public final WristSubsystem m_wrist = new WristSubsystem();
 
+  private boolean armStubOut = true;
+
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final SendableChooser<Auto> m_chooser = new SendableChooser<>();
@@ -64,15 +66,25 @@ public class RobotContainer {
   }
 
   private void configureAutoRoutines() {
-    m_chooser.setDefaultOption("Blue B Place Cross", Auto.blueBPlaceCross(m_robotDrive, m_arm, m_gripper));
-    m_chooser.addOption("Blue H Place Cross", Auto.blueHPlaceCross(m_robotDrive, m_arm, m_gripper));
-    m_chooser.addOption("Blue E Place Cross", Auto.blueEPlaceCross(m_robotDrive, m_arm, m_gripper));
-    m_chooser.addOption("Blue E Place Cross Charge", Auto.blueEPlaceCrossCharge(m_robotDrive, m_arm, m_gripper));
+    if (armStubOut == false) {
+      m_chooser.setDefaultOption("Blue B Place Cross", Auto.blueBPlaceCross(m_robotDrive, m_arm, m_gripper));
+      m_chooser.addOption("Blue H Place Cross", Auto.blueHPlaceCross(m_robotDrive, m_arm, m_gripper));
+      m_chooser.addOption("Blue E Place Cross", Auto.blueEPlaceCross(m_robotDrive, m_arm, m_gripper));
+      m_chooser.addOption("Blue E Place Cross Charge", Auto.blueEPlaceCrossCharge(m_robotDrive, m_arm, m_gripper));
 
-    m_chooser.addOption("Red B Place Cross", Auto.redBPlaceCross(m_robotDrive, m_arm, m_gripper));
-    m_chooser.addOption("Red H Place Cross", Auto.redHPlaceCross(m_robotDrive, m_arm, m_gripper));
-    m_chooser.addOption("Red E Place Cross", Auto.redEPlaceCross(m_robotDrive, m_arm, m_gripper));
-    m_chooser.addOption("Red E Place Cross Charge", Auto.redEPlaceCrossCharge(m_robotDrive, m_arm, m_gripper));
+      m_chooser.addOption("Red B Place Cross", Auto.redBPlaceCross(m_robotDrive, m_arm, m_gripper));
+      m_chooser.addOption("Red H Place Cross", Auto.redHPlaceCross(m_robotDrive, m_arm, m_gripper));
+      m_chooser.addOption("Red E Place Cross", Auto.redEPlaceCross(m_robotDrive, m_arm, m_gripper));
+      m_chooser.addOption("Red E Place Cross Charge", Auto.redEPlaceCrossCharge(m_robotDrive, m_arm, m_gripper));
+    } else {
+      m_chooser.setDefaultOption("Blue B Place Cross Wrist", Auto.blueBPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper));
+      m_chooser.addOption("Blue H Place Cross Wrist", Auto.blueHPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper));
+      m_chooser.addOption("Blue E Place Cross Wrist", Auto.blueEPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper));
+
+      m_chooser.addOption("Red B Place Cross Wrist", Auto.redBPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper));
+      m_chooser.addOption("Red H Place Cross Wrist", Auto.redHPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper));
+      m_chooser.addOption("Red E Place Cross Wrist", Auto.redEPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper));
+    }
     SmartDashboard.putData(m_chooser);
   }
 
@@ -83,7 +95,6 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    boolean armStubOut = true;
     // Creates the triggers for the cone and cube grab commands
     new JoystickButton(m_driverController, OIConstants.kCubeButtonPressed)
       .debounce(OIConstants.kDebounceSeconds)
