@@ -181,17 +181,6 @@ public class DriveTrajectory extends CommandBase {
     if (!m_timer.hasElapsed(m_trajectory.getTotalTimeSeconds())) {
       return false;
     }
-    // Pose2d currentPose = m_pose.get();
-    // Rotation2d rotationDelta = normalizeRotation(m_finalPose.getRotation().minus(currentPose.getRotation()));
-    // if (Math.abs(MathUtil.inputModulus(rotationDelta.getDegrees(), -180, 180)) > 5/* XXX Magic number. */) {
-    //   System.out.printf("rotationDelta: %s\n", rotationDelta);
-    //   return false;
-    // }
-    // double distance = currentPose.getTranslation().getDistance(m_finalPose.getTranslation());
-    // if (distance > 0.025 /* XXX Magic number. */) {
-    //   System.out.printf("distance: %f\n", distance);
-    //   return false;
-    // }
     m_finished = true;
     return true;
   }
