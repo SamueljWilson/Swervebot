@@ -60,7 +60,8 @@ public final class Constants {
     public static final Rotation2d kRearRightEncoderOffset = new Rotation2d(Math.toRadians(189.141)); //Q3
     public static final Rotation2d kFrontRightEncoderOffset = new Rotation2d(Math.toRadians(340.225)); //Q4
 
-    public static final SupplyCurrentLimitConfiguration kSupplyCurrentLimit = new SupplyCurrentLimitConfiguration(true, 30, 35, 0.5);
+    public static final SupplyCurrentLimitConfiguration kSupplyCurrentLimit =
+      new SupplyCurrentLimitConfiguration(true, 30, 35, 0.5);
 
     public static final double kTrackWidth = 0.431;
     // Distance between centers of right and left wheels on robot
@@ -75,16 +76,7 @@ public final class Constants {
 
     public static final boolean kGyroReversed = false;
 
-    // These are example values only - DO NOT USE THESE FOR YOUR OWN ROBOT!
-    // These characterization values MUST be determined either experimentally or theoretically
-    // for *your* robot's drive.
-    // The SysId tool provides a convenient method for obtaining these values for your robot.
-    public static final double ksVolts = 1;
-    public static final double kvVoltSecondsPerMeter = 0.8;
-    public static final double kaVoltSecondsSquaredPerMeter = 0.15;
-
     public static final double kMaxSpeedMetersPerSecond = 5;
-    public static int kFrontLeftTurningEncoderPorts;
   }
 
   public static final class GripperConstants {
@@ -107,13 +99,13 @@ public final class Constants {
     public static final DoubleSolenoid.Value kWristExtended = Value.kForward;
     public static final DoubleSolenoid.Value kWristRetracted = Value.kReverse;
 
-
     public static final double kAdjustVelocity = 0.8;
 
     public static final int kWristSolenoidForwardChannel = 5;
     public static final int kWristSolenoidBackwardChannel = 6;
-    public static final int kWristExtensionCycles = 2000;
-    public static final int kWristRetractionCycles = 1500;
+    // Extension > Retraction
+    public static final int kWristExtensionCycles = 2000; //TODO: FIND REAL VALUES
+    public static final int kWristRetractionCycles = 1500; //TODO: FIND REAL VALUES
   }
 
   public static final class SwerveModuleConstants {
@@ -128,7 +120,6 @@ public final class Constants {
 
     public static final double kDriveEncoderDistancePerPulse =
         (kWheelDiameterMeters * Math.PI) / (kDriveEncoderCPR * kDriveGearRatio);
-
 
     public static final double kPModuleTurningController = 0.25;
     public static final double kIModuleTurningController = 0.0;
@@ -184,14 +175,6 @@ public final class Constants {
                 AutoConstants.kMaxAccelerationMetersPerSecondSquared)
             // Add kinematics to ensure max speed is actually obeyed
             .setKinematics(DriveConstants.kDriveKinematics);
-    
-    public static final TrajectoryConfig kDriveTrajectoryConfigReversed =
-    new TrajectoryConfig(
-            AutoConstants.kMaxSpeedMetersPerSecond,
-            AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        .setReversed(true)
-        // Add kinematics to ensure max speed is actually obeyed
-        .setKinematics(DriveConstants.kDriveKinematics);
 
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
