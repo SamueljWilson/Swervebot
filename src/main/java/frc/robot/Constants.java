@@ -106,6 +106,8 @@ public final class Constants {
     // Extension > Retraction
     public static final int kWristExtensionCycles = 2000; //TODO: FIND REAL VALUES
     public static final int kWristRetractionCycles = 1500; //TODO: FIND REAL VALUES
+
+    public static boolean kStubOut = true;
   }
 
   public static final class WristConstants {
