@@ -60,9 +60,7 @@ public class SwerveModule {
     m_driveMotor = new WPI_TalonFX(driveMotorChannel);
     m_driveMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     m_driveMotor.setSensorPhase(false);
-    // Set whether drive motor should be reversed or not
     m_driveMotor.setInverted(driveMotorReversed);
-    // m_driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10, 10);
     m_driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 10);
     m_driveMotor.config_kP(0, SwerveModuleConstants.kPModuleDriveController, 10);
     m_driveMotor.config_kI(0, SwerveModuleConstants.kIModuleDriveController, 10);
@@ -71,10 +69,10 @@ public class SwerveModule {
     m_driveMotor.configSupplyCurrentLimit(DriveConstants.kSupplyCurrentLimit);
 
     m_turningMotor = new WPI_TalonFX(turningMotorChannel);
-    m_turningEncoder = new WPI_CANCoder(turningEncoderChannel);
-
-    // Set whether turning encoder should be reversed or not
     m_turningMotor.setInverted(turningMotorReversed);
+    m_turningMotor.configSupplyCurrentLimit(DriveConstants.kSupplyCurrentLimit);
+
+    m_turningEncoder = new WPI_CANCoder(turningEncoderChannel);
     m_turningEncoder.configSensorDirection(turningEncoderReversed, 10);
     m_turningEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
 
