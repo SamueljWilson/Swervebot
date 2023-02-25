@@ -120,12 +120,7 @@ private final SwerveModule m_frontRight = //Q4
             fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-        swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
-    m_frontLeft.setDesiredState(swerveModuleStates[0]); //Q1
-    m_rearLeft.setDesiredState(swerveModuleStates[1]); //Q2
-    m_rearRight.setDesiredState(swerveModuleStates[2]); //Q3
-    m_frontRight.setDesiredState(swerveModuleStates[3]); //Q4
+        setModuleStates(swerveModuleStates);
   }
 
   /**
