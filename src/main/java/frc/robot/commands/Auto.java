@@ -32,7 +32,7 @@ public class Auto {
   private static final double kECrossX = 6.074;
   private static final double kEChargingStationX = 4.515;
 
-  private static final double kStartingGridX = kGridMaxX + kRobotHalfLength + 0.15 + 1;
+  private static final double kStartingGridX = kGridMaxX + kRobotHalfLength + 0.15;
   private static final double kPlacingGridX = kGridMaxX + kRobotHalfLength;
   private static final double kBGridY = 0.413;
   private static final double kHGridY = kGridMaxY - kBGridY;
