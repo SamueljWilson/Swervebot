@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.Auto;
 import frc.robot.subsystems.ArmSubsystem;
@@ -31,8 +32,6 @@ public class RobotContainer {
   public final GripperSubsystem m_gripper = new GripperSubsystem();
   public final ArmSubsystem m_arm = new ArmSubsystem();
   public final WristSubsystem m_wrist = new WristSubsystem();
-
-  private boolean armStubOut = true;
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -66,7 +65,7 @@ public class RobotContainer {
   }
 
   private void configureAutoRoutines() {
-    if (armStubOut == false) {
+    if (ArmConstants.kStubOut == false) {
       m_chooser.setDefaultOption("Blue B Place Cross", Auto.blueBPlaceCross(m_robotDrive, m_arm, m_gripper));
       m_chooser.addOption("Blue H Place Cross", Auto.blueHPlaceCross(m_robotDrive, m_arm, m_gripper));
       m_chooser.addOption("Blue E Place Cross", Auto.blueEPlaceCross(m_robotDrive, m_arm, m_gripper));
@@ -105,7 +104,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, OIConstants.kOpenButtonPressed)
       .debounce(OIConstants.kDebounceSeconds)
       .onTrue(m_gripper.openGrippers());
-    if (armStubOut == false) {
+    if (ArmConstants.kStubOut == false) {
       new JoystickButton(m_driverController, OIConstants.kHomeButtonPressed)
         .debounce(OIConstants.kDebounceSeconds)
         .onTrue(m_arm.moveHome());
