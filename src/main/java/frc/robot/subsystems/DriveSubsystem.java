@@ -14,7 +14,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 
@@ -84,19 +83,8 @@ private final SwerveModule m_frontRight = //Q4
     zeroHeading();
   }
 
-  private static void printPose(String label, Pose2d pose) {
-    System.out.printf("%s: X %f - Y %f - Yaw %f\n", label, pose.getX(), pose.getY(), pose.getRotation().getDegrees());
-  }
-
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Gyro Reading", m_gyro.getYaw());
-    SmartDashboard.putNumber("Pose X", getPose().getX());
-    SmartDashboard.putNumber("Pose Y", getPose().getY());
-    SmartDashboard.putNumber("Pose Yaw", getPose().getRotation().getDegrees());
-    // printPose("DriveSubsystem Periodic", getPose());
-    // System.out.println(getPose().getX());
-
     // Update the odometry in the periodic block
     m_odometry.update(
         getRotation2d(),
@@ -115,10 +103,6 @@ private final SwerveModule m_frontRight = //Q4
 
   public void initOdometry(Pose2d initialPose) {
     m_odometry.resetPosition(getRotation2d(), getPositions(), initialPose);
-    SmartDashboard.putNumber("Odometry Pose X", getPose().getX());
-    SmartDashboard.putNumber("Odometry Pose Y", getPose().getY());
-    SmartDashboard.putNumber("Odometry Pose Yaw", getPose().getRotation().getDegrees());
-    System.out.println("Reset Odometry");
   }
 
   /**
@@ -142,18 +126,6 @@ private final SwerveModule m_frontRight = //Q4
     m_rearLeft.setDesiredState(swerveModuleStates[1]); //Q2
     m_rearRight.setDesiredState(swerveModuleStates[2]); //Q3
     m_frontRight.setDesiredState(swerveModuleStates[3]); //Q4
-    SmartDashboard.putNumber("Front Left Desired State", (swerveModuleStates[0].angle.getDegrees() + 360) % 360); //Q1
-    SmartDashboard.putNumber("Rear Left Desired State", (swerveModuleStates[1].angle.getDegrees() + 360) % 360); //Q2
-    SmartDashboard.putNumber("Rear Right Desired State", (swerveModuleStates[2].angle.getDegrees() + 360) % 360); //Q3
-    SmartDashboard.putNumber("Front Right Desired State", (swerveModuleStates[3].angle.getDegrees() + 360) % 360); //Q4
-    dashboardPublish();
-  }
-
-  public void dashboardPublish() {
-    SmartDashboard.putNumber("Front Left Actual State", m_frontLeft.getPosition().angle.getDegrees()); //Q1
-    SmartDashboard.putNumber("Rear Left Actual State", m_rearLeft.getPosition().angle.getDegrees()); //Q2
-    SmartDashboard.putNumber("Rear Right Actual State", m_rearRight.getPosition().angle.getDegrees()); //Q3
-    SmartDashboard.putNumber("Front Right Actual State", m_frontRight.getPosition().angle.getDegrees()); //Q4
   }
 
   /**

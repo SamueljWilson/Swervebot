@@ -6,8 +6,6 @@ package frc.robot.commands;
 
 import java.util.List;
 
-import org.opencv.core.Mat;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -89,22 +87,10 @@ public class Auto {
   private static Pose2d copyPose(Pose2d pose) {
     return new Pose2d (pose.getX(), pose.getY(), pose.getRotation());
   }
-
-  private static void printStates(List<Trajectory.State> states) {
-    for (int i = 0; i < states.size(); i++) {
-      Trajectory.State state = states.get(i);
-      System.out.printf("State %d: X %f - Y %f - Yaw %f\n", i, state.poseMeters.getX(), state.poseMeters.getY(), state.poseMeters.getRotation().getDegrees());
-    }
-  }
-
-  private static void printPose(String label, Pose2d pose) {
-    System.out.printf("%s: X %f - Y %f - Yaw %f\n", label, pose.getX(), pose.getY(), pose.getRotation().getDegrees());
-  }
   
   private static Pose2d getFinalPose(Trajectory trajectory) {
     List<Trajectory.State> states = trajectory.getStates();
     Trajectory.State state = states.get(states.size()-1);
-    printPose("getFinalPose", state.poseMeters);
     return copyPose(state.poseMeters);
   }
   
@@ -140,12 +126,10 @@ public class Auto {
     Command command =
       arm.moveToTop()
       .andThen(trajectoryCommand(drive, trajectory0, transform))
-      .andThen(() -> System.out.println("xxxa"))
       .andThen(gripper.openGrippers())
-      // .andThen(trajectoryCommand(drive, trajectory1, transform))
-      .andThen(() -> System.out.println("xxxb"))
+      .andThen(trajectoryCommand(drive, trajectory1, transform))
       .andThen(arm.moveHome())
-      // .andThen(trajectoryCommand(drive, trajectory2, transform))
+      .andThen(trajectoryCommand(drive, trajectory2, transform))
       .andThen(arm.moveToOffFloor());
     return new Auto(drive, startingPose, command);
   }
