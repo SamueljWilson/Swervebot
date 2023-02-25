@@ -13,6 +13,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
@@ -138,6 +139,7 @@ public class DriveTrajectory extends CommandBase {
     Trajectory.State sampledState = m_trajectory.sample(curTime);
     Rotation2d desiredRotation = getDesiredRotation();
 
+    // Overriding the current rotation with our desired rotation
     Trajectory.State desiredState = new Trajectory.State(
       sampledState.timeSeconds,
       sampledState.velocityMetersPerSecond,
@@ -145,9 +147,9 @@ public class DriveTrajectory extends CommandBase {
       new Pose2d(sampledState.poseMeters.getX(), sampledState.poseMeters.getY(), desiredRotation),
       sampledState.curvatureRadPerMeter);
 
-    var targetChassisSpeeds =
+    ChassisSpeeds targetChassisSpeeds =
         m_controller.calculate(currentPose, desiredState, desiredRotation);
-    var targetModuleStates = m_kinematics.toSwerveModuleStates(targetChassisSpeeds);
+    SwerveModuleState[] targetModuleStates = m_kinematics.toSwerveModuleStates(targetChassisSpeeds);
 
     m_outputModuleStates.accept(targetModuleStates);
 
@@ -179,17 +181,17 @@ public class DriveTrajectory extends CommandBase {
     if (!m_timer.hasElapsed(m_trajectory.getTotalTimeSeconds())) {
       return false;
     }
-    Pose2d currentPose = m_pose.get();
-    Rotation2d rotationDelta = normalizeRotation(m_finalPose.getRotation().minus(currentPose.getRotation()));
-    if (Math.abs(MathUtil.inputModulus(rotationDelta.getDegrees(), -180, 180)) > 5/* XXX Magic number. */) {
-      System.out.printf("rotationDelta: %s\n", rotationDelta);
-      return false;
-    }
-    double distance = currentPose.getTranslation().getDistance(m_finalPose.getTranslation());
-    if (distance > 0.025 /* XXX Magic number. */) {
-      System.out.printf("distance: %f\n", distance);
-      return false;
-    }
+    // Pose2d currentPose = m_pose.get();
+    // Rotation2d rotationDelta = normalizeRotation(m_finalPose.getRotation().minus(currentPose.getRotation()));
+    // if (Math.abs(MathUtil.inputModulus(rotationDelta.getDegrees(), -180, 180)) > 5/* XXX Magic number. */) {
+    //   System.out.printf("rotationDelta: %s\n", rotationDelta);
+    //   return false;
+    // }
+    // double distance = currentPose.getTranslation().getDistance(m_finalPose.getTranslation());
+    // if (distance > 0.025 /* XXX Magic number. */) {
+    //   System.out.printf("distance: %f\n", distance);
+    //   return false;
+    // }
     m_finished = true;
     return true;
   }
