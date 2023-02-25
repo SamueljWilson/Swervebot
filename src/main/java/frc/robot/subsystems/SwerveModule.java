@@ -73,16 +73,10 @@ public class SwerveModule {
     m_turningMotor = new WPI_TalonFX(turningMotorChannel);
     m_turningEncoder = new WPI_CANCoder(turningEncoderChannel);
 
-    // Set whether drive encoder should be reversed or not
-    m_driveMotor.setInverted(driveMotorReversed);
-
     // Set whether turning encoder should be reversed or not
     m_turningMotor.setInverted(turningMotorReversed);
     m_turningEncoder.configSensorDirection(turningEncoderReversed, 10);
     m_turningEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
-
-    m_driveMotor.configSupplyCurrentLimit(DriveConstants.kSupplyCurrentLimit);
-    m_turningMotor.configSupplyCurrentLimit(DriveConstants.kSupplyCurrentLimit);
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
@@ -131,7 +125,6 @@ public class SwerveModule {
            1
           );
 
-    // Calculate the turning motor output from the turning PID controller.
     m_driveMotor.set(ControlMode.Velocity, driveVelocityDesired);
     m_turningMotor.set(ControlMode.PercentOutput, turnOutput);
   }
