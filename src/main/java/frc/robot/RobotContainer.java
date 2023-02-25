@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -33,10 +34,7 @@ public class RobotContainer {
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final SendableChooser<Auto> m_chooser = new SendableChooser<>();
   private static double joystickDeadband(double value) {
-    if (value >= -OIConstants.kJoystickDeadband && value <= OIConstants.kJoystickDeadband) {
-      return 0;
-    }
-    return value;
+    return MathUtil.applyDeadband(value, OIConstants.kJoystickDeadband);
   }
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
