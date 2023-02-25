@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ArmConstants;
@@ -36,8 +37,24 @@ public class RobotContainer {
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final SendableChooser<Auto> m_chooser = new SendableChooser<>();
-  private static double joystickDeadband(double value) {
-    return MathUtil.applyDeadband(value, OIConstants.kJoystickDeadband);
+
+  private enum DriveSpeed {
+    FAST,
+    SLOW
+  }
+  private static DriveSpeed m_driveSpeed = DriveSpeed.FAST;
+
+  // Applies deadband and slows down the robot if the m_driveSpeed enum is set to SLOW
+  private static double joystickTransform(double value) {
+    double speedCoef;
+    switch (m_driveSpeed) {
+      case SLOW:
+        speedCoef = OIConstants.kSlowCoef;
+        break;
+      default:
+        speedCoef = 1.0;
+    }
+    return MathUtil.applyDeadband(value, OIConstants.kJoystickDeadband)*speedCoef;
   }
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -55,9 +72,9 @@ public class RobotContainer {
         new RunCommand(
           () -> {
             m_robotDrive.drive(
-              joystickDeadband(m_driverController.getLeftY())*OIConstants.kMaxMetersPerSec,
-              joystickDeadband(m_driverController.getLeftX())*OIConstants.kMaxMetersPerSec,
-              joystickDeadband(m_driverController.getRightX())*OIConstants.kMaxRadPerSec,
+              joystickTransform(m_driverController.getLeftY())*OIConstants.kMaxMetersPerSec,
+              joystickTransform(m_driverController.getLeftX())*OIConstants.kMaxMetersPerSec,
+              joystickTransform(m_driverController.getRightX())*OIConstants.kMaxRadPerSec,
               true);
           }, m_robotDrive
         )
@@ -104,6 +121,10 @@ public class RobotContainer {
     new JoystickButton(m_driverController, OIConstants.kOpenButtonPressed)
       .debounce(OIConstants.kDebounceSeconds)
       .onTrue(m_gripper.openGrippers());
+    new JoystickButton(m_driverController, OIConstants.kSlowButtonPressed)
+      .debounce(OIConstants.kDebounceSeconds)
+      .onTrue(Commands.runOnce(() -> {m_driveSpeed = DriveSpeed.SLOW;}))
+      .onFalse(Commands.runOnce(() -> {m_driveSpeed = DriveSpeed.FAST;}));
     if (ArmConstants.kStubOut == false) {
       new JoystickButton(m_driverController, OIConstants.kHomeButtonPressed)
         .debounce(OIConstants.kDebounceSeconds)
@@ -121,10 +142,10 @@ public class RobotContainer {
         .debounce(OIConstants.kDebounceSeconds)
         .onTrue(m_arm.moveToTop());
     } else {
-      new JoystickButton(m_driverController, OIConstants.kExtendWristPressed)
+      new JoystickButton(m_driverController, OIConstants.kExtendWristButtonPressed)
         .debounce(OIConstants.kDebounceSeconds)
         .onTrue(m_wrist.extendWrist());
-      new JoystickButton(m_driverController, OIConstants.kRetractWristPressed)
+      new JoystickButton(m_driverController, OIConstants.kRetractWristButtonPressed)
         .debounce(OIConstants.kDebounceSeconds)
         .onTrue(m_wrist.retractWrist());
     }
