@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.Auto;
@@ -35,7 +37,7 @@ public class RobotContainer {
   public final WristSubsystem m_wrist = new WristSubsystem();
 
   // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  GenericHID m_driverController = new GenericHID(OIConstants.kDriverControllerPort);
   private final SendableChooser<Auto> m_chooser = new SendableChooser<>();
 
   private enum DriveSpeed {
@@ -72,9 +74,9 @@ public class RobotContainer {
         new RunCommand(
           () -> {
             m_robotDrive.drive(
-              joystickTransform(m_driverController.getLeftY())*OIConstants.kMaxMetersPerSec,
-              joystickTransform(m_driverController.getLeftX())*OIConstants.kMaxMetersPerSec,
-              joystickTransform(m_driverController.getRightX())*OIConstants.kMaxRadPerSec,
+              joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyYAxis))*OIConstants.kMaxMetersPerSec,
+              joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyXAxis))*OIConstants.kMaxMetersPerSec,
+              joystickTransform(m_driverController.getRawAxis(OIConstants.kRightJoyXAxis))*OIConstants.kMaxRadPerSec,
               true);
           }, m_robotDrive
         )
@@ -112,40 +114,43 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Creates the triggers for the cone and cube grab commands
-    new JoystickButton(m_driverController, OIConstants.kCubeButtonPressed)
+    new JoystickButton(m_driverController, OIConstants.kCubeAxis)
       .debounce(OIConstants.kDebounceSeconds)
       .onTrue(m_gripper.grabCube());
-    new JoystickButton(m_driverController, OIConstants.kConeButtonPressed)
+    new Trigger(()-> m_driverController.getRawAxis(OIConstants.kLeftTriggerAxis) >= 0)
       .debounce(OIConstants.kDebounceSeconds)
       .onTrue(m_gripper.grabCone());
-    new JoystickButton(m_driverController, OIConstants.kOpenButtonPressed)
+    new Trigger(()-> m_driverController.getRawAxis(OIConstants.kRightTriggerAxis) >= 0)
+      .debounce(OIConstants.kDebounceSeconds)
+      .onTrue(m_gripper.grabCone());
+    new JoystickButton(m_driverController, OIConstants.kOpenButton)
       .debounce(OIConstants.kDebounceSeconds)
       .onTrue(m_gripper.openGrippers());
-    new JoystickButton(m_driverController, OIConstants.kSlowButtonPressed)
+    new JoystickButton(m_driverController, OIConstants.kSlowButton)
       .debounce(OIConstants.kDebounceSeconds)
       .onTrue(Commands.runOnce(() -> {m_driveSpeed = DriveSpeed.SLOW;}))
       .onFalse(Commands.runOnce(() -> {m_driveSpeed = DriveSpeed.FAST;}));
     if (ArmConstants.kStubOut == false) {
-      new JoystickButton(m_driverController, OIConstants.kHomeButtonPressed)
+      new JoystickButton(m_driverController, OIConstants.kHomeButton)
         .debounce(OIConstants.kDebounceSeconds)
         .onTrue(m_arm.moveHome());
-      new JoystickButton(m_driverController, OIConstants.kPickOffFloorButtonPressed)
+      new JoystickButton(m_driverController, OIConstants.kPickOffFloorButton)
         .debounce(OIConstants.kDebounceSeconds)
         .onTrue(m_arm.moveToOffFloor());
-      new JoystickButton(m_driverController, OIConstants.k1stRowButtonPressed)
+      new JoystickButton(m_driverController, OIConstants.k1stRowButton)
         .debounce(OIConstants.kDebounceSeconds)
         .onTrue(m_arm.moveToBottom());
-      new JoystickButton(m_driverController, OIConstants.k2ndRowButtonPressed)
+      new JoystickButton(m_driverController, OIConstants.k2ndRowButton)
         .debounce(OIConstants.kDebounceSeconds)
         .onTrue(m_arm.moveToMiddle());
-      new JoystickButton(m_driverController, OIConstants.k3rdRowButtonPressed)
+      new JoystickButton(m_driverController, OIConstants.k3rdRowButton)
         .debounce(OIConstants.kDebounceSeconds)
         .onTrue(m_arm.moveToTop());
     } else {
-      new JoystickButton(m_driverController, OIConstants.kExtendWristButtonPressed)
+      new JoystickButton(m_driverController, OIConstants.kExtendWristButton)
         .debounce(OIConstants.kDebounceSeconds)
         .onTrue(m_wrist.extendWrist());
-      new JoystickButton(m_driverController, OIConstants.kRetractWristButtonPressed)
+      new JoystickButton(m_driverController, OIConstants.kRetractWristButton)
         .debounce(OIConstants.kDebounceSeconds)
         .onTrue(m_wrist.retractWrist());
     }
