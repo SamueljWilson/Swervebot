@@ -26,12 +26,12 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   InitState m_initState = InitState.UNINITIALIZED;
-  
-  DoubleSolenoid m_wristPiston = new DoubleSolenoid(
+    
+  DoubleSolenoid m_wristPiston = ArmConstants.kStubOut ? null : new DoubleSolenoid(
     PneumaticsModuleType.REVPH,
     ArmConstants.kWristSolenoidForwardChannel,
     ArmConstants.kWristSolenoidBackwardChannel);
-    
+
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {}
 

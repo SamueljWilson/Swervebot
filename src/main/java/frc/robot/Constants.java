@@ -13,7 +13,6 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.XboxController;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -144,29 +143,45 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final double kMaxRadPerSec = SwerveModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond;
     public static final double kMaxMetersPerSec = DriveConstants.kMaxSpeedMetersPerSecond;
+    
+    public static final int kA = 1;
+    public static final int kB = 2;
+    public static final int kX = 3;
+    public static final int kY = 4;
+    public static final int kLeftBumper = 5;
+    public static final int kRightBumper = 6;
+    public static final int kBack = 7;
+    public static final int kStart = 8;
+    public static final int kLeftJoy = 9;
+    public static final int kRightJoy = 10;
+
+    public static int kLeftJoyXAxis = 0;
+    public static int kLeftJoyYAxis = 1;
+    public static int kRightJoyXAxis = 2;
+    public static int kRightJoyYAxis = 3;
+    public static int kLeftTriggerAxis = 4;
+    public static int kRightTriggerAxis = 5;
 
     public static final int kDpadUp = 12; //TODO: FIND OUT THE REAL VALUES OF THIS TRIGGERS
     public static final int kDpadRight = 13; //TODO: FIND OUT THE REAL VALUES OF THIS TRIGGERS
     public static final int kDpadDown = 14; //TODO: FIND OUT THE REAL VALUES OF THIS TRIGGERS
     public static final int kDpadLeft = 15; //TODO: FIND OUT THE REAL VALUES OF THIS TRIGGERS
-    public static final int kLeftTrigger = 4; //TODO: FIND OUT THE REAL VALUES OF THIS TRIGGERS
-    public static final int kRightTrigger = 5; //TODO: FIND OUT THE REAL VALUES OF THIS TRIGGERS
 
     public static final int kArmDown = kDpadDown;
     public static final int kArmUp = kDpadUp;
-    public static final int kCubeButtonPressed = kLeftTrigger;
-    public static final int kConeButtonPressed = kRightTrigger;
-    public static final int kOpenButtonPressed = XboxController.Button.kLeftBumper.value;
-    public static final int kExtendWristButtonPressed = XboxController.Button.kY.value;
-    public static final int kRetractWristButtonPressed = XboxController.Button.kA.value;
+    public static final int kCubeAxis = kRightTriggerAxis;
+    public static final int kConeAxis = kLeftTriggerAxis;
+    public static final int kOpenButton = kLeftBumper;
+    public static final int kExtendWristButton = kY;
+    public static final int kRetractWristButton = kA;
 
 
-    public static final int kHomeButtonPressed = XboxController.Button.kA.value;
-    public static final int k1stRowButtonPressed = XboxController.Button.kB.value;
-    public static final int kPickOffFloorButtonPressed = XboxController.Button.kY.value;
-    public static final int k2ndRowButtonPressed = XboxController.Button.kX.value;
-    public static final int k3rdRowButtonPressed = XboxController.Button.kRightBumper.value;
-    public static final int kSlowButtonPressed = XboxController.Button.kRightBumper.value;
+    public static final int kHomeButton = 16; //TODO: ASSIGN BUTTON VALUES
+    public static final int k1stRowButton = 16; //TODO: ASSIGN BUTTON VALUES
+    public static final int kPickOffFloorButton = 16; //TODO: ASSIGN BUTTON VALUES
+    public static final int k2ndRowButton = 16; //TODO: ASSIGN BUTTON VALUES
+    public static final int k3rdRowButton = 16; //TODO: ASSIGN BUTTON VALUES
+    public static final int kSlowButton = kRightBumper;
 
     public static final double kDebounceSeconds = 0.01;
 
