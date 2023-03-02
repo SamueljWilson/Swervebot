@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -117,6 +118,10 @@ public class Auto {
 
   private static Transform2d blueTransform() {
     return new Transform2d();
+  }
+
+  public static Auto doNothing(DriveSubsystem drive) {
+    return new Auto(drive, new Pose2d(0, 0, new Rotation2d(0)), Commands.runOnce(() -> {}));
   }
   
   public static Auto bPlaceCross(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Transform2d transform) {
