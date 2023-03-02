@@ -60,6 +60,7 @@ private final SwerveModule m_frontRight = //Q4
           DriveConstants.kFrontRightEncoderOffset);
   // The gyro sensor uses NavX
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+  private Pose2d m_initialPose;
 
   private SwerveModulePosition[] getPositions() {
     SwerveModulePosition[] positions = {
@@ -102,6 +103,7 @@ private final SwerveModule m_frontRight = //Q4
   }
 
   public void initOdometry(Pose2d initialPose) {
+    m_initialPose = initialPose;
     m_odometry.resetPosition(getRotation2d(), getPositions(), initialPose);
   }
 
@@ -151,6 +153,6 @@ private final SwerveModule m_frontRight = //Q4
   }
 
   public Rotation2d getRotation2d() {
-    return new Rotation2d(Math.toRadians(-m_gyro.getYaw()));
+    return new Rotation2d(Math.toRadians(-m_gyro.getYaw()) + m_initialPose.getRotation().getRadians());
   }
 }
