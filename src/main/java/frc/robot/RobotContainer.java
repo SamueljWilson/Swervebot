@@ -114,15 +114,12 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Creates the triggers for the cone and cube grab commands
-    new JoystickButton(m_driverController, OIConstants.kCubeAxis)
+    new Trigger(()-> m_driverController.getRawAxis(OIConstants.kLeftTriggerAxis) >= 0.5)
+      .debounce(OIConstants.kDebounceSeconds)
+      .onTrue(m_gripper.grabCone());
+    new Trigger(()-> m_driverController.getRawAxis(OIConstants.kRightTriggerAxis) >= 0.5)
       .debounce(OIConstants.kDebounceSeconds)
       .onTrue(m_gripper.grabCube());
-    new Trigger(()-> m_driverController.getRawAxis(OIConstants.kLeftTriggerAxis) >= 0)
-      .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_gripper.grabCone());
-    new Trigger(()-> m_driverController.getRawAxis(OIConstants.kRightTriggerAxis) >= 0)
-      .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_gripper.grabCone());
     new JoystickButton(m_driverController, OIConstants.kOpenButton)
       .debounce(OIConstants.kDebounceSeconds)
       .onTrue(m_gripper.openGrippers());

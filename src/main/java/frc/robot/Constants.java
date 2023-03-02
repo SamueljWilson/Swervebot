@@ -157,10 +157,10 @@ public final class Constants {
 
     public static int kLeftJoyXAxis = 0;
     public static int kLeftJoyYAxis = 1;
-    public static int kRightJoyXAxis = 2;
-    public static int kRightJoyYAxis = 3;
-    public static int kLeftTriggerAxis = 4;
-    public static int kRightTriggerAxis = 5;
+    public static int kLeftTriggerAxis = 2;
+    public static int kRightTriggerAxis = 3;
+    public static int kRightJoyXAxis = 4;
+    public static int kRightJoyYAxis = 5;
 
     public static final int kDpadUp = 12; //TODO: FIND OUT THE REAL VALUES OF THIS TRIGGERS
     public static final int kDpadRight = 13; //TODO: FIND OUT THE REAL VALUES OF THIS TRIGGERS
