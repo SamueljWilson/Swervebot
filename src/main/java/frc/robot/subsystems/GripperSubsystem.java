@@ -65,8 +65,8 @@ public class GripperSubsystem extends SubsystemBase {
       () -> {
         if (m_state != State.CLOSED_CUBE) {
           m_state = State.CLOSED_CUBE;
-          m_leftSolenoid.set(Value.kForward);
-          m_rightSolenoid.set(Value.kReverse);
+          m_leftSolenoid.set(Value.kReverse);
+          m_rightSolenoid.set(Value.kForward);
         }
       }
     ); 
