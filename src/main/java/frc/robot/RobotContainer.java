@@ -76,7 +76,8 @@ public class RobotContainer {
         new RunCommand(
           () -> {
             m_robotDrive.drive(
-              joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyYAxis))*OIConstants.kMaxMetersPerSec,
+              (getTeam() == Auto.Team.BLUE ? -1 : 1)
+                *joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyYAxis))*OIConstants.kMaxMetersPerSec,
               joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyXAxis))*OIConstants.kMaxMetersPerSec,
               -joystickTransform(m_driverController.getRawAxis(OIConstants.kRightJoyXAxis))*OIConstants.kMaxRadPerSec,
               true);
@@ -88,23 +89,23 @@ public class RobotContainer {
   private void configureAutoRoutines() {
     m_chooser.setDefaultOption("Do Nothing", Auto.doNothing(m_robotDrive));
     if (ArmConstants.kStubOut == false) {
-      m_chooser.addOption("Blue B Place Cross", Auto.blueBPlaceCross(m_robotDrive, m_arm, m_gripper));
-      m_chooser.addOption("Blue H Place Cross", Auto.blueHPlaceCross(m_robotDrive, m_arm, m_gripper));
-      m_chooser.addOption("Blue E Place Cross", Auto.blueEPlaceCross(m_robotDrive, m_arm, m_gripper));
-      m_chooser.addOption("Blue E Place Cross Charge", Auto.blueEPlaceCrossCharge(m_robotDrive, m_arm, m_gripper));
+      m_chooser.addOption("Blue B Place Cross", Auto.blueBPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
+      m_chooser.addOption("Blue H Place Cross", Auto.blueHPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
+      m_chooser.addOption("Blue E Place Cross", Auto.blueEPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
+      m_chooser.addOption("Blue E Place Cross Charge", Auto.blueEPlaceCrossCharge(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
 
-      m_chooser.addOption("Red B Place Cross", Auto.redBPlaceCross(m_robotDrive, m_arm, m_gripper));
-      m_chooser.addOption("Red H Place Cross", Auto.redHPlaceCross(m_robotDrive, m_arm, m_gripper));
-      m_chooser.addOption("Red E Place Cross", Auto.redEPlaceCross(m_robotDrive, m_arm, m_gripper));
-      m_chooser.addOption("Red E Place Cross Charge", Auto.redEPlaceCrossCharge(m_robotDrive, m_arm, m_gripper));
+      m_chooser.addOption("Red B Place Cross", Auto.redBPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.RED));
+      m_chooser.addOption("Red H Place Cross", Auto.redHPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.RED));
+      m_chooser.addOption("Red E Place Cross", Auto.redEPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.RED));
+      m_chooser.addOption("Red E Place Cross Charge", Auto.redEPlaceCrossCharge(m_robotDrive, m_arm, m_gripper, Auto.Team.RED));
     } else {
-      m_chooser.addOption("Blue B Place Cross Wrist", Auto.blueBPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper));
-      m_chooser.addOption("Blue H Place Cross Wrist", Auto.blueHPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper));
-      m_chooser.addOption("Blue E Place Cross Wrist", Auto.blueEPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper));
+      m_chooser.addOption("Blue B Place Cross Wrist", Auto.blueBPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper, Auto.Team.BLUE));
+      m_chooser.addOption("Blue H Place Cross Wrist", Auto.blueHPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper, Auto.Team.BLUE));
+      m_chooser.addOption("Blue E Place Cross Wrist", Auto.blueEPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper, Auto.Team.BLUE));
 
-      m_chooser.addOption("Red B Place Cross Wrist", Auto.redBPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper));
-      m_chooser.addOption("Red H Place Cross Wrist", Auto.redHPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper));
-      m_chooser.addOption("Red E Place Cross Wrist", Auto.redEPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper));
+      m_chooser.addOption("Red B Place Cross Wrist", Auto.redBPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper, Auto.Team.RED));
+      m_chooser.addOption("Red H Place Cross Wrist", Auto.redHPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper, Auto.Team.RED));
+      m_chooser.addOption("Red E Place Cross Wrist", Auto.redEPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper, Auto.Team.RED));
     }
     SmartDashboard.putData(m_chooser);
   }
@@ -166,5 +167,9 @@ public class RobotContainer {
 
   public Pose2d getAutonomousStartingPose() {
     return m_chooser.getSelected().getInitialPose();
+  }
+
+  public Auto.Team getTeam() {
+    return m_chooser.getSelected().getTeam();
   }
 }
