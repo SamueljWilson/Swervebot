@@ -126,7 +126,7 @@ public class Auto {
     Trajectory trajectory0 = bTrajectoryPlaceCross0(mirror);
     Trajectory trajectory1 = bTrajectoryPlaceCross1(trajectory0, mirror);
     Trajectory trajectory2 = bTrajectoryPlaceCross2(trajectory1, mirror);
-    Pose2d startingPose = mirror.apply(trajectory0.getInitialPose());
+    Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
       arm.moveToTop()
       .andThen(trajectoryCommand(drive, trajectory0))
@@ -142,7 +142,7 @@ public class Auto {
     Trajectory trajectory0 = bTrajectoryPlaceCross0(mirror);
     Trajectory trajectory1 = bTrajectoryPlaceCross1(trajectory0, mirror);
     Trajectory trajectory2 = bTrajectoryPlaceCross2(trajectory1, mirror);
-    Pose2d startingPose = mirror.apply(trajectory0.getInitialPose());
+    Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
       wrist.extendWrist()
       .andThen(trajectoryCommand(drive, trajectory0))
@@ -174,7 +174,7 @@ public class Auto {
     Trajectory trajectory1 = eTrajectoryPlaceCross1(trajectory0, mirror);
     Trajectory trajectory2 = eTrajectoryPlaceCross2(trajectory1, mirror);
     Trajectory trajectory3 = eTrajectoryPlaceCross3(trajectory2, mirror);
-    Pose2d startingPose = mirror.apply(trajectory0.getInitialPose());
+    Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
       arm.moveToTop()
       .andThen(trajectoryCommand(drive, trajectory0))
@@ -192,7 +192,7 @@ public class Auto {
     Trajectory trajectory1 = eTrajectoryPlaceCross1(trajectory0, mirror);
     Trajectory trajectory2 = eTrajectoryPlaceCross2(trajectory1, mirror);
     Trajectory trajectory3 = eTrajectoryPlaceCross3(trajectory2, mirror);
-    Pose2d startingPose = mirror.apply(trajectory0.getInitialPose());
+    Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
       wrist.extendWrist()
       .andThen(trajectoryCommand(drive, trajectory0))
@@ -225,7 +225,7 @@ public class Auto {
     Trajectory trajectory1 = eTrajectoryPlaceCross1(trajectory0, mirror);
     Trajectory trajectory2 = eTrajectoryPlaceCross2(trajectory1, mirror);
     Trajectory trajectory3 = eTrajectoryPlaceCrossCharge3(trajectory2, mirror);
-    Pose2d startingPose = mirror.apply(trajectory0.getInitialPose());
+    Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
       arm.moveToTop()
       .andThen(trajectoryCommand(drive, trajectory0))
@@ -249,7 +249,7 @@ public class Auto {
     Trajectory trajectory0 = hTrajectoryPlaceCross0(mirror);
     Trajectory trajectory1 = hTrajectoryPlaceCross1(trajectory0, mirror);
     Trajectory trajectory2 = hTrajectoryPlaceCross2(trajectory1, mirror);
-    Pose2d startingPose = mirror.apply(trajectory0.getInitialPose());
+    Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
       arm.moveToTop()
       .andThen(trajectoryCommand(drive, trajectory0))
@@ -265,7 +265,7 @@ public class Auto {
     Trajectory trajectory0 = hTrajectoryPlaceCross0(mirror);
     Trajectory trajectory1 = hTrajectoryPlaceCross1(trajectory0, mirror);
     Trajectory trajectory2 = hTrajectoryPlaceCross2(trajectory1, mirror);
-    Pose2d startingPose = mirror.apply(trajectory0.getInitialPose());
+    Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
       wrist.extendWrist()
       .andThen(trajectoryCommand(drive, trajectory0))
