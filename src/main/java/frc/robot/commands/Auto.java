@@ -59,19 +59,19 @@ public class Auto {
   private static final Pose2d kPickupStagingMarker1 = new Pose2d(
     kSM1.getX() - kRobotHalfLength - kPickupOffset,
     kSM1.getY(),
-    new Rotation2d(0)
+    new Rotation2d(Math.PI)
   );
 
   private static final Pose2d kPickupStagingMarker4 = new Pose2d(
     kSM4.getX() - kRobotHalfLength - kPickupOffset,
     kSM4.getY(),
-    new Rotation2d(0)
+    new Rotation2d(Math.PI)
   );
 
   private static final Pose2d kPickupStagingMarker2 = new Pose2d(
     kSM2.getX() - kRobotHalfLength - kPickupOffset,
     kSM2.getY(),
-    new Rotation2d(0)
+    new Rotation2d(Math.PI)
   );
 
   Pose2d m_pose;
