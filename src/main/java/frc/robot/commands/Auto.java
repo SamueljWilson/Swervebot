@@ -148,8 +148,8 @@ public class Auto {
       .andThen(trajectoryCommand(drive, trajectory0))
       .andThen(gripper.openGrippers())
       .andThen(trajectoryCommand(drive, trajectory1))
-      .andThen(wrist.retractWrist())
-      .andThen(trajectoryCommand(drive, trajectory2));
+      .andThen(wrist.retractWrist());
+      // .andThen(trajectoryCommand(drive, trajectory2));
     return new Auto(drive, startingPose, command);
   }
 
@@ -198,9 +198,9 @@ public class Auto {
       .andThen(trajectoryCommand(drive, trajectory0))
       .andThen(gripper.openGrippers())
       .andThen(trajectoryCommand(drive, trajectory1))
-      .andThen(wrist.retractWrist())
-      .andThen(trajectoryCommand(drive, trajectory2))
-      .andThen(trajectoryCommand(drive, trajectory3));
+      .andThen(wrist.retractWrist());
+      // .andThen(trajectoryCommand(drive, trajectory2))
+      // .andThen(trajectoryCommand(drive, trajectory3));
     return new Auto(drive, startingPose, command);
   }
   
@@ -271,8 +271,8 @@ public class Auto {
       .andThen(trajectoryCommand(drive, trajectory0))
       .andThen(gripper.openGrippers())
       .andThen(trajectoryCommand(drive, trajectory1))
-      .andThen(wrist.retractWrist())
-      .andThen(trajectoryCommand(drive, trajectory2));
+      .andThen(wrist.retractWrist());
+      // .andThen(trajectoryCommand(drive, trajectory2));
     return new Auto(drive, startingPose, command);
   }
 
