@@ -56,7 +56,9 @@ public class RobotContainer {
       default:
         speedCoef = 1.0;
     }
-    return MathUtil.applyDeadband(value, OIConstants.kJoystickDeadband)*speedCoef;
+    double postDeadbandValue = MathUtil.applyDeadband(value, OIConstants.kJoystickDeadband);
+    double postDeadbandValueSquared = postDeadbandValue * Math.abs(postDeadbandValue);
+    return postDeadbandValueSquared*speedCoef;
   }
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
