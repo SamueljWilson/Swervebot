@@ -75,10 +75,10 @@ public class RobotContainer {
       // Turning is controlled by the X axis of the right stick.
         new RunCommand(
           () -> {
+            double reverseFactor = getTeam() == Auto.Team.BLUE ? -1 : 1;
             m_robotDrive.drive(
-              (getTeam() == Auto.Team.BLUE ? -1 : 1)
-                *joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyYAxis))*OIConstants.kMaxMetersPerSec,
-              joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyXAxis))*OIConstants.kMaxMetersPerSec,
+              reverseFactor*joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyYAxis))*OIConstants.kMaxMetersPerSec,
+              reverseFactor*joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyXAxis))*OIConstants.kMaxMetersPerSec,
               -joystickTransform(m_driverController.getRawAxis(OIConstants.kRightJoyXAxis))*OIConstants.kMaxRadPerSec,
               true);
           }, m_robotDrive
