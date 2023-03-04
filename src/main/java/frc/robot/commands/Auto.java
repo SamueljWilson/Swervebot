@@ -40,7 +40,7 @@ public class Auto {
 
   private static final double kStartingGridX = kGridMaxX + kRobotHalfLength + 0.356;
   private static final double kPlacingGridX = kGridMaxX + kRobotHalfLength + 0.206;
-  private static final double kBGridY = 0.413;
+  private static final double kBGridY = 1.074;
   private static final double kHGridY = kGridMaxY - kBGridY;
   private static final double kEGridY = kGridMaxY / 2;
 
@@ -161,8 +161,8 @@ public class Auto {
       .andThen(trajectoryCommand(drive, trajectory0))
       .andThen(gripper.openGrippers())
       .andThen(trajectoryCommand(drive, trajectory1))
-      .andThen(wrist.retractWrist());
-      // .andThen(trajectoryCommand(drive, trajectory2));
+      .andThen(wrist.retractWrist())
+      .andThen(trajectoryCommand(drive, trajectory2));
     return new Auto(drive, startingPose, command, team);
   }
 
@@ -289,8 +289,8 @@ public class Auto {
       .andThen(trajectoryCommand(drive, trajectory0))
       .andThen(gripper.openGrippers())
       .andThen(trajectoryCommand(drive, trajectory1))
-      .andThen(wrist.retractWrist());
-      // .andThen(trajectoryCommand(drive, trajectory2));
+      .andThen(wrist.retractWrist())
+      .andThen(trajectoryCommand(drive, trajectory2));
     return new Auto(drive, startingPose, command, team);
   }
 
