@@ -119,7 +119,7 @@ public final class Constants {
 
   public static final class SwerveModuleConstants {
     public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI;
-    public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 4 * Math.PI;
+    public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
 
     public static final double kDriveEncoderCPR = 2048.0;
     public static final double kAbsoluteEncoderCPR = 4096.0;
