@@ -101,7 +101,7 @@ public class Auto {
     return copyPose(state.poseMeters);
   }
   
-  public Auto(DriveSubsystem drive, Pose2d pose, Command command, Team team) {
+  public Auto(Pose2d pose, Command command, Team team) {
     m_initialPose = pose;
     m_command = command;
     m_team = team;
@@ -120,7 +120,7 @@ public class Auto {
   }
 
   public static Auto doNothing(DriveSubsystem drive) {
-    return new Auto(drive, new Pose2d(0, 0, new Rotation2d(0)), Commands.runOnce(() -> {}), Team.BLUE);
+    return new Auto(new Pose2d(0, 0, new Rotation2d(0)), Commands.runOnce(() -> {}), Team.BLUE);
   }
 
   private static interface MirrorInterface {
@@ -147,7 +147,7 @@ public class Auto {
       .andThen(arm.moveHome())
       .andThen(trajectoryCommand(drive, trajectory2))
       .andThen(arm.moveToOffFloor());
-    return new Auto(drive, startingPose, command, team);
+    return new Auto(startingPose, command, team);
   }
 
   public static Auto bPlaceCrossWrist(
@@ -163,7 +163,7 @@ public class Auto {
       .andThen(trajectoryCommand(drive, trajectory1))
       .andThen(wrist.retractWrist())
       .andThen(trajectoryCommand(drive, trajectory2));
-    return new Auto(drive, startingPose, command, team);
+    return new Auto(startingPose, command, team);
   }
 
   public static Auto blueBPlaceCross(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Team team) {
@@ -198,7 +198,7 @@ public class Auto {
       .andThen(trajectoryCommand(drive, trajectory2))
       .andThen(trajectoryCommand(drive, trajectory3))
       .andThen(arm.moveToOffFloor());
-    return new Auto(drive, startingPose, command, team);
+    return new Auto(startingPose, command, team);
   }
 
   public static Auto ePlaceCrossWrist(
@@ -216,7 +216,7 @@ public class Auto {
       .andThen(wrist.retractWrist());
       // .andThen(trajectoryCommand(drive, trajectory2))
       // .andThen(trajectoryCommand(drive, trajectory3));
-    return new Auto(drive, startingPose, command, team);
+    return new Auto(startingPose, command, team);
   }
   
   public static Auto blueEPlaceCross(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Team team) {
@@ -250,7 +250,7 @@ public class Auto {
       .andThen(arm.moveHome())
       .andThen(trajectoryCommand(drive, trajectory2))
       .andThen(trajectoryCommand(drive, trajectory3));
-    return new Auto(drive, startingPose, command, team);
+    return new Auto(startingPose, command, team);
   }
 
   public static Auto blueEPlaceCrossCharge(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Team team) {
@@ -275,7 +275,7 @@ public class Auto {
       .andThen(arm.moveHome())
       .andThen(trajectoryCommand(drive, trajectory2))
       .andThen(arm.moveToOffFloor());
-    return new Auto(drive, startingPose, command, team);
+    return new Auto(startingPose, command, team);
   }
 
   public static Auto hPlaceCrossWrist(
@@ -291,7 +291,7 @@ public class Auto {
       .andThen(trajectoryCommand(drive, trajectory1))
       .andThen(wrist.retractWrist())
       .andThen(trajectoryCommand(drive, trajectory2));
-    return new Auto(drive, startingPose, command, team);
+    return new Auto(startingPose, command, team);
   }
 
   public static Auto blueHPlaceCross(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Team team) {
