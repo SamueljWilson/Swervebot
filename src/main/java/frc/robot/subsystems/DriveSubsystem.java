@@ -60,6 +60,8 @@ private final SwerveModule m_frontRight = //Q4
           DriveConstants.kFrontRightEncoderOffset);
   // The gyro sensor uses NavX
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+  private double m_pitch0; // Radians
+  private double m_roll0; // Radians
   private Pose2d m_initialPose = new Pose2d();
 
   private SwerveModulePosition[] getPositions() {
@@ -81,7 +83,7 @@ private final SwerveModule m_frontRight = //Q4
     m_gyro.enableBoardlevelYawReset(true);
     // We have to wait for the gyro to callibrate before we can reset the gyro
     while (m_gyro.isCalibrating()) {Thread.yield();}
-    zeroHeading();
+    zeroGyro();
   }
 
   @Override
@@ -101,6 +103,30 @@ private final SwerveModule m_frontRight = //Q4
   public Pose2d getPose() {
     return m_odometry.getPoseMeters();
   }
+
+  private double getPitchLogical() {
+    return Math.toRadians(-m_gyro.getRoll());
+  }
+
+  private double getRollLogical() {
+    return Math.toRadians(m_gyro.getPitch());
+  }
+
+  public double getPitch() {
+    // Corrections for how we mounted our RoboRIO
+    return getPitchLogical() - m_pitch0;
+  }
+
+  public double getRoll() {
+    // Corrections for how we mounted our RoboRIO
+    return getRollLogical() - m_roll0;
+  }
+
+  public double getYaw() {
+    // Corrections for how we mounted our RoboRIO
+    return Math.toRadians(-m_gyro.getYaw());
+  }
+
 
   public void initOdometry(Pose2d initialPose) {
     m_initialPose = initialPose;
@@ -148,11 +174,14 @@ private final SwerveModule m_frontRight = //Q4
   }
 
   /** Zeroes the heading of the robot. */
-  public void zeroHeading() {
+  public void zeroGyro() {
     m_gyro.reset();
+    // Calculates the the offsets we need to apply for the pitch and roll
+    m_pitch0 = getPitchLogical();
+    m_roll0 = getRollLogical();
   }
 
   public Rotation2d getRotation2d() {
-    return new Rotation2d(Math.toRadians(-m_gyro.getYaw()) + m_initialPose.getRotation().getRadians());
+    return new Rotation2d(getYaw() + m_initialPose.getRotation().getRadians());
   }
 }
