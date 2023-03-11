@@ -76,6 +76,9 @@ public final class Constants {
     public static final boolean kGyroReversed = false;
 
     public static final double kMaxSpeedMetersPerSecond = 5;
+
+    public static final double kGyroPitchOffset = -3.07;
+    public static final double kGyroRollOffset = -0.47875;
   }
 
   public static final class GripperConstants {
@@ -198,6 +201,8 @@ public final class Constants {
     public static final double kPXController = 1;
     public static final double kPYController = 1;
     public static final double kPThetaController = 1;
+
+    public static final double kChargeAdjustingThreshold = Math.toRadians(5);
 
     public static final TrajectoryConfig kDriveTrajectoryConfig =
         new TrajectoryConfig(
