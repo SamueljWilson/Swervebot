@@ -49,7 +49,6 @@ public class AutoBalance extends CommandBase {
   @Override
   public void execute() {
     Orientation3d orientation = new Orientation3d(m_drive.getPitch(), m_drive.getRoll(), m_drive.getYaw());
-
     switch (m_state) {
       case STOPPED:
         m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecond, 0, 0, true);
