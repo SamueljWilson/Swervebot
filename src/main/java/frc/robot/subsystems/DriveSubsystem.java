@@ -127,6 +127,14 @@ private final SwerveModule m_frontRight = //Q4
     return Math.toRadians(-m_gyro.getYaw());
   }
 
+  public void lock() {
+    SwerveModuleState desiredState0 = new SwerveModuleState(0.0, new Rotation2d(Math.PI/4));
+    SwerveModuleState desiredStates1 = new SwerveModuleState(0.0, new Rotation2d((3*Math.PI)/4));
+    m_frontLeft.setDesiredState(desiredState0);
+    m_rearRight.setDesiredState(desiredState0);
+    m_frontRight.setDesiredState(desiredStates1);
+    m_rearLeft.setDesiredState(desiredStates1);
+  }
 
   public void initOdometry(Pose2d initialPose) {
     m_initialPose = initialPose;
