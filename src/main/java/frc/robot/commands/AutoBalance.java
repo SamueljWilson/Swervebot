@@ -52,12 +52,12 @@ public class AutoBalance extends CommandBase {
 
     switch (m_state) {
       case STOPPED:
-        m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecondBalancing, 0, 0, true);
+        m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecond, 0, 0, true);
         m_state = State.DRIVING;
         break;
 
       case DRIVING:
-        m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecondBalancing, 0, 0, true);
+        m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecond, 0, 0, true);
         if (orientation.getTilt() >= AutoConstants.kChargeAdjustingThreshold) {
           m_state = State.ADJUSTING;
         }
