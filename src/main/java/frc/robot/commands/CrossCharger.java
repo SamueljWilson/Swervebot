@@ -7,29 +7,34 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Orientation3d;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.commands.Auto.Team;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class CrossCharger extends CommandBase {
   /** Creates a new CrossCharger. */
   private enum State {
     FLAT,
-    UPWARDS,
-    ENGAGED,
-    DOWNWARDS,
+    CLIMBING,
+    DESCENDING,
     ENDING
   }
   State m_state = State.FLAT;
+  Team m_team;
+  double m_reverseFactor;
+
   DriveSubsystem m_drive;
 
-  public CrossCharger(DriveSubsystem drive) {
+  public CrossCharger(Team team, DriveSubsystem drive) {
+    m_team = team;
     m_drive = drive;
     addRequirements(drive);
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_reverseFactor = m_team == Auto.Team.BLUE ? -1 : 1;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -37,34 +42,27 @@ public class CrossCharger extends CommandBase {
     Orientation3d orientation = new Orientation3d(m_drive.getPitch(), m_drive.getRoll(), m_drive.getYaw());
     switch (m_state) {
       case FLAT:
-        m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecond, 0, 0, true);
+        m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecond*m_reverseFactor, 0, 0, true);
         if (orientation.getTilt() >= AutoConstants.kChargeAdjustingThreshold) {
-          m_state = State.UPWARDS;
+          m_state = State.CLIMBING;
           break;
         }
         break;
       
-      case UPWARDS:
-        if (orientation.getTilt() <= AutoConstants.kEngagedThreshold && orientation.getTilt() >= -AutoConstants.kEngagedThreshold) {
-          m_state = State.ENGAGED;
+      case CLIMBING:
+        if (orientation.isTiltedUp()) {
+          m_state = State.DESCENDING;
           break;
         }
-        m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecond, 0, 0, true);
+        m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecond*m_reverseFactor, 0, 0, true);
         break;
       
-      case ENGAGED:
-        if (orientation.getTilt() >= AutoConstants.kEngagedThreshold || orientation.getTilt() <= -AutoConstants.kEngagedThreshold) {
-          m_state = State.DOWNWARDS;
-          break;
-        }
-        m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecond, 0, 0, true);
-        break;
-      
-      case DOWNWARDS:
-        if (orientation.getTilt() <= AutoConstants.kEngagedThreshold && orientation.getTilt() >= -AutoConstants.kEngagedThreshold) {
+      case DESCENDING:
+        if (orientation.getTilt() <= AutoConstants.kLevelThreshold) {
           m_state = State.ENDING;
           break;
         }
+        m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecond*m_reverseFactor, 0, 0, true);
         break;
       
       case ENDING:
