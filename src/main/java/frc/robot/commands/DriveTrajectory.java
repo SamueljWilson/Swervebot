@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -13,11 +14,14 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants.AutoConstants;
@@ -35,8 +39,57 @@ public class DriveTrajectory extends CommandBase {
   private Rotation2d m_initialRotation = new Rotation2d();
   private Pose2d m_finalPose = new Pose2d();
   private boolean m_finished = false;
-
   // private DriveSubsystem m_drive;
+
+  private static Rotation2d orientation(Translation2d fr, Translation2d to) {
+    // Compute the angle of the fr->to vector.
+    Translation2d orientationVector = to.minus(fr);
+    return new Rotation2d(orientationVector.getX(), orientationVector.getY());
+  }
+  
+  public static Command trajectoryCommand(DriveSubsystem drive, Trajectory trajectory) {
+  return (
+      new DriveTrajectory(
+      trajectory,
+      drive)
+      .andThen(() -> drive.drive(0, 0, 0, true))
+  );
+  }
+
+  public static Trajectory generateTrajectory(Pose2d start, List<Translation2d> waypoints, Pose2d end) {
+      Translation2d next = waypoints.isEmpty() ? end.getTranslation() : waypoints.get(0);
+      Rotation2d startOrientation = orientation(start.getTranslation(), next);
+
+      Translation2d prev = waypoints.isEmpty() ? start.getTranslation() : waypoints.get(waypoints.size() - 1);
+      Rotation2d endOrientation = orientation(prev, end.getTranslation());
+
+      List<Trajectory.State> states = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(start.getTranslation(), startOrientation),
+        waypoints,
+        new Pose2d(end.getTranslation(), endOrientation),
+        AutoConstants.kDriveTrajectoryConfig
+      ).getStates();
+
+      Trajectory.State startStateOrig = states.get(0);
+      Trajectory.State startState = new Trajectory.State(
+        startStateOrig.timeSeconds,
+        startStateOrig.velocityMetersPerSecond,
+        startStateOrig.accelerationMetersPerSecondSq,
+        start,
+        startStateOrig.curvatureRadPerMeter);
+      states.set(0, startState);
+
+      Trajectory.State endStateOrig = states.get(states.size() - 1);
+      Trajectory.State endState = new Trajectory.State(
+        endStateOrig.timeSeconds,
+        endStateOrig.velocityMetersPerSecond,
+        endStateOrig.accelerationMetersPerSecondSq,
+        end,
+        endStateOrig.curvatureRadPerMeter);
+      states.set(states.size() - 1, endState);
+
+      return new Trajectory(states);
+    }
 
   // Normalize to [0..2*pi).
   private static final Rotation2d normalizeRotation(Rotation2d rotation) {
