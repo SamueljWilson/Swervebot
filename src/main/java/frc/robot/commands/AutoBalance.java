@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Orientation3d;
@@ -24,7 +25,7 @@ public class AutoBalance extends CommandBase {
 
   private State m_state = State.STOPPED;
 
-  private PIDController m_balancePID = new PIDController(1, 0, 0);
+  private PIDController m_balancePID = new PIDController(1.0, 0, 0);
   private boolean m_withinTolerance = false;
   private final Timer m_timer = new Timer();
   private final double m_reverseFactor;
@@ -36,8 +37,8 @@ public class AutoBalance extends CommandBase {
     m_drive = drive;
     m_team = team;
     m_balancePID.setSetpoint(0);
-    m_balancePID.setTolerance(AutoConstants.kEngagedThreshold);
-    m_reverseFactor = team == Auto.Team.BLUE ? -1 : 1;
+    m_balancePID.setTolerance(AutoConstants.kLevelThreshold);
+    m_reverseFactor = team == Auto.Team.BLUE ? 1 : -1;
     addRequirements(m_drive);
   }
 
@@ -90,8 +91,9 @@ public class AutoBalance extends CommandBase {
         break;
 
       default:
-        assert(false);      
+        assert(false);
     }
+    SmartDashboard.putString("state", m_state.toString());
   }
 
   // Called once the command ends or is interrupted.
