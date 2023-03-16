@@ -203,8 +203,8 @@ public final class Constants {
     public static final double kPThetaController = 1;
 
     public static final double kMaxSpeedMetersPerSecondBalancing = 0.25;
-    public static final double kChargeAdjustingThreshold = Math.toRadians(5);
-    public static final double kEngagedThreshold = Math.toRadians(2);
+    public static final double kChargeAdjustingThreshold = Math.toRadians(7);
+    public static final double kLevelThreshold = Math.toRadians(2);
     public static double kEngagedTimeThreshold = 1.0;
 
     public static final TrajectoryConfig kDriveTrajectoryConfig =
