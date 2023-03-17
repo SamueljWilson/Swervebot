@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 
@@ -88,6 +89,13 @@ private final SwerveModule m_frontRight = //Q4
 
   @Override
   public void periodic() {
+    if (SmartDashboard.getBoolean("reset PID", false)) {
+      m_frontLeft.resetPID();
+      m_frontRight.resetPID();
+      m_rearLeft.resetPID();
+      m_rearRight.resetPID();
+      SmartDashboard.putBoolean("reset PID", false);
+    }
     // Update the odometry in the periodic block
     m_odometry.update(
         getRotation2d(),
