@@ -93,6 +93,17 @@ public class SwerveModule {
     m_encoderOffset = encoderOffset;
   }
 
+  public void resetPID() {
+    m_driveMotor.config_kP(0, SmartDashboard.getNumber("P", 0), 10);
+    m_driveMotor.config_kI(0, SmartDashboard.getNumber("I", 0), 10);
+    m_driveMotor.config_kD(0, SmartDashboard.getNumber("D", 0), 10);
+  }
+
+  public void printPID() {
+    TalonFXPIDSetConfiguration pidConfig = new TalonFXPIDSetConfiguration();
+    m_driveMotor.getPIDConfigs(pidConfig);
+  }
+
   /**
    * Returns the current state of the module.
    *
