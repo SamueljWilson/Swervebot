@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static final double kDt = 0.02;
   public static final class DriveConstants {
     public static final int kFrontLeftDriveMotorPort = 1; //Q1
     public static final int kRearLeftDriveMotorPort = 2; //Q2
@@ -123,6 +124,9 @@ public final class Constants {
   public static final class SwerveModuleConstants {
     public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI;
     public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
+
+    public static final double kMaxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond;
+    public static final double kMaxAccelerationMetersPerSecond = 10.0;
 
     public static final double kDriveEncoderCPR = 2048.0;
     public static final double kAbsoluteEncoderCPR = 4096.0;

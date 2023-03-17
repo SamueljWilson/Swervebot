@@ -18,6 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
 
@@ -39,7 +40,12 @@ public class SwerveModule {
       new TrapezoidProfile.Constraints(
         SwerveModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond,
         SwerveModuleConstants.kMaxModuleAngularAccelerationRadiansPerSecondSquared));
-
+  
+  private final TrapezoidProfile.Constraints m_contraints = new TrapezoidProfile.Constraints(
+    SwerveModuleConstants.kMaxSpeedMetersPerSecond / (SwerveModuleConstants.kDriveEncoderDistancePerPulse * 10.0),
+    SwerveModuleConstants.kMaxAccelerationMetersPerSecond / (SwerveModuleConstants.kDriveEncoderDistancePerPulse * 10.0)
+  );
+  
   private final Rotation2d m_encoderOffset;
 
   /**
@@ -135,8 +141,19 @@ public class SwerveModule {
     SwerveModuleState state =
       SwerveModuleState.optimize(desiredState, getPosR2d());
     
+    final double drivePositionDesired = m_driveMotor.getSelectedSensorPosition() + (state.speedMetersPerSecond 
+      / (SwerveModuleConstants.kDriveEncoderDistancePerPulse * 10.0)) * Constants.kDt;
+
     final double driveVelocityDesired = state.speedMetersPerSecond
       / (SwerveModuleConstants.kDriveEncoderDistancePerPulse * 10.0);
+    
+    TrapezoidProfile.State driveGoal = new TrapezoidProfile.State(drivePositionDesired, driveVelocityDesired);
+    TrapezoidProfile.State driveSetpoint = new TrapezoidProfile.State();
+    TrapezoidProfile profile = new TrapezoidProfile(m_contraints, driveGoal, driveSetpoint);
+    driveSetpoint = profile.calculate(Constants.kDt);
+    System.out.printf("VELOCITY: %f\n", driveSetpoint.velocity*SwerveModuleConstants.kDriveEncoderDistancePerPulse*10.0);
+    System.out.printf("DESIRED VELOCITY: %f\n", driveVelocityDesired*SwerveModuleConstants.kDriveEncoderDistancePerPulse*10.0);
+
 
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput =
@@ -147,7 +164,7 @@ public class SwerveModule {
            1
           );
 
-    m_driveMotor.set(ControlMode.Velocity, driveVelocityDesired);
+    m_driveMotor.set(ControlMode.Velocity, driveSetpoint.velocity);
     m_turningMotor.set(ControlMode.PercentOutput, turnOutput);
   }
 
