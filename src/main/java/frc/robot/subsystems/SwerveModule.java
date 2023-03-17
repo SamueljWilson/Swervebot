@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.can.TalonFXPIDSetConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
@@ -18,7 +17,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
 
@@ -37,15 +35,6 @@ public class SwerveModule {
       new TrapezoidProfile.Constraints(
         SwerveModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond,
         SwerveModuleConstants.kMaxModuleAngularAccelerationRadiansPerSecondSquared));
-  
-  private final ProfiledPIDController m_drivingPIDController =
-    new ProfiledPIDController(
-      SwerveModuleConstants.kPModuleDriveController,
-      SwerveModuleConstants.kIModuleDriveController,
-      SwerveModuleConstants.kDModuleDriveController,
-      new TrapezoidProfile.Constraints(
-        SwerveModuleConstants.kMaxModuleSpeedMetersPerSecond,
-        SwerveModuleConstants.kMaxModuleAccelerationMetersPerSecondSquared));
 
   private final Rotation2d m_encoderOffset;
 
@@ -132,15 +121,9 @@ public class SwerveModule {
     // Optimize the reference state to avoid spinning further than 90 degrees
     SwerveModuleState state =
       SwerveModuleState.optimize(desiredState, getPosR2d());
-
-    final double driveVelocityDesiredMetersPerSecond = 
-        m_drivingPIDController.calculate(getState().speedMetersPerSecond,
-          state.speedMetersPerSecond);
-
-    final double driveVelocityDesired = 
-      driveVelocityDesiredMetersPerSecond / (SwerveModuleConstants.kDriveEncoderDistancePerPulse * 10.0);
-
-    System.out.println(state.speedMetersPerSecond);
+    
+    final double driveVelocityDesired = state.speedMetersPerSecond
+      / (SwerveModuleConstants.kDriveEncoderDistancePerPulse * 10.0);
 
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput =
