@@ -87,8 +87,7 @@ private final SwerveModule m_frontRight = //Q4
     zeroGyro();
   }
 
-  @Override
-  public void periodic() {
+  private void updatePID() {
     if (SmartDashboard.getBoolean("reset PID", false)) {
       m_frontLeft.resetPID();
       m_frontRight.resetPID();
@@ -96,6 +95,12 @@ private final SwerveModule m_frontRight = //Q4
       m_rearRight.resetPID();
       SmartDashboard.putBoolean("reset PID", false);
     }
+    m_frontLeft.printPID();
+  }
+
+  @Override
+  public void periodic() {
+    // updatePID();
     // Update the odometry in the periodic block
     m_odometry.update(
         getRotation2d(),

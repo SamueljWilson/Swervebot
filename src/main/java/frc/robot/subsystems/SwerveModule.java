@@ -17,12 +17,16 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
 
 public class SwerveModule {
   private final WPI_TalonFX m_driveMotor;
   private final WPI_TalonFX m_turningMotor;
+  private double m_kP;
+  private double m_kI;
+  private double m_kD;
 
   private final WPI_CANCoder m_turningEncoder;
 
@@ -57,14 +61,18 @@ public class SwerveModule {
       boolean turningEncoderReversed,
       Rotation2d encoderOffset) {
     
+    m_kP = SwerveModuleConstants.kPModuleDriveController;
+    m_kI = SwerveModuleConstants.kIModuleDriveController;
+    m_kD = SwerveModuleConstants.kDModuleDriveController;
+    
     m_driveMotor = new WPI_TalonFX(driveMotorChannel);
     m_driveMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     m_driveMotor.setSensorPhase(false);
     m_driveMotor.setInverted(driveMotorReversed);
     m_driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 10);
-    m_driveMotor.config_kP(0, SwerveModuleConstants.kPModuleDriveController, 10);
-    m_driveMotor.config_kI(0, SwerveModuleConstants.kIModuleDriveController, 10);
-    m_driveMotor.config_kD(0, SwerveModuleConstants.kDModuleDriveController, 10);
+    m_driveMotor.config_kP(0, m_kP, 10);
+    m_driveMotor.config_kI(0, m_kI, 10);
+    m_driveMotor.config_kD(0, m_kD, 10);
     m_driveMotor.config_kF(0, 0, 10);
     m_driveMotor.configSupplyCurrentLimit(DriveConstants.kSupplyCurrentLimit);
 
@@ -83,14 +91,19 @@ public class SwerveModule {
   }
 
   public void resetPID() {
-    m_driveMotor.config_kP(0, SmartDashboard.getNumber("P", 0), 10);
-    m_driveMotor.config_kI(0, SmartDashboard.getNumber("I", 0), 10);
-    m_driveMotor.config_kD(0, SmartDashboard.getNumber("D", 0), 10);
+    System.out.println("resetPID");
+    m_kP = SmartDashboard.getNumber("P", m_kP);
+    m_kI = SmartDashboard.getNumber("I", m_kI);
+    m_kD = SmartDashboard.getNumber("D", m_kD);
+    m_driveMotor.config_kP(0, m_kP, 10);
+    m_driveMotor.config_kI(0, m_kI, 10);
+    m_driveMotor.config_kD(0, m_kD, 10);
   }
 
   public void printPID() {
-    TalonFXPIDSetConfiguration pidConfig = new TalonFXPIDSetConfiguration();
-    m_driveMotor.getPIDConfigs(pidConfig);
+    SmartDashboard.putNumber("actual P", m_kP);
+    SmartDashboard.putNumber("actual I", m_kI);
+    SmartDashboard.putNumber("actual D", m_kD);
   }
 
   /**
