@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Orientation3d {
     private final double m_pitch;
@@ -34,7 +33,6 @@ public class Orientation3d {
           Math.pow(Math.cos(m_pitch)*Math.sin(m_roll), 2) +
           Math.pow(Math.cos(m_pitch)*Math.cos(m_roll), 2)
         );
-        SmartDashboard.putNumber("dotProduct/Magnitude", dotProduct/vectorMagnitude);
         return Math.acos(dotProduct / vectorMagnitude);
       }
     
