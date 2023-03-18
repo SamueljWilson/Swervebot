@@ -117,22 +117,22 @@ private final SwerveModule m_frontRight = //Q4
     return m_odometry.getPoseMeters();
   }
 
-  private double getPitchLogical() {
+  private double getPitchUncorrected() {
     return Math.toRadians(-m_gyro.getRoll());
   }
 
-  private double getRollLogical() {
+  private double getRollUncorrected() {
     return Math.toRadians(m_gyro.getPitch());
   }
 
   public double getPitch() {
     // Corrections for how we mounted our RoboRIO
-    return getPitchLogical() - m_pitch0;
+    return getPitchUncorrected() - m_pitch0;
   }
 
   public double getRoll() {
     // Corrections for how we mounted our RoboRIO
-    return getRollLogical() - m_roll0;
+    return getRollUncorrected() - m_roll0;
   }
 
   public double getYaw() {
@@ -198,8 +198,8 @@ private final SwerveModule m_frontRight = //Q4
   public void zeroGyro() {
     m_gyro.reset();
     // Calculates the the offsets we need to apply for the pitch and roll
-    m_pitch0 = getPitchLogical();
-    m_roll0 = getRollLogical();
+    m_pitch0 = getPitchUncorrected();
+    m_roll0 = getRollUncorrected();
   }
 
   public Rotation2d getRotation2d() {

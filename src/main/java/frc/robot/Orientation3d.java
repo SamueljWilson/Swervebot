@@ -35,7 +35,6 @@ public class Orientation3d {
           Math.pow(Math.cos(m_pitch)*Math.cos(m_roll), 2)
         );
         SmartDashboard.putNumber("dotProduct/Magnitude", dotProduct/vectorMagnitude);
-        // SmartDashboard.putNumber("vectorMagnitude", vectorMagnitude);
         return Math.acos(dotProduct / vectorMagnitude);
       }
     

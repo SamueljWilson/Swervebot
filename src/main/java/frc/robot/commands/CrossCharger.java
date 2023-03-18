@@ -20,7 +20,7 @@ public class CrossCharger extends CommandBase {
   }
   State m_state = State.FLAT;
   Team m_team;
-  double m_reverseFactor;
+  double m_mirrorFactor;
 
   DriveSubsystem m_drive;
 
@@ -33,7 +33,7 @@ public class CrossCharger extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_reverseFactor = m_team == Auto.Team.BLUE ? -1 : 1;
+    m_mirrorFactor = m_team == Auto.Team.BLUE ? 1 : -1;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,7 +42,7 @@ public class CrossCharger extends CommandBase {
     Orientation3d orientation = new Orientation3d(m_drive.getPitch(), m_drive.getRoll(), m_drive.getYaw());
     switch (m_state) {
       case FLAT:
-        m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecond*m_reverseFactor, 0, 0, true);
+        m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecond*m_mirrorFactor, 0, 0, true);
         if (orientation.getTilt() >= AutoConstants.kChargeAdjustingThreshold) {
           m_state = State.CLIMBING;
           break;
@@ -54,7 +54,7 @@ public class CrossCharger extends CommandBase {
           m_state = State.DESCENDING;
           break;
         }
-        m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecond*m_reverseFactor, 0, 0, true);
+        m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecond*m_mirrorFactor, 0, 0, true);
         break;
       
       case DESCENDING:
@@ -62,7 +62,7 @@ public class CrossCharger extends CommandBase {
           m_state = State.ENDING;
           break;
         }
-        m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecond*m_reverseFactor, 0, 0, true);
+        m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecond*m_mirrorFactor, 0, 0, true);
         break;
       
       case ENDING:

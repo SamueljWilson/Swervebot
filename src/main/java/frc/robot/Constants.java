@@ -77,9 +77,6 @@ public final class Constants {
     public static final boolean kGyroReversed = false;
 
     public static final double kMaxSpeedMetersPerSecond = 5;
-
-    public static final double kGyroPitchOffset = -3.07;
-    public static final double kGyroRollOffset = -0.47875;
   }
 
   public static final class GripperConstants {
@@ -122,8 +119,8 @@ public final class Constants {
   }
 
   public static final class SwerveModuleConstants {
-    public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI;
-    public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
+    public static final double kMaxAngularSpeedRadiansPerSecond = 2 * Math.PI;
+    public static final double kMaxAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
 
     public static final double kMaxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond;
     public static final double kMaxAccelerationMetersPerSecond = 10.0;
@@ -137,18 +134,18 @@ public final class Constants {
     public static final double kDriveEncoderDistancePerPulse =
         (kWheelDiameterMeters * Math.PI) / (kDriveEncoderCPR * kDriveGearRatio);
 
-    public static final double kPModuleTurningController = 0.25;
-    public static final double kIModuleTurningController = 0.0;
-    public static final double kDModuleTurningController = 0.0;
+    public static final double kPTurningController = 0.25;
+    public static final double kITurningController = 0.0;
+    public static final double kDTurningController = 0.0;
 
-    public static final double kPModuleDriveController = 0.03125;
-    public static final double kIModuleDriveController = 0.0;
-    public static final double kDModuleDriveController = 0.0;
+    public static final double kPDriveController = 0.03125;
+    public static final double kIDriveController = 0.0;
+    public static final double kDDriveController = 0.0;
   }
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
-    public static final double kMaxRadPerSec = SwerveModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond;
+    public static final double kMaxRadPerSec = SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond;
     public static final double kMaxMetersPerSec = DriveConstants.kMaxSpeedMetersPerSecond;
     
     public static final int kA = 1;
@@ -201,6 +198,10 @@ public final class Constants {
     public static final double kMaxAccelerationMetersPerSecondSquared = 1;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+
+    public static final double kPBalanceController = 1.0;
+    public static final double kIBalanceController = 0.0;
+    public static final double kDBalanceController = 0.0;
 
     public static final double kPXController = 1;
     public static final double kPYController = 1;

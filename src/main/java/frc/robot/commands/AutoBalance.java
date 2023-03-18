@@ -25,10 +25,13 @@ public class AutoBalance extends CommandBase {
 
   private State m_state = State.STOPPED;
 
-  private PIDController m_balancePID = new PIDController(1.0, 0, 0);
+  private PIDController m_balancePID = new PIDController(
+      AutoConstants.kPBalanceController, 
+      AutoConstants.kIBalanceController,
+      AutoConstants.kDBalanceController);
   private boolean m_withinTolerance = false;
   private final Timer m_timer = new Timer();
-  private final double m_reverseFactor;
+  private final double m_mirrorFactor;
 
   DriveSubsystem m_drive;
   Team m_team;
@@ -38,7 +41,7 @@ public class AutoBalance extends CommandBase {
     m_team = team;
     m_balancePID.setSetpoint(0);
     m_balancePID.setTolerance(AutoConstants.kLevelThreshold);
-    m_reverseFactor = team == Auto.Team.BLUE ? 1 : -1;
+    m_mirrorFactor = (team == Auto.Team.BLUE ? 1 : -1);
     addRequirements(m_drive);
   }
 
@@ -52,12 +55,12 @@ public class AutoBalance extends CommandBase {
     Orientation3d orientation = new Orientation3d(m_drive.getPitch(), m_drive.getRoll(), m_drive.getYaw());
     switch (m_state) {
       case STOPPED:
-        m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecond, 0, 0, true);
+        m_drive.drive(-AutoConstants.kMaxSpeedMetersPerSecond*m_mirrorFactor, 0, 0, true);
         m_state = State.DRIVING;
         break;
 
       case DRIVING:
-        m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecond, 0, 0, true);
+        m_drive.drive(-AutoConstants.kMaxSpeedMetersPerSecond*m_mirrorFactor, 0, 0, true);
         if (orientation.getTilt() >= AutoConstants.kChargeAdjustingThreshold) {
           m_state = State.ADJUSTING;
         }
@@ -79,10 +82,10 @@ public class AutoBalance extends CommandBase {
           m_timer.reset();
         }
         double tilt = orientation.getTilt() * (orientation.isTiltedUp() ? 1.0 : -1.0);
-        double driveOutput = MathUtil.clamp(m_balancePID.calculate(tilt),
+        double driveOutput = MathUtil.clamp(m_balancePID.calculate(tilt * m_mirrorFactor),
           -AutoConstants.kMaxSpeedMetersPerSecondBalancing,
           AutoConstants.kMaxSpeedMetersPerSecondBalancing);
-        double finalDriveOutput = m_reverseFactor * driveOutput;
+        double finalDriveOutput = m_mirrorFactor * driveOutput;
         m_drive.drive(finalDriveOutput, 0, 0, true);
         break;
 
@@ -93,7 +96,6 @@ public class AutoBalance extends CommandBase {
       default:
         assert(false);
     }
-    SmartDashboard.putString("state", m_state.toString());
   }
 
   // Called once the command ends or is interrupted.
@@ -103,6 +105,6 @@ public class AutoBalance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_state == State.ENGAGED;
   }
 }
