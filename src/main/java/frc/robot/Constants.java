@@ -126,7 +126,7 @@ public final class Constants {
     public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
 
     public static final double kMaxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond;
-    public static final double kMaxAccelerationMetersPerSecond = 10.0;
+    public static final double kMaxAccelerationMetersPerSecond = 1.0;
 
     public static final double kDriveEncoderCPR = 2048.0;
     public static final double kAbsoluteEncoderCPR = 4096.0;
@@ -141,9 +141,9 @@ public final class Constants {
     public static final double kIModuleTurningController = 0.0;
     public static final double kDModuleTurningController = 0.0;
 
-    public static final double kPModuleDriveController = 0.25;
-    public static final double kIModuleDriveController = 0.0001;
-    public static final double kDModuleDriveController = 7.5;
+    public static final double kPModuleDriveController = 0.03125;
+    public static final double kIModuleDriveController = 0.0;
+    public static final double kDModuleDriveController = 0.0;
   }
 
   public static final class OIConstants {
