@@ -50,10 +50,10 @@ public class Auto {
   private static final Pose2d kStartingGridH = new Pose2d(kStartingGridX, kHGridY, new Rotation2d(Math.PI));
   private static final Pose2d kPlacingGridH = new Pose2d(kPlacingGridX, kHGridY, new Rotation2d(Math.PI));
 
-  private static final Translation2d kSM1 = new Translation2d(5.690, 0.921);
-  private static final Translation2d kSM2 = new Translation2d(5.690, 2.140);
-  // private static final Translation2d kSM3 = new Translation2d(5.690, 3.359);
-  private static final Translation2d kSM4 = new Translation2d(5.690, 4.578);
+  private static final Translation2d kSM1 = new Translation2d(7.118, 0.921);
+  // private static final Translation2d kSM2 = new Translation2d(7.118, 2.140);
+  // private static final Translation2d kSM3 = new Translation2d(7.118, 3.359);
+  private static final Translation2d kSM4 = new Translation2d(7.118, 4.578);
 
   private static final Pose2d kPickupStagingMarker1 = new Pose2d(
     kSM1.getX() - kRobotHalfLength - kPickupOffset,
