@@ -184,15 +184,14 @@ public class Auto {
       DriveSubsystem drive, WristSubsystem wrist, GripperSubsystem gripper, Team team, MirrorInterface mirror) {
     Trajectory trajectory0 = eTrajectoryPlaceCross0(mirror);
     Trajectory trajectory1 = eTrajectoryPlaceCross1(trajectory0, mirror);
-    Trajectory trajectory2 = eTrajectoryPlaceCross2(mirror);
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
       wrist.extendWrist()
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
       .andThen(gripper.openGrippers())
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
-      .andThen(wrist.retractWrist());
-      // .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, true));
+      .andThen(wrist.retractWrist())
+      .andThen(new CrossCharger(team, drive));
     return new Auto(startingPose, command, team);
   }
   
