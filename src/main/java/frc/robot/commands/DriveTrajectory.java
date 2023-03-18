@@ -30,7 +30,8 @@ import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveTrajectory extends CommandBase {
   private final Timer m_timer = new Timer();
-  private final Trajectory m_trajectory;
+  private Trajectory m_trajectory;
+  private final boolean m_fieldRelative;
   private final Supplier<Pose2d> m_pose;
   private final SwerveDriveKinematics m_kinematics;
   private final HolonomicDriveController m_controller;
@@ -47,13 +48,14 @@ public class DriveTrajectory extends CommandBase {
     return new Rotation2d(orientationVector.getX(), orientationVector.getY());
   }
   
-  public static Command trajectoryCommand(DriveSubsystem drive, Trajectory trajectory) {
-  return (
+  public static Command trajectoryCommand(DriveSubsystem drive, Trajectory trajectory, boolean fieldRelative) {
+    return (
       new DriveTrajectory(
       trajectory,
-      drive)
+      drive,
+      fieldRelative)
       .andThen(() -> drive.drive(0, 0, 0, true))
-  );
+    );
   }
 
   public static Trajectory generateTrajectory(Pose2d start, List<Translation2d> waypoints, Pose2d end) {
@@ -121,12 +123,14 @@ public class DriveTrajectory extends CommandBase {
    */
   public DriveTrajectory(
       Trajectory trajectory,
+      boolean fieldRelative,
       Supplier<Pose2d> pose,
       SwerveDriveKinematics kinematics,
       HolonomicDriveController controller,
       Consumer<SwerveModuleState[]> outputModuleStates,
       Subsystem... requirements) {
     m_trajectory = trajectory;
+    m_fieldRelative = fieldRelative;
     m_pose = pose;
     m_kinematics = kinematics;
     m_controller = controller;
@@ -155,9 +159,10 @@ public class DriveTrajectory extends CommandBase {
     );
   }
   /** Creates a new DriveTrajectory. */
-  public DriveTrajectory(Trajectory trajectory, DriveSubsystem drive) {
+  public DriveTrajectory(Trajectory trajectory, DriveSubsystem drive, boolean fieldRelative) {
     this(
       trajectory,
+      fieldRelative,
       drive::getPose, // Functional interface to feed supplier
       DriveConstants.kDriveKinematics,
       initDriveController(),
@@ -172,6 +177,9 @@ public class DriveTrajectory extends CommandBase {
 
   @Override
   public void initialize() {
+    if (!m_fieldRelative) {
+      m_trajectory = m_trajectory.relativeTo(m_pose.get());
+    }
     m_initialRotation = normalizeRotation(m_pose.get().getRotation());
     Pose2d finalPose = m_trajectory.getStates().get(m_trajectory.getStates().size() - 1).poseMeters;
     Rotation2d finalRotation = normalizeRotation(finalPose.getRotation());
@@ -181,7 +189,6 @@ public class DriveTrajectory extends CommandBase {
     boolean rotateRight = (rotationDelta.getRadians() > Math.PI);
     Rotation2d finalRotationOptimized = rotateRight ? finalRotation.minus(Rotation2d.fromRadians(2*Math.PI)) : finalRotation;
     m_finalPose = new Pose2d(finalPose.getTranslation(), finalRotationOptimized);
-
     m_timer.restart();
   }
 

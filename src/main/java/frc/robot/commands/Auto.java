@@ -36,8 +36,7 @@ public class Auto {
   private static final double kChargingStationMinEdgeY = 1.51448;
   private static final double kChargingStationMaxEdgeX = 4.909;
   private static final double kChargingStationMaxEdgeY = 3.98463;
-  private static final double kECrossX = 6.074;
-  private static final double kEChargingStationX = 4.515;
+  // private static final double kEChargingStationX = 4.515;
 
   private static final double kStartingGridX = kGridMaxX + kRobotHalfLength + 0.356;
   private static final double kPlacingGridX = kGridMaxX + kRobotHalfLength + 0.206;
@@ -50,8 +49,6 @@ public class Auto {
 
   private static final Pose2d kStartingGridE = new Pose2d(kStartingGridX, kEGridY, new Rotation2d(Math.PI));
   private static final Pose2d kPlacingGridE = new Pose2d(kPlacingGridX, kEGridY, new Rotation2d(Math.PI));
-  private static final Pose2d kCrossChargingStationE = new Pose2d(kECrossX, kEGridY, new Rotation2d(Math.PI));
-  private static final Pose2d kCenterChargingStationE = new Pose2d(kEChargingStationX, kEGridY, new Rotation2d(Math.PI));
 
   private static final Pose2d kStartingGridH = new Pose2d(kStartingGridX, kHGridY, new Rotation2d(Math.PI));
   private static final Pose2d kPlacingGridH = new Pose2d(kPlacingGridX, kHGridY, new Rotation2d(Math.PI));
@@ -133,11 +130,11 @@ public class Auto {
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
       arm.moveToTop()
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0))
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
       .andThen(gripper.openGrippers())
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1))
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
       .andThen(arm.moveHome())
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2))
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, true))
       .andThen(arm.moveToOffFloor());
     return new Auto(startingPose, command, team);
   }
@@ -150,11 +147,11 @@ public class Auto {
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
       wrist.extendWrist()
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0))
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
       .andThen(gripper.openGrippers())
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1))
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
       .andThen(wrist.retractWrist())
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2));
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, true));
     return new Auto(startingPose, command, team);
   }
 
@@ -178,16 +175,16 @@ public class Auto {
       DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Team team, MirrorInterface mirror) {
     Trajectory trajectory0 = eTrajectoryPlaceCross0(mirror);
     Trajectory trajectory1 = eTrajectoryPlaceCross1(trajectory0, mirror);
-    Trajectory trajectory2 = eTrajectoryPlaceCross2(trajectory1, mirror);
-    Trajectory trajectory3 = eTrajectoryPlaceCross3(trajectory2, mirror);
+    Trajectory trajectory2 = eTrajectoryPlaceCross2(mirror);
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
       arm.moveToTop()
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0))
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
       .andThen(gripper.openGrippers())
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1))
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
       .andThen(arm.moveHome())
-      .andThen(new CrossCharger(team, drive));
+      .andThen(new CrossCharger(team, drive))
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, false));
     return new Auto(startingPose, command, team);
   }
 
@@ -195,17 +192,15 @@ public class Auto {
       DriveSubsystem drive, WristSubsystem wrist, GripperSubsystem gripper, Team team, MirrorInterface mirror) {
     Trajectory trajectory0 = eTrajectoryPlaceCross0(mirror);
     Trajectory trajectory1 = eTrajectoryPlaceCross1(trajectory0, mirror);
-    Trajectory trajectory2 = eTrajectoryPlaceCross2(trajectory1, mirror);
-    Trajectory trajectory3 = eTrajectoryPlaceCross3(trajectory2, mirror);
+    Trajectory trajectory2 = eTrajectoryPlaceCross2(mirror);
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
       wrist.extendWrist()
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0))
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
       .andThen(gripper.openGrippers())
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1))
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
       .andThen(wrist.retractWrist());
-      // .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2))
-      // .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory3));
+      // .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, true));
     return new Auto(startingPose, command, team);
   }
   
@@ -229,15 +224,16 @@ public class Auto {
       DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Team team, MirrorInterface mirror) {
     Trajectory trajectory0 = eTrajectoryPlaceCross0(mirror);
     Trajectory trajectory1 = eTrajectoryPlaceCross1(trajectory0, mirror);
-    Trajectory trajectory2 = eTrajectoryPlaceCross2(trajectory1, mirror);
-    Trajectory trajectory3 = eTrajectoryPlaceCrossCharge3(trajectory2, mirror);
+    Trajectory trajectory2 = eTrajectoryPlaceCross2(mirror);
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
       arm.moveToTop()
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0))
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
       // .andThen(gripper.openGrippers())
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1))
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
       // .andThen(arm.moveHome())
+      .andThen(new CrossCharger(team, drive))
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, false))
       .andThen(new AutoBalance(team, drive));
       return new Auto(startingPose, command, team);
   }
@@ -258,11 +254,11 @@ public class Auto {
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
       arm.moveToTop()
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0))
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
       .andThen(gripper.openGrippers())
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1))
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
       .andThen(arm.moveHome())
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2))
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, true))
       .andThen(arm.moveToOffFloor());
     return new Auto(startingPose, command, team);
   }
@@ -275,11 +271,11 @@ public class Auto {
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
       wrist.extendWrist()
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0))
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
       .andThen(gripper.openGrippers())
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1))
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
       .andThen(wrist.retractWrist())
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2));
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, true));
     return new Auto(startingPose, command, team);
   }
 
@@ -340,28 +336,12 @@ public class Auto {
         mirror.apply(kStartingGridE));
   }
 
-  private static Trajectory eTrajectoryPlaceCross2(Trajectory prevTrajectory, MirrorInterface mirror) {
+  private static Trajectory eTrajectoryPlaceCross2(MirrorInterface mirror) {
     return
       DriveTrajectory.generateTrajectory(
-        getFinalPose(prevTrajectory),
+        mirror.apply(new Pose2d(0, 0, new Rotation2d(Math.PI))),
         List.of(),
-        mirror.apply(kCrossChargingStationE));
-  }
-
-  private static Trajectory eTrajectoryPlaceCross3(Trajectory prevTrajectory, MirrorInterface mirror) {
-    return
-      DriveTrajectory.generateTrajectory(
-        getFinalPose(prevTrajectory),
-        List.of(),
-        mirror.apply(kPickupStagingMarker2));
-  }
-
-  private static Trajectory eTrajectoryPlaceCrossCharge3(Trajectory prevTrajectory, MirrorInterface mirror) {
-    return
-      DriveTrajectory.generateTrajectory(
-        getFinalPose(prevTrajectory),
-        List.of(),
-        mirror.apply(kCenterChargingStationE));
+        mirror.apply(new Pose2d(0.5, 0, new Rotation2d(Math.PI))));
   }
 
   private static Trajectory hTrajectoryPlaceCross0(MirrorInterface mirror) {
