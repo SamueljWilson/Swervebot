@@ -349,7 +349,6 @@ public class Auto {
   }
 
   private static Trajectory eTrajectoryPlaceCross3(Trajectory prevTrajectory, MirrorInterface mirror) {
-    // Pose2d prevPose = 
     return
       DriveTrajectory.generateTrajectory(
         getFinalPose(prevTrajectory),

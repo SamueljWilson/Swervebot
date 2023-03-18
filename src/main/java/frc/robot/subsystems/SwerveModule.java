@@ -29,19 +29,19 @@ public class SwerveModule {
   private double m_kP;
   private double m_kI;
   private double m_kD;
-  private double m_current = 0;
+  private double m_idealVelocity = 0;
 
   private final WPI_CANCoder m_turningEncoder;
 
   // Using a TrapezoidProfile PIDController to allow for smooth turning
   private final ProfiledPIDController m_turningPIDController =
     new ProfiledPIDController(
-      SwerveModuleConstants.kPModuleTurningController,
-      SwerveModuleConstants.kIModuleTurningController,
-      SwerveModuleConstants.kDModuleTurningController,
+      SwerveModuleConstants.kPTurningController,
+      SwerveModuleConstants.kITurningController,
+      SwerveModuleConstants.kDTurningController,
       new TrapezoidProfile.Constraints(
-        SwerveModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond,
-        SwerveModuleConstants.kMaxModuleAngularAccelerationRadiansPerSecondSquared));
+        SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond,
+        SwerveModuleConstants.kMaxAngularAccelerationRadiansPerSecondSquared));
   
   private final Rotation2d m_encoderOffset;
 
@@ -64,9 +64,9 @@ public class SwerveModule {
       boolean turningEncoderReversed,
       Rotation2d encoderOffset) {
     
-    m_kP = SwerveModuleConstants.kPModuleDriveController;
-    m_kI = SwerveModuleConstants.kIModuleDriveController;
-    m_kD = SwerveModuleConstants.kDModuleDriveController;
+    m_kP = SwerveModuleConstants.kPDriveController;
+    m_kI = SwerveModuleConstants.kIDriveController;
+    m_kD = SwerveModuleConstants.kDDriveController;
     
     m_driveMotor = new WPI_TalonFX(driveMotorChannel);
     m_driveMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
@@ -137,9 +137,6 @@ public class SwerveModule {
     // Optimize the reference state to avoid spinning further than 90 degrees
     SwerveModuleState state =
       SwerveModuleState.optimize(desiredState, getPosR2d());
-    
-    final double drivePositionDesired = state.speedMetersPerSecond 
-      / (SwerveModuleConstants.kDriveEncoderDistancePerPulse) * Constants.kDt;
 
     final double driveVelocityDesired = state.speedMetersPerSecond
       / (SwerveModuleConstants.kDriveEncoderDistancePerPulse);
@@ -148,7 +145,7 @@ public class SwerveModule {
       SwerveModuleConstants.kMaxSpeedMetersPerSecond / (SwerveModuleConstants.kDriveEncoderDistancePerPulse),
       SwerveModuleConstants.kMaxAccelerationMetersPerSecond / (SwerveModuleConstants.kDriveEncoderDistancePerPulse));
     
-    m_current = profile.calculate(driveVelocityDesired, m_current, Constants.kDt);
+    m_idealVelocity = profile.calculate(driveVelocityDesired, m_idealVelocity, Constants.kDt);
 
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput =
@@ -159,8 +156,7 @@ public class SwerveModule {
            1
           );
 
-    m_driveMotor.set(ControlMode.Velocity, m_current/10);
-    // m_driveMotor.set(ControlMode.Velocity, m_setpoint.velocity/10.0);
+    m_driveMotor.set(ControlMode.Velocity, m_idealVelocity/10.0);
 
     m_turningMotor.set(ControlMode.PercentOutput, turnOutput);
   }
