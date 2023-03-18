@@ -10,15 +10,12 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.WristSubsystem;
-import frc.robot.commands.CrossCharger;
 
 public class Auto {
   /** Creates a new Auto. */
@@ -67,12 +64,6 @@ public class Auto {
   private static final Pose2d kPickupStagingMarker4 = new Pose2d(
     kSM4.getX() - kRobotHalfLength - kPickupOffset,
     kSM4.getY(),
-    new Rotation2d(Math.PI)
-  );
-
-  private static final Pose2d kPickupStagingMarker2 = new Pose2d(
-    kSM2.getX() - kRobotHalfLength - kPickupOffset,
-    kSM2.getY(),
     new Rotation2d(Math.PI)
   );
 
@@ -184,7 +175,8 @@ public class Auto {
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
       .andThen(arm.moveHome())
       .andThen(new CrossCharger(team, drive))
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, false));
+      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, false))
+      .andThen(arm.moveToOffFloor());
     return new Auto(startingPose, command, team);
   }
 
