@@ -33,7 +33,7 @@ public class CrossCharger extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_mirrorFactor = m_team == Auto.Team.BLUE ? 1 : -1;
+    m_mirrorFactor = (m_team == Auto.Team.BLUE ? 1 : -1);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

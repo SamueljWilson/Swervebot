@@ -82,7 +82,7 @@ public class AutoBalance extends CommandBase {
           m_timer.reset();
         }
         double tilt = orientation.getTilt() * (orientation.isTiltedUp() ? 1.0 : -1.0);
-        double driveOutput = MathUtil.clamp(m_balancePID.calculate(tilt * m_mirrorFactor),
+        double driveOutput = MathUtil.clamp(m_balancePID.calculate(-1.0 * tilt * m_mirrorFactor),
           -AutoConstants.kMaxSpeedMetersPerSecondBalancing,
           AutoConstants.kMaxSpeedMetersPerSecondBalancing);
         double finalDriveOutput = m_mirrorFactor * driveOutput;
