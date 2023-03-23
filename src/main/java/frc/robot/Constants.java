@@ -90,11 +90,12 @@ public final class Constants {
   public static final class ArmConstants {
     public static final int kArmMotorPort = 13;
 
-    public static final double kHomeHeight = 0.0; //TODO: FIND REAL HEIGHT VALUES
-    public static final double k1stRowHeight = 0.0; //TODO: FIND REAL HEIGHT VALUES
-    public static final double kOffFloorHeight = 0.0; //TODO: FIND REAL HEIGHT VALUES
-    public static final double k2ndRowHeight = 0.0; //TODO: FIND REAL HEIGHT VALUES
-    public static final double k3rdRowHeight = 0.0; //TODO: FIND REAL HEIGHT VALUES
+    private static final double kPlacingHeightOffset = 0.20;
+    public static final double kHomeHeight = 0.0; //TODO: FIND REAL VALUES
+    public static final double kOffFloorHeight = 0.0; //TODO: FIND REAL VALUES
+    public static final double k2ndRowHeight = 0.87 + kPlacingHeightOffset;
+    public static final double k3rdRowHeight = 1.17 + kPlacingHeightOffset;
+    public static final double kHumanStationHeight = 0.95 + kPlacingHeightOffset;
 
     public static final double kAdjustVelocity = 0.8;
 
@@ -146,6 +147,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final double kMaxRadPerSec = SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond;
     public static final double kMaxMetersPerSec = DriveConstants.kMaxSpeedMetersPerSecond;
+    public static final double kArmAdjustV = 0.1;
     
     public static final int kA = 1;
     public static final int kB = 2;
@@ -165,25 +167,16 @@ public final class Constants {
     public static int kRightJoyXAxis = 4;
     public static int kRightJoyYAxis = 5;
 
-    public static final int kDpadUp = 12; //TODO: FIND OUT THE REAL VALUES OF THIS TRIGGERS
-    public static final int kDpadRight = 13; //TODO: FIND OUT THE REAL VALUES OF THIS TRIGGERS
-    public static final int kDpadDown = 14; //TODO: FIND OUT THE REAL VALUES OF THIS TRIGGERS
-    public static final int kDpadLeft = 15; //TODO: FIND OUT THE REAL VALUES OF THIS TRIGGERS
-
-    public static final int kArmDown = kDpadDown;
-    public static final int kArmUp = kDpadUp;
-    public static final int kCubeAxis = kRightTriggerAxis;
-    public static final int kConeAxis = kLeftTriggerAxis;
-    public static final int kOpenButton = kLeftBumper;
+    public static final int kCloseAxis = kRightTriggerAxis;
+    public static final int kOpenAxis = kLeftTriggerAxis;
     public static final int kExtendWristButton = kY;
     public static final int kRetractWristButton = kA;
 
-
-    public static final int kHomeButton = 16; //TODO: ASSIGN BUTTON VALUES
-    public static final int k1stRowButton = 16; //TODO: ASSIGN BUTTON VALUES
-    public static final int kPickOffFloorButton = 16; //TODO: ASSIGN BUTTON VALUES
-    public static final int k2ndRowButton = 16; //TODO: ASSIGN BUTTON VALUES
-    public static final int k3rdRowButton = 16; //TODO: ASSIGN BUTTON VALUES
+    public static final int kHomeButton = kLeftJoy;
+    public static final int kPickOffFloorButton = kA;
+    public static final int k2ndRowButton = kX;
+    public static final int k3rdRowButton = kY;
+    public static final int kHumanStationButton = kB;
     public static final int kSlowButton = kRightBumper;
 
     public static final double kDebounceSeconds = 0.01;

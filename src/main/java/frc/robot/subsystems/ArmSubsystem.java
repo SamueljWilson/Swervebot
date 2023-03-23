@@ -57,10 +57,6 @@ public class ArmSubsystem extends SubsystemBase {
     );
   }
 
-  public Command moveToBottom() {
-    return moveToHeight(ArmConstants.k1stRowHeight);
-  }
-
   public Command moveToOffFloor() {
     return moveToHeight(ArmConstants.kOffFloorHeight);
   }
@@ -71,6 +67,10 @@ public class ArmSubsystem extends SubsystemBase {
 
   public Command moveToTop() {
     return moveToHeight(ArmConstants.k3rdRowHeight);
+  }
+
+  public Command moveToHumanStation() {
+    return moveToHeight(ArmConstants.kHumanStationHeight);
   }
 
   public Command moveVHeight(double metersPerSecond) {

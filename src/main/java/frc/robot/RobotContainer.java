@@ -118,12 +118,26 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new Trigger(()-> m_driverController.getRawAxis(OIConstants.kRightTriggerAxis) >= 0.5)
+    new Trigger(()-> m_driverController.getRawAxis(OIConstants.kCloseAxis) >= 0.5)
       .debounce(OIConstants.kDebounceSeconds)
       .onTrue(m_gripper.grab());
-    new JoystickButton(m_driverController, OIConstants.kOpenButton)
+    new Trigger(()-> m_driverController.getRawAxis(OIConstants.kOpenAxis) >= 0.5)
       .debounce(OIConstants.kDebounceSeconds)
       .onTrue(m_gripper.openGrippers());
+    new Trigger(() -> {
+          int povAngle = m_driverController.getPOV();
+          return (povAngle == 315 || povAngle == 0 || povAngle == 45);
+        }
+      )
+      .debounce(OIConstants.kDebounceSeconds)
+      .onTrue(m_arm.moveVHeight(OIConstants.kArmAdjustV));
+    new Trigger(() -> {
+          int povAngle = m_driverController.getPOV();
+          return (povAngle == 225 || povAngle == 180 || povAngle == 135);
+        }
+      )
+      .debounce(OIConstants.kDebounceSeconds)
+      .onTrue(m_arm.moveVHeight(-OIConstants.kArmAdjustV));
     new JoystickButton(m_driverController, OIConstants.kSlowButton)
       .debounce(OIConstants.kDebounceSeconds)
       .onTrue(Commands.runOnce(() -> {m_driveSpeed = DriveSpeed.SLOW;}))
@@ -135,15 +149,15 @@ public class RobotContainer {
       new JoystickButton(m_driverController, OIConstants.kPickOffFloorButton)
         .debounce(OIConstants.kDebounceSeconds)
         .onTrue(m_arm.moveToOffFloor());
-      new JoystickButton(m_driverController, OIConstants.k1stRowButton)
-        .debounce(OIConstants.kDebounceSeconds)
-        .onTrue(m_arm.moveToBottom());
       new JoystickButton(m_driverController, OIConstants.k2ndRowButton)
         .debounce(OIConstants.kDebounceSeconds)
         .onTrue(m_arm.moveToMiddle());
       new JoystickButton(m_driverController, OIConstants.k3rdRowButton)
         .debounce(OIConstants.kDebounceSeconds)
         .onTrue(m_arm.moveToTop());
+      new JoystickButton(m_driverController, OIConstants.kHumanStationButton)
+        .debounce(OIConstants.kDebounceSeconds)
+        .onTrue(m_arm.moveToHumanStation());
     } else {
       new JoystickButton(m_driverController, OIConstants.kExtendWristButton)
         .debounce(OIConstants.kDebounceSeconds)
