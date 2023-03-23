@@ -31,7 +31,7 @@ import frc.robot.subsystems.DriveSubsystem;
 public class DriveTrajectory extends CommandBase {
   private final Timer m_timer = new Timer();
   private Trajectory m_trajectory;
-  private final boolean m_fieldRelative;
+  private final boolean m_fieldOrigin;
   private final Supplier<Pose2d> m_pose;
   private final SwerveDriveKinematics m_kinematics;
   private final HolonomicDriveController m_controller;
@@ -48,12 +48,12 @@ public class DriveTrajectory extends CommandBase {
     return new Rotation2d(orientationVector.getX(), orientationVector.getY());
   }
   
-  public static Command trajectoryCommand(DriveSubsystem drive, Trajectory trajectory, boolean fieldRelative) {
+  public static Command trajectoryCommand(DriveSubsystem drive, Trajectory trajectory, boolean fieldOrigin) {
     return (
       new DriveTrajectory(
       trajectory,
       drive,
-      fieldRelative)
+      fieldOrigin)
       .andThen(() -> drive.drive(0, 0, 0, true))
     );
   }
@@ -123,14 +123,14 @@ public class DriveTrajectory extends CommandBase {
    */
   public DriveTrajectory(
       Trajectory trajectory,
-      boolean fieldRelative,
+      boolean fieldOrigin,
       Supplier<Pose2d> pose,
       SwerveDriveKinematics kinematics,
       HolonomicDriveController controller,
       Consumer<SwerveModuleState[]> outputModuleStates,
       Subsystem... requirements) {
     m_trajectory = trajectory;
-    m_fieldRelative = fieldRelative;
+    m_fieldOrigin = fieldOrigin;
     m_pose = pose;
     m_kinematics = kinematics;
     m_controller = controller;
@@ -159,10 +159,10 @@ public class DriveTrajectory extends CommandBase {
     );
   }
   /** Creates a new DriveTrajectory. */
-  public DriveTrajectory(Trajectory trajectory, DriveSubsystem drive, boolean fieldRelative) {
+  public DriveTrajectory(Trajectory trajectory, DriveSubsystem drive, boolean fieldOrigin) {
     this(
       trajectory,
-      fieldRelative,
+      fieldOrigin,
       drive::getPose, // Functional interface to feed supplier
       DriveConstants.kDriveKinematics,
       initDriveController(),
@@ -177,8 +177,10 @@ public class DriveTrajectory extends CommandBase {
 
   @Override
   public void initialize() {
-    if (!m_fieldRelative) {
-      m_trajectory = m_trajectory.relativeTo(m_pose.get());
+    if (!m_fieldOrigin) {
+      Pose2d currentPose = m_pose.get();
+      Pose2d transformPose = new Pose2d(currentPose.getTranslation(), new Rotation2d(0));
+      m_trajectory = m_trajectory.relativeTo(transformPose);
     }
     m_initialRotation = normalizeRotation(m_pose.get().getRotation());
     Pose2d finalPose = m_trajectory.getStates().get(m_trajectory.getStates().size() - 1).poseMeters;
