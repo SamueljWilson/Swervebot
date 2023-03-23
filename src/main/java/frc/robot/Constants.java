@@ -96,9 +96,6 @@ public final class Constants {
     public static final double k2ndRowHeight = 0.0; //TODO: FIND REAL HEIGHT VALUES
     public static final double k3rdRowHeight = 0.0; //TODO: FIND REAL HEIGHT VALUES
 
-    public static final DoubleSolenoid.Value kWristExtended = Value.kForward;
-    public static final DoubleSolenoid.Value kWristRetracted = Value.kReverse;
-
     public static final double kAdjustVelocity = 0.8;
 
     public static final int kWristSolenoidForwardChannel = 5;
