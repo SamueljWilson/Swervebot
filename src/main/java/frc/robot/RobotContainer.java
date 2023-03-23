@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.WristConstants;
 import frc.robot.commands.Auto;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -88,7 +89,7 @@ public class RobotContainer {
 
   private void configureAutoRoutines() {
     m_chooser.setDefaultOption("Do Nothing", Auto.doNothing(m_robotDrive));
-    if (ArmConstants.kStubOut == false) {
+    if (ArmConstants.kArmStubOut == false || WristConstants.kWristStubOut) {
       m_chooser.addOption("Blue B Place Cross", Auto.blueBPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
       m_chooser.addOption("Blue E Place Cross", Auto.blueEPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
       m_chooser.addOption("Blue E Place Cross Charge", Auto.blueEPlaceCrossCharge(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
