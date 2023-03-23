@@ -17,7 +17,7 @@ public class WristSubsystem extends SubsystemBase {
      WristConstants.kWristSolenoidForwardChannel, 
      WristConstants.kWristSolenoidBackwardChannel);
   
-  private DoubleSolenoid.Value getWristPosition() {
+  public DoubleSolenoid.Value getWristPosition() {
     if (WristConstants.kWristStubOut) return DoubleSolenoid.Value.kOff;
     return m_wristPiston.get();
   }
