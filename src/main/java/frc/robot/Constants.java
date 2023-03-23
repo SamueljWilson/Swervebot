@@ -107,7 +107,7 @@ public final class Constants {
     public static final int kWristExtensionCycles = 2000; //TODO: FIND REAL VALUES
     public static final int kWristRetractionCycles = 1500; //TODO: FIND REAL VALUES
 
-    public static boolean kStubOut = true;
+    public static boolean kArmStubOut = true;
   }
 
   public static final class WristConstants {
@@ -116,6 +116,8 @@ public final class Constants {
 
     public static final DoubleSolenoid.Value kWristExtended = Value.kForward;
     public static final DoubleSolenoid.Value kWristRetracted = Value.kReverse;
+
+    public static final boolean kWristStubOut = true;
   }
 
   public static final class SwerveModuleConstants {

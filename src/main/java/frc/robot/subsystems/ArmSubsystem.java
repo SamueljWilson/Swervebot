@@ -27,7 +27,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   InitState m_initState = InitState.UNINITIALIZED;
     
-  DoubleSolenoid m_wristPiston = ArmConstants.kStubOut ? null : new DoubleSolenoid(
+  DoubleSolenoid m_wristPiston = ArmConstants.kArmStubOut ? null : new DoubleSolenoid(
     PneumaticsModuleType.REVPH,
     ArmConstants.kWristSolenoidForwardChannel,
     ArmConstants.kWristSolenoidBackwardChannel);
@@ -95,7 +95,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public Command initCommand() {
-    if (ArmConstants.kStubOut) {
+    if (ArmConstants.kArmStubOut) {
       return Commands.none();
     }
     return 
