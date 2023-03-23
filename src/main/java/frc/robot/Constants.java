@@ -120,10 +120,10 @@ public final class Constants {
 
   public static final class SwerveModuleConstants {
     public static final double kMaxAngularSpeedRadiansPerSecond = 2 * Math.PI;
-    public static final double kMaxAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
+    public static final double kMaxAngularAccelerationRadiansPerSecondSquared = 4 * Math.PI;
 
     public static final double kMaxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond;
-    public static final double kMaxAccelerationMetersPerSecond = 10.0;
+    public static final double kMaxAccelerationMetersPerSecond = 7.5;
 
     public static final double kDriveEncoderCPR = 2048.0;
     public static final double kAbsoluteEncoderCPR = 4096.0;
@@ -138,7 +138,7 @@ public final class Constants {
     public static final double kITurningController = 0.0;
     public static final double kDTurningController = 0.0;
 
-    public static final double kPDriveController = 0.03125;
+    public static final double kPDriveController = 0.0625;
     public static final double kIDriveController = 0.0;
     public static final double kDDriveController = 0.0;
   }
@@ -190,7 +190,7 @@ public final class Constants {
     public static final double kDebounceSeconds = 0.01;
 
     public static final double kJoystickDeadband = 0.05;
-    public static final double kSlowCoef = 0.25;
+    public static final double kSlowCoef = 0.375;
   }
 
   public static final class AutoConstants {
