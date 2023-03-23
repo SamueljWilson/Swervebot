@@ -14,11 +14,10 @@ import frc.robot.Constants.GripperConstants;
 public class GripperSubsystem extends SubsystemBase {
   public enum State {
     OPEN,
-    CLOSED_CUBE,
-    CLOSED_CONE
+    CLOSED
   }
 
-  State m_state = State.CLOSED_CUBE;
+  State m_state = State.CLOSED;
   DoubleSolenoid m_leftSolenoid = new DoubleSolenoid(
     PneumaticsModuleType.REVPH,
     GripperConstants.kLeftSolenoidForwardChannel,
@@ -33,7 +32,7 @@ public class GripperSubsystem extends SubsystemBase {
 
   /** Creates a new GrpperSubsystem. */
   public GripperSubsystem() {
-    grabCone();
+    grab();
   }
 
   public Command openGrippers() {
@@ -48,28 +47,16 @@ public class GripperSubsystem extends SubsystemBase {
     );
   }
 
-  public Command grabCone() {
+  public Command grab() {
     return runOnce(
       () -> {
-        if (m_state != State.CLOSED_CONE) {
-          m_state = State.CLOSED_CONE;
+        if (m_state != State.CLOSED) {
+          m_state = State.CLOSED;
           m_leftSolenoid.set(Value.kReverse);
           m_rightSolenoid.set(Value.kReverse);
         }
       }
     );
-  }
-
-  public Command grabCube() {
-    return runOnce(
-      () -> {
-        if (m_state != State.CLOSED_CUBE) {
-          m_state = State.CLOSED_CUBE;
-          m_leftSolenoid.set(Value.kReverse);
-          m_rightSolenoid.set(Value.kForward);
-        }
-      }
-    ); 
   }
 
   public State getState() {
