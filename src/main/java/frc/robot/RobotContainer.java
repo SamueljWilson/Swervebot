@@ -131,7 +131,7 @@ public class RobotContainer {
       .debounce(OIConstants.kDebounceSeconds)
       .onTrue(Commands.runOnce(() -> {m_driveSpeed = DriveSpeed.SLOW;}))
       .onFalse(Commands.runOnce(() -> {m_driveSpeed = DriveSpeed.FAST;}));
-    if (ArmConstants.kStubOut == false) {
+    if (ArmConstants.kArmStubOut == false) {
       new JoystickButton(m_driverController, OIConstants.kHomeButton)
         .debounce(OIConstants.kDebounceSeconds)
         .onTrue(m_arm.moveHome());
