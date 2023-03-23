@@ -34,8 +34,8 @@ public class RobotContainer {
   // The robot's subsystems
   public final DriveSubsystem m_robotDrive = new DriveSubsystem();
   public final GripperSubsystem m_gripper = new GripperSubsystem();
-  public final ArmSubsystem m_arm = new ArmSubsystem();
   public final WristSubsystem m_wrist = new WristSubsystem();
+  public final ArmSubsystem m_arm = new ArmSubsystem(m_wrist);
 
   // The driver's controller
   GenericHID m_driverController = new GenericHID(OIConstants.kDriverControllerPort);
