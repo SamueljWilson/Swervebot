@@ -11,6 +11,7 @@ import com.revrobotics.SparkMaxLimitSwitch;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.WristConstants;
@@ -31,6 +32,11 @@ public class ArmSubsystem extends SubsystemBase {
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem(WristSubsystem wrist) {
     m_wrist = wrist;
+    m_armMotor.setInverted(false);
+    m_armMotor.getPIDController().setP(ArmConstants.kP);
+    m_armMotor.getPIDController().setI(ArmConstants.kI);
+    m_armMotor.getPIDController().setD(ArmConstants.kD);
+    m_armMotor.getPIDController().setOutputRange(-ArmConstants.kMaxOutput, ArmConstants.kMaxOutput);
   }
 
   private DoubleSolenoid.Value getWristPosition() {
@@ -38,22 +44,24 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public Command moveHome() {
-    return runOnce(
+    return new RunCommand(
       () -> {
         if (m_wrist.getWristPosition() == WristConstants.kWristExtended) {
           m_wrist.retractWrist();
         }
         m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.kHomeHeight),
         ControlType.kPosition);
-      }
+      },
+      this, m_wrist
     );
   }
 
   private Command moveToHeight(double height) {
-    return runOnce(
+    return new RunCommand(
       () -> {
         m_armMotor.getPIDController().setReference(ArmInterp.heightToCycles(height), ControlType.kPosition);
-      }
+      },
+      this, m_wrist
     );
   }
 

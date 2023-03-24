@@ -98,6 +98,7 @@ public final class Constants {
     public static final double kHumanStationHeight = 0.95 + kPlacingHeightOffset;
 
     public static final double kAdjustVelocity = 0.8;
+    public static final double kMaxOutput = 0.2;
 
     public static final int kWristSolenoidForwardChannel = 5;
     public static final int kWristSolenoidBackwardChannel = 6;
@@ -105,7 +106,11 @@ public final class Constants {
     public static final int kWristExtensionCycles = 2000; //TODO: FIND REAL VALUES
     public static final int kWristRetractionCycles = 1500; //TODO: FIND REAL VALUES
 
-    public static boolean kArmStubOut = true;
+    public static final double kP = 1.0;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+
+    public static boolean kArmStubOut = false;
   }
 
   public static final class WristConstants {
@@ -177,7 +182,9 @@ public final class Constants {
     public static final int k2ndRowButton = kX;
     public static final int k3rdRowButton = kY;
     public static final int kHumanStationButton = kB;
-    public static final int kSlowButton = kRightBumper;
+    public static final int kSlowButton = kRightJoy;
+    public static final int kArmAdjustUpButton = kRightBumper;
+    public static final int kArmAdjustDownButton = kLeftBumper;
 
     public static final double kDebounceSeconds = 0.01;
 
