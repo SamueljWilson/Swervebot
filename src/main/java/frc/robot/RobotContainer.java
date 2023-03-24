@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.ObjIntConsumer;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -138,6 +140,12 @@ public class RobotContainer {
       )
       .debounce(OIConstants.kDebounceSeconds)
       .onTrue(m_arm.moveVHeight(-OIConstants.kArmAdjustV));
+    new JoystickButton(m_driverController, OIConstants.kArmAdjustUpButton)
+        .debounce(OIConstants.kDebounceSeconds)
+        .onTrue(m_arm.moveVHeight(OIConstants.kArmAdjustV));
+    new JoystickButton(m_driverController, OIConstants.kArmAdjustDownButton)
+        .debounce(OIConstants.kDebounceSeconds)
+        .onTrue(m_arm.moveVHeight(-OIConstants.kArmAdjustV));
     new JoystickButton(m_driverController, OIConstants.kSlowButton)
       .debounce(OIConstants.kDebounceSeconds)
       .onTrue(Commands.runOnce(() -> {m_driveSpeed = DriveSpeed.SLOW;}))

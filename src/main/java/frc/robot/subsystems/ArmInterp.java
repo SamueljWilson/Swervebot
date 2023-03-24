@@ -11,12 +11,17 @@ public class ArmInterp {
   static class HtEntry{double cycles; double height; public HtEntry(double c, double h) {cycles = c; height = h;}}
   static final HtEntry[] htTable = {
       new HtEntry(0, 0),
-      new HtEntry(10000, 60)
+      new HtEntry(100, 1.5)
   };
 
   public static int cycleIndex(double cycles) {
     assert(cycles >= 0);
     int index = Arrays.binarySearch(htTable, new HtEntry(cycles, 0), (a,b) -> Double.compare(a.cycles, b.cycles));
+    if (index < 0) {
+      // Imperfect match
+      index = -index - 1;
+    }
+    assert(index >= 0);
     assert(index < htTable.length);
     return index;
   }
@@ -44,6 +49,12 @@ public class ArmInterp {
   public static int heightIndex(double height) {
     assert(height >= 0);
     int index = Arrays.binarySearch(htTable, new HtEntry(0, height), (a,b) -> Double.compare(a.height, b.height));
+    if (index < 0) {
+      // Imperfect match
+      index = -index - 1;
+    }
+    // System.out.printf("HEIGHT: %f -- INDEX: %d\n", height, index);
+    assert(index >= 0);
     assert(index < htTable.length);
     return index;
   }
@@ -64,7 +75,9 @@ public class ArmInterp {
       double h1 = htTable[index].height;
       double scaler = (height-h0) / (h1 - h0);
       double cycleRange = c1 - c0;
-      return c0 + scaler*cycleRange;
+      double cycles = c0 + scaler*cycleRange;
+      // System.out.printf("HEIGHT: %f, -- CYCLES: %f\n", height, cycles);
+      return cycles;
      }
   }
 
