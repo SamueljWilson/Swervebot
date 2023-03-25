@@ -25,6 +25,7 @@ public class WristSubsystem extends SubsystemBase {
   public Command extendWrist() {
     return runOnce(
       () -> {
+        if (WristConstants.kWristStubOut) return;
         DoubleSolenoid.Value wristPosition = getWristPosition();
         if (wristPosition != WristConstants.kWristExtended) {
           m_wristPiston.set(WristConstants.kWristExtended);
