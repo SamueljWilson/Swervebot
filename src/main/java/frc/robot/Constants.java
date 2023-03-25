@@ -80,8 +80,8 @@ public final class Constants {
   }
 
   public static final class GripperConstants {
-    public static final int kLeftSolenoidForwardChannel = 1;
-    public static final int kLeftSolenoidBackwardChannel = 2;
+    public static final int kLeftSolenoidForwardChannel = 5;
+    public static final int kLeftSolenoidBackwardChannel = 6;
 
     public static final int kRightSolenoidForwardChannel = 3;
     public static final int kRightSolenoidBackwardChannel = 4;
@@ -90,21 +90,22 @@ public final class Constants {
   public static final class ArmConstants {
     public static final int kArmMotorPort = 13;
 
+    public static final double kHomeCyclesOffset = 2.0;
     private static final double kPlacingHeightOffset = 0.20;
-    public static final double kHomeHeight = 0.0; //TODO: FIND REAL VALUES
-    public static final double kOffFloorHeight = 0.0; //TODO: FIND REAL VALUES
+    public static final double kHomeHeight = 0.0;
+    public static final double kOffFloorHeight = 0.2; //TODO: FIND REAL VALUES
     public static final double k2ndRowHeight = 0.87 + kPlacingHeightOffset;
     public static final double k3rdRowHeight = 1.17 + kPlacingHeightOffset;
     public static final double kHumanStationHeight = 0.95 + kPlacingHeightOffset;
 
     public static final double kAdjustVelocity = 0.8;
-    public static final double kMaxOutput = 0.2;
+    public static final double kMaxOutput = 0.2; //TODO: MAKE FASTER FOR COMPETITION
 
     public static final int kWristSolenoidForwardChannel = 5;
     public static final int kWristSolenoidBackwardChannel = 6;
     // Extension > Retraction
-    public static final int kWristExtensionCycles = 2000; //TODO: FIND REAL VALUES
-    public static final int kWristRetractionCycles = 1500; //TODO: FIND REAL VALUES
+    public static final double kWristExtensionCycles = 24.0;
+    public static final double kWristRetractionCycles = 10.0;
 
     public static final double kP = 1.0;
     public static final double kI = 0.0;
@@ -114,13 +115,13 @@ public final class Constants {
   }
 
   public static final class WristConstants {
-    public static final int kWristSolenoidForwardChannel = 5;
-    public static final int kWristSolenoidBackwardChannel = 6;
+    public static final int kWristSolenoidForwardChannel = 1;
+    public static final int kWristSolenoidBackwardChannel = 2;
 
     public static final DoubleSolenoid.Value kWristExtended = Value.kForward;
     public static final DoubleSolenoid.Value kWristRetracted = Value.kReverse;
 
-    public static final boolean kWristStubOut = true;
+    public static final boolean kWristStubOut = false;
   }
 
   public static final class SwerveModuleConstants {
@@ -152,7 +153,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final double kMaxRadPerSec = SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond;
     public static final double kMaxMetersPerSec = DriveConstants.kMaxSpeedMetersPerSecond;
-    public static final double kArmAdjustV = 0.1;
+    public static final double kArmAdjustV = 0.025; //TODO: TUNE AFTER INTERPOLATION TABLE FINISHED
     
     public static final int kA = 1;
     public static final int kB = 2;
