@@ -132,20 +132,30 @@ public class RobotContainer {
         }
       )
       .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_arm.moveVHeight(OIConstants.kArmAdjustV));
+      .whileTrue(m_arm.moveVHeight(OIConstants.kArmAdjustV))
+      .onFalse(m_arm.stopVHeight());
     new Trigger(() -> {
           int povAngle = m_driverController.getPOV();
           return (povAngle == 225 || povAngle == 180 || povAngle == 135);
         }
       )
       .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_arm.moveVHeight(-OIConstants.kArmAdjustV));
+      .whileTrue(m_arm.moveVHeight(-OIConstants.kArmAdjustV))
+      .onFalse(m_arm.stopVHeight());
     new JoystickButton(m_driverController, OIConstants.kArmAdjustUpButton)
         .debounce(OIConstants.kDebounceSeconds)
-        .onTrue(m_arm.moveVHeight(OIConstants.kArmAdjustV));
+        .whileTrue(m_arm.moveVHeight(OIConstants.kArmAdjustV))
+        .onFalse(m_arm.stopVHeight());
     new JoystickButton(m_driverController, OIConstants.kArmAdjustDownButton)
         .debounce(OIConstants.kDebounceSeconds)
-        .onTrue(m_arm.moveVHeight(-OIConstants.kArmAdjustV));
+        .whileTrue(m_arm.moveVHeight(-OIConstants.kArmAdjustV))
+        .onFalse(m_arm.stopVHeight());
+    new JoystickButton(m_driverController, 7) //TODO: DELETE WHEN WRIST WORKS
+        .debounce(OIConstants.kDebounceSeconds)
+        .onTrue(m_wrist.extendWrist());
+    new JoystickButton(m_driverController, 8) //TODO: DELETE WHEN WRIST WORKS
+        .debounce(OIConstants.kDebounceSeconds)
+        .onTrue(m_wrist.retractWrist());
     new JoystickButton(m_driverController, OIConstants.kSlowButton)
       .debounce(OIConstants.kDebounceSeconds)
       .onTrue(Commands.runOnce(() -> {m_driveSpeed = DriveSpeed.SLOW;}))
