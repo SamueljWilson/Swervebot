@@ -9,18 +9,21 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxLimitSwitch;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.WristConstants;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ArmSubsystem extends SubsystemBase {
   CANSparkMax m_armMotor = new CANSparkMax(ArmConstants.kArmMotorPort, MotorType.kBrushless);
   SparkMaxLimitSwitch m_forwardLimitSwitch = m_armMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
   SparkMaxLimitSwitch m_reverseLimitSwitch = m_armMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
   WristSubsystem m_wrist;
+  AtomicBoolean m_vHeightInUse = new AtomicBoolean();
 
   public enum InitState {
     UNINITIALIZED,
@@ -82,11 +85,24 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public Command moveVHeight(double metersPerSecond) {
+    if (m_vHeightInUse.compareAndSet(false, true)) {
+      return runOnce(
+        () -> {
+          double height = ArmInterp.cyclesToHeight(getCycles());
+          double velocity = ArmInterp.vheightToRPM(metersPerSecond, height);
+          m_armMotor.getPIDController().setReference(velocity, ControlType.kVelocity);
+          m_vHeightInUse.set(false);
+        }
+      );
+    } else {
+      return Commands.none();
+    }
+  }
+
+  public Command stopVHeight() {
     return runOnce(
       () -> {
-        double height = ArmInterp.cyclesToHeight(getCycles());
-        double velocity = ArmInterp.vheightToRPM(metersPerSecond, height);
-        m_armMotor.getPIDController().setReference(velocity, ControlType.kVelocity);
+        m_armMotor.getPIDController().setReference(0.0, ControlType.kVelocity);
       }
     );
   }
@@ -106,12 +122,13 @@ public class ArmSubsystem extends SubsystemBase {
     return 
       runOnce(
         () -> {
-          m_armMotor.getPIDController().setReference(-0.5, ControlType.kCurrent);
+          m_armMotor.getPIDController().setReference(-ArmConstants.kMaxOutput, ControlType.kCurrent);
         }
       )
-      .andThen(() -> {}, this).until(m_forwardLimitSwitch::isPressed)
+      .andThen(() -> {}, this).until(m_reverseLimitSwitch::isPressed)
       .andThen(
         () -> {
+          m_armMotor.getPIDController().setReference(ArmConstants.kHomeCyclesOffset, ControlType.kPosition);
           setCycles(0.0);
           m_initState = InitState.INITIALIZED;
         }
@@ -121,6 +138,9 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     if (m_initState != InitState.INITIALIZED) return;
+    double cycles = getCycles();
+    SmartDashboard.putNumber("Cycles", cycles);
+    SmartDashboard.putNumber("Height", ArmInterp.cyclesToHeight(cycles));
     DoubleSolenoid.Value wristPosition = getWristPosition();
     double armPosition = getCycles();
     assert(ArmConstants.kWristRetractionCycles < ArmConstants.kWristExtensionCycles);
