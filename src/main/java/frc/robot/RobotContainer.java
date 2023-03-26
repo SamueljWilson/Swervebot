@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.util.function.ObjIntConsumer;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -38,6 +36,7 @@ public class RobotContainer {
   public final GripperSubsystem m_gripper = new GripperSubsystem();
   public final WristSubsystem m_wrist = new WristSubsystem();
   public final ArmSubsystem m_arm = new ArmSubsystem(m_wrist);
+  private boolean m_ranInits = false;
 
   // The driver's controller
   GenericHID m_driverController = new GenericHID(OIConstants.kDriverControllerPort);
@@ -69,8 +68,6 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     configureAutoRoutines();
-    m_arm.initCommand().schedule();
-    m_wrist.initCommand().schedule();
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -132,7 +129,7 @@ public class RobotContainer {
         }
       )
       .debounce(OIConstants.kDebounceSeconds)
-      .whileTrue(m_arm.moveVHeight(OIConstants.kArmAdjustV))
+      .whileActiveContinuous(m_arm.moveVHeight(OIConstants.kArmAdjustV))
       .onFalse(m_arm.stopVHeight());
     new Trigger(() -> {
           int povAngle = m_driverController.getPOV();
@@ -140,15 +137,15 @@ public class RobotContainer {
         }
       )
       .debounce(OIConstants.kDebounceSeconds)
-      .whileTrue(m_arm.moveVHeight(-OIConstants.kArmAdjustV))
+      .whileActiveContinuous(m_arm.moveVHeight(-OIConstants.kArmAdjustV))
       .onFalse(m_arm.stopVHeight());
     new JoystickButton(m_driverController, OIConstants.kArmAdjustUpButton)
         .debounce(OIConstants.kDebounceSeconds)
-        .whileTrue(m_arm.moveVHeight(OIConstants.kArmAdjustV))
+        .whileActiveContinuous(m_arm.moveVHeight(OIConstants.kArmAdjustV))
         .onFalse(m_arm.stopVHeight());
     new JoystickButton(m_driverController, OIConstants.kArmAdjustDownButton)
         .debounce(OIConstants.kDebounceSeconds)
-        .whileTrue(m_arm.moveVHeight(-OIConstants.kArmAdjustV))
+        .whileActiveContinuous(m_arm.moveVHeight(-OIConstants.kArmAdjustV))
         .onFalse(m_arm.stopVHeight());
     new JoystickButton(m_driverController, 7) //TODO: DELETE WHEN WRIST WORKS
         .debounce(OIConstants.kDebounceSeconds)
@@ -185,6 +182,16 @@ public class RobotContainer {
         .onTrue(m_wrist.retractWrist());
     }
   }
+
+  public void initCommands() {
+    if (!m_ranInits) {
+      m_arm.initCommand().schedule();
+      System.out.printf("The arm command: %b\n", m_arm.initCommand().isScheduled());
+      m_wrist.initCommand().schedule();
+      m_ranInits = true;
+    }
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

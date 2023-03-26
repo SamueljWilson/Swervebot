@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxLimitSwitch;
 
@@ -16,6 +17,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.WristConstants;
+import frc.robot.commands.WaitUntilArmRetracted;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ArmSubsystem extends SubsystemBase {
@@ -40,6 +43,7 @@ public class ArmSubsystem extends SubsystemBase {
     m_armMotor.getPIDController().setI(ArmConstants.kI);
     m_armMotor.getPIDController().setD(ArmConstants.kD);
     m_armMotor.getPIDController().setOutputRange(-ArmConstants.kMaxOutput, ArmConstants.kMaxOutput);
+    m_armMotor.setIdleMode(IdleMode.kBrake);
   }
 
   private DoubleSolenoid.Value getWristPosition() {
@@ -47,22 +51,24 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public Command moveHome() {
-    return new RunCommand(
+    return Commands.runOnce(
       () -> {
         if (m_wrist.getWristPosition() == WristConstants.kWristExtended) {
           m_wrist.retractWrist();
         }
         m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.kHomeHeight),
         ControlType.kPosition);
+        System.out.printf("Moving To Home\n");
       },
       this, m_wrist
     );
   }
 
   private Command moveToHeight(double height) {
-    return new RunCommand(
+    return Commands.runOnce(
       () -> {
         m_armMotor.getPIDController().setReference(ArmInterp.heightToCycles(height), ControlType.kPosition);
+        System.out.printf("Move To Height: %f\n", height);
       },
       this, m_wrist
     );
@@ -85,24 +91,25 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public Command moveVHeight(double metersPerSecond) {
-    if (m_vHeightInUse.compareAndSet(false, true)) {
-      return runOnce(
-        () -> {
+    return runOnce(
+      () -> {
+        if (m_vHeightInUse.compareAndSet(false, true)) {
           double height = ArmInterp.cyclesToHeight(getCycles());
           double velocity = ArmInterp.vheightToRPM(metersPerSecond, height);
+          SmartDashboard.putNumber("Arm Velocity", velocity);
+          System.out.printf("MoveVHeight %f\n", metersPerSecond);
           m_armMotor.getPIDController().setReference(velocity, ControlType.kVelocity);
           m_vHeightInUse.set(false);
         }
-      );
-    } else {
-      return Commands.none();
-    }
+      }
+    );
   }
 
   public Command stopVHeight() {
     return runOnce(
       () -> {
         m_armMotor.getPIDController().setReference(0.0, ControlType.kVelocity);
+        System.out.printf("Stopping\n");
       }
     );
   }
@@ -122,21 +129,30 @@ public class ArmSubsystem extends SubsystemBase {
     return 
       runOnce(
         () -> {
-          m_armMotor.getPIDController().setReference(-ArmConstants.kMaxOutput, ControlType.kCurrent);
+          m_armMotor.getPIDController().setReference(-1095, ControlType.kVelocity);
+          // m_armMotor.getPIDController().setReference(-0.2, ControlType.kDutyCycle);
+          System.out.println("MOVING");
         }
       )
-      .andThen(() -> {}, this).until(m_reverseLimitSwitch::isPressed)
+      .andThen(new WaitUntilArmRetracted(this))
       .andThen(
         () -> {
+          // m_armMotor.getPIDController().setReference(0.0, ControlType.kCurrent);
+          System.out.println("MOVING TO OFFSET");
           m_armMotor.getPIDController().setReference(ArmConstants.kHomeCyclesOffset, ControlType.kPosition);
           setCycles(0.0);
           m_initState = InitState.INITIALIZED;
-        }
+        }, this
       );
+  }
+
+  public boolean isReverseLimitSwitchPressed() {
+    return m_reverseLimitSwitch.isPressed();
   }
 
   @Override
   public void periodic() {
+    SmartDashboard.putString("Arm State", m_initState.toString());
     if (m_initState != InitState.INITIALIZED) return;
     double cycles = getCycles();
     SmartDashboard.putNumber("Cycles", cycles);
