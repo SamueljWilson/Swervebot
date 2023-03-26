@@ -100,6 +100,7 @@ public final class Constants {
 
     public static final double kAdjustVelocity = 0.8;
     public static final double kMaxOutput = 0.2; //TODO: MAKE FASTER FOR COMPETITION
+    public static final double kRetractingVelocity = -50.0; // For zeroing the arm
 
     public static final int kWristSolenoidForwardChannel = 5;
     public static final int kWristSolenoidBackwardChannel = 6;
@@ -153,7 +154,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final double kMaxRadPerSec = SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond;
     public static final double kMaxMetersPerSec = DriveConstants.kMaxSpeedMetersPerSecond;
-    public static final double kArmAdjustV = 0.025; //TODO: TUNE AFTER INTERPOLATION TABLE FINISHED
+    public static final double kArmAdjustV = 1.0; //TODO: TUNE AFTER INTERPOLATION TABLE FINISHED
     
     public static final int kA = 1;
     public static final int kB = 2;
