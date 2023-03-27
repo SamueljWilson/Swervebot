@@ -186,7 +186,6 @@ public class RobotContainer {
   public void initCommands() {
     if (!m_ranInits) {
       m_arm.initCommand().schedule();
-      System.out.printf("The arm command: %b\n", m_arm.initCommand().isScheduled());
       m_wrist.initCommand().schedule();
       m_ranInits = true;
     }
