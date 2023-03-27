@@ -21,27 +21,36 @@ public class WristSubsystem extends SubsystemBase {
     if (WristConstants.kWristStubOut) return DoubleSolenoid.Value.kOff;
     return m_wristPiston.get();
   }
+  
+  public void extendWrist() {
+    if (WristConstants.kWristStubOut) return;
+    DoubleSolenoid.Value wristPosition = getWristPosition();
+    System.out.printf("Wrist position is: %s\n", wristPosition.toString());
+    if (wristPosition != WristConstants.kWristExtended) {
+      m_wristPiston.set(WristConstants.kWristExtended);
+    } 
+  }
 
-  public Command extendWrist() {
+  public Command extendWristCommand() {
     return runOnce(
       () -> {
-        if (WristConstants.kWristStubOut) return;
-        DoubleSolenoid.Value wristPosition = getWristPosition();
-        if (wristPosition != WristConstants.kWristExtended) {
-          m_wristPiston.set(WristConstants.kWristExtended);
-        } 
+        extendWrist();
       }
     );
   }
 
-  public Command retractWrist() {
+  public void retractWrist() {
+    if (WristConstants.kWristStubOut) return;
+    DoubleSolenoid.Value wristPosition = getWristPosition();
+    if (wristPosition != WristConstants.kWristRetracted) {
+      m_wristPiston.set(WristConstants.kWristRetracted);
+    } 
+  }
+
+  public Command retractWristCommand() {
     return runOnce(
       () -> {
-        if (WristConstants.kWristStubOut) return;
-        DoubleSolenoid.Value wristPosition = getWristPosition();
-        if (wristPosition != WristConstants.kWristRetracted) {
-          m_wristPiston.set(WristConstants.kWristRetracted);
-        } 
+        retractWrist();
       }
     );
   }

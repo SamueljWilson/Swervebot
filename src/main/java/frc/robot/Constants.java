@@ -106,7 +106,7 @@ public final class Constants {
     public static final int kWristSolenoidBackwardChannel = 6;
     // Extension > Retraction
     public static final double kWristExtensionCycles = 24.0;
-    public static final double kWristRetractionCycles = 10.0;
+    public static final double kWristRetractionCycles = 20.0;
 
     public static final double kP = 1.0;
     public static final double kI = 0.0;
