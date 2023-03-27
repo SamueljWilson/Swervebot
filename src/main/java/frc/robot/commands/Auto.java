@@ -119,13 +119,13 @@ public class Auto {
     Trajectory trajectory2 = bTrajectoryPlaceCross2(trajectory1, mirror);
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
-      arm.moveToTop()
+      arm.moveToTopCommand()
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
       .andThen(gripper.openGrippers())
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
-      .andThen(arm.moveHome())
+      .andThen(arm.moveHomeCommand())
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, true))
-      .andThen(arm.moveToOffFloor());
+      .andThen(arm.moveToOffFloorCommand());
     return new Auto(startingPose, command, team);
   }
 
@@ -144,14 +144,14 @@ public class Auto {
     Trajectory trajectory2 = eTrajectoryPlaceCross2(mirror);
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
-      arm.moveToTop()
+      arm.moveToTopCommand()
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
       .andThen(gripper.openGrippers())
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
-      .andThen(arm.moveHome())
+      .andThen(arm.moveHomeCommand())
       .andThen(new CrossCharger(team, drive))
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, false))
-      .andThen(arm.moveToOffFloor());
+      .andThen(arm.moveToOffFloorCommand());
     return new Auto(startingPose, command, team);
   }
   
@@ -170,7 +170,7 @@ public class Auto {
     Trajectory trajectory2 = eTrajectoryPlaceCross2(mirror);
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
-      arm.moveToTop()
+      arm.moveToTopCommand()
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
       // .andThen(gripper.openGrippers())
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
@@ -196,13 +196,13 @@ public class Auto {
     Trajectory trajectory2 = hTrajectoryPlaceCross2(trajectory1, mirror);
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
-      arm.moveToTop()
+      arm.moveToTopCommand()
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
       .andThen(gripper.openGrippers())
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
-      .andThen(arm.moveHome())
+      .andThen(arm.moveHomeCommand())
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, true))
-      .andThen(arm.moveToOffFloor());
+      .andThen(arm.moveToOffFloorCommand());
     return new Auto(startingPose, command, team);
   }
 
