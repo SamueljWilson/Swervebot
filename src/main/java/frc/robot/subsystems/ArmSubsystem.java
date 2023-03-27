@@ -3,7 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
@@ -25,7 +24,6 @@ public class ArmSubsystem extends SubsystemBase {
   SparkMaxLimitSwitch m_forwardLimitSwitch = m_armMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
   SparkMaxLimitSwitch m_reverseLimitSwitch = m_armMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
   WristSubsystem m_wrist;
-  AtomicBoolean m_vHeightInUse = new AtomicBoolean();
 
   public enum InitState {
     UNINITIALIZED,
@@ -103,12 +101,9 @@ public class ArmSubsystem extends SubsystemBase {
   public Command moveVHeight(double metersPerSecond) {
     return runOnce(
       () -> {
-        if (m_vHeightInUse.compareAndSet(false, true)) {
-          double height = ArmInterp.cyclesToHeight(getCycles());
-          double velocity = ArmInterp.vheightToRPM(metersPerSecond, height);
-          m_armMotor.getPIDController().setReference(velocity, ControlType.kVelocity, ArmConstants.kVelPIDSlot);
-          m_vHeightInUse.set(false);
-        }
+        double height = ArmInterp.cyclesToHeight(getCycles());
+        double velocity = ArmInterp.vheightToRPM(metersPerSecond, height);
+        m_armMotor.getPIDController().setReference(velocity, ControlType.kVelocity, ArmConstants.kVelPIDSlot);
       }
     );
   }
