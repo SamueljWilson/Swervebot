@@ -72,11 +72,15 @@ public class ArmSubsystem extends SubsystemBase {
     );
   }
 
+  public void moveToHeight(double height) {
+    m_armMotor.getPIDController().setReference(ArmInterp.heightToCycles(height), ControlType.kPosition,
+          ArmConstants.kPosPIDSlot);
+  }
+
   private Command moveToHeightCommand(double height) {
     return Commands.runOnce(
       () -> {
-        m_armMotor.getPIDController().setReference(ArmInterp.heightToCycles(height), ControlType.kPosition,
-          ArmConstants.kPosPIDSlot);
+        moveToHeight(height);
       },
       this, m_wrist
     );
@@ -157,6 +161,10 @@ public class ArmSubsystem extends SubsystemBase {
 
   public boolean isReverseLimitSwitchPressed() {
     return m_reverseLimitSwitch.isPressed();
+  }
+
+  public boolean isInitialized() {
+    return m_initState == InitState.INITIALIZED;
   }
 
   @Override
