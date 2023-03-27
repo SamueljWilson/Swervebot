@@ -132,9 +132,6 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public Command initCommand() {
-    if (ArmConstants.kArmStubOut) {
-      return Commands.none();
-    }
     return 
       runOnce(
         () -> {

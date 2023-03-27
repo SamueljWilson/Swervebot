@@ -123,8 +123,6 @@ public final class Constants {
 
     public static final int kPosPIDSlot = 0;
     public static final int kVelPIDSlot = 1;
-
-    public static boolean kArmStubOut = false;
   }
 
   public static final class WristConstants {
@@ -133,8 +131,6 @@ public final class Constants {
 
     public static final DoubleSolenoid.Value kWristExtended = Value.kForward;
     public static final DoubleSolenoid.Value kWristRetracted = Value.kReverse;
-
-    public static final boolean kWristStubOut = false;
   }
 
   public static final class SwerveModuleConstants {

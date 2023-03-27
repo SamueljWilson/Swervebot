@@ -12,18 +12,16 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 public class WristSubsystem extends SubsystemBase {
 
-  DoubleSolenoid m_wristPiston = WristConstants.kWristStubOut ? null : new DoubleSolenoid(
+  DoubleSolenoid m_wristPiston = new DoubleSolenoid(
     PneumaticsModuleType.REVPH,
      WristConstants.kWristSolenoidForwardChannel, 
      WristConstants.kWristSolenoidBackwardChannel);
   
   public DoubleSolenoid.Value getWristPosition() {
-    if (WristConstants.kWristStubOut) return DoubleSolenoid.Value.kOff;
     return m_wristPiston.get();
   }
   
   public void extendWrist() {
-    if (WristConstants.kWristStubOut) return;
     DoubleSolenoid.Value wristPosition = getWristPosition();
     System.out.printf("Wrist position is: %s\n", wristPosition.toString());
     if (wristPosition != WristConstants.kWristExtended) {
@@ -40,7 +38,6 @@ public class WristSubsystem extends SubsystemBase {
   }
 
   public void retractWrist() {
-    if (WristConstants.kWristStubOut) return;
     DoubleSolenoid.Value wristPosition = getWristPosition();
     if (wristPosition != WristConstants.kWristRetracted) {
       m_wristPiston.set(WristConstants.kWristRetracted);
@@ -58,7 +55,6 @@ public class WristSubsystem extends SubsystemBase {
   public Command initCommand() {
     return runOnce(
       () -> {
-        if (WristConstants.kWristStubOut) return;
         m_wristPiston.set(WristConstants.kWristRetracted);
       }
     );

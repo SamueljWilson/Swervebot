@@ -88,25 +88,15 @@ public class RobotContainer {
 
   private void configureAutoRoutines() {
     m_chooser.setDefaultOption("Do Nothing", Auto.doNothing(m_robotDrive));
-    if (ArmConstants.kArmStubOut == false || WristConstants.kWristStubOut) {
-      m_chooser.addOption("Blue B Place Cross", Auto.blueBPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
-      m_chooser.addOption("Blue E Place Cross", Auto.blueEPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
-      m_chooser.addOption("Blue E Place Cross Charge", Auto.blueEPlaceCrossCharge(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
-      m_chooser.addOption("Blue H Place Cross", Auto.blueHPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
+    m_chooser.addOption("Blue B Place Cross", Auto.blueBPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
+    m_chooser.addOption("Blue E Place Cross", Auto.blueEPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
+    m_chooser.addOption("Blue E Place Cross Charge", Auto.blueEPlaceCrossCharge(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
+    m_chooser.addOption("Blue H Place Cross", Auto.blueHPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
 
-      m_chooser.addOption("Red B Place Cross", Auto.redBPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.RED));
-      m_chooser.addOption("Red E Place Cross", Auto.redEPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.RED));
-      m_chooser.addOption("Red E Place Cross Charge", Auto.redEPlaceCrossCharge(m_robotDrive, m_arm, m_gripper, Auto.Team.RED));
-      m_chooser.addOption("Red H Place Cross", Auto.redHPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.RED));
-    } else {
-      m_chooser.addOption("Blue B Place Cross Wrist", Auto.blueBPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper, Auto.Team.BLUE));
-      m_chooser.addOption("Blue E Place Cross Wrist", Auto.blueEPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper, Auto.Team.BLUE));
-      m_chooser.addOption("Blue H Place Cross Wrist", Auto.blueHPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper, Auto.Team.BLUE));
-
-      m_chooser.addOption("Red B Place Cross Wrist", Auto.redBPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper, Auto.Team.RED));
-      m_chooser.addOption("Red E Place Cross Wrist", Auto.redEPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper, Auto.Team.RED));
-      m_chooser.addOption("Red H Place Cross Wrist", Auto.redHPlaceCrossWrist(m_robotDrive, m_wrist, m_gripper, Auto.Team.RED));
-    }
+    m_chooser.addOption("Red B Place Cross", Auto.redBPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.RED));
+    m_chooser.addOption("Red E Place Cross", Auto.redEPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.RED));
+    m_chooser.addOption("Red E Place Cross Charge", Auto.redEPlaceCrossCharge(m_robotDrive, m_arm, m_gripper, Auto.Team.RED));
+    m_chooser.addOption("Red H Place Cross", Auto.redHPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.RED));
     SmartDashboard.putData(m_chooser);
   }
 
@@ -147,40 +137,25 @@ public class RobotContainer {
         .debounce(OIConstants.kDebounceSeconds)
         .whileActiveContinuous(m_arm.moveVHeight(-OIConstants.kArmAdjustV))
         .onFalse(m_arm.stopVHeight());
-    new JoystickButton(m_driverController, 7) //TODO: DELETE WHEN WRIST WORKS
-        .debounce(OIConstants.kDebounceSeconds)
-        .onTrue(m_wrist.extendWristCommand());
-    new JoystickButton(m_driverController, 8) //TODO: DELETE WHEN WRIST WORKS
-        .debounce(OIConstants.kDebounceSeconds)
-        .onTrue(m_wrist.retractWristCommand());
     new JoystickButton(m_driverController, OIConstants.kSlowButton)
       .debounce(OIConstants.kDebounceSeconds)
       .onTrue(Commands.runOnce(() -> {m_driveSpeed = DriveSpeed.SLOW;}))
       .onFalse(Commands.runOnce(() -> {m_driveSpeed = DriveSpeed.FAST;}));
-    if (ArmConstants.kArmStubOut == false) {
-      new JoystickButton(m_driverController, OIConstants.kHomeButton)
-        .debounce(OIConstants.kDebounceSeconds)
-        .onTrue(m_arm.moveHome());
-      new JoystickButton(m_driverController, OIConstants.kPickOffFloorButton)
-        .debounce(OIConstants.kDebounceSeconds)
-        .onTrue(m_arm.moveToOffFloor());
-      new JoystickButton(m_driverController, OIConstants.k2ndRowButton)
-        .debounce(OIConstants.kDebounceSeconds)
-        .onTrue(m_arm.moveToMiddle());
-      new JoystickButton(m_driverController, OIConstants.k3rdRowButton)
-        .debounce(OIConstants.kDebounceSeconds)
-        .onTrue(m_arm.moveToTop());
-      new JoystickButton(m_driverController, OIConstants.kHumanStationButton)
-        .debounce(OIConstants.kDebounceSeconds)
-        .onTrue(m_arm.moveToHumanStation());
-    } else {
-      new JoystickButton(m_driverController, OIConstants.kExtendWristButton)
-        .debounce(OIConstants.kDebounceSeconds)
-        .onTrue(m_wrist.extendWristCommand());
-      new JoystickButton(m_driverController, OIConstants.kRetractWristButton)
-        .debounce(OIConstants.kDebounceSeconds)
-        .onTrue(m_wrist.retractWristCommand());
-    }
+    new JoystickButton(m_driverController, OIConstants.kHomeButton)
+      .debounce(OIConstants.kDebounceSeconds)
+      .onTrue(m_arm.moveHome());
+    new JoystickButton(m_driverController, OIConstants.kPickOffFloorButton)
+      .debounce(OIConstants.kDebounceSeconds)
+      .onTrue(m_arm.moveToOffFloor());
+    new JoystickButton(m_driverController, OIConstants.k2ndRowButton)
+      .debounce(OIConstants.kDebounceSeconds)
+      .onTrue(m_arm.moveToMiddle());
+    new JoystickButton(m_driverController, OIConstants.k3rdRowButton)
+      .debounce(OIConstants.kDebounceSeconds)
+      .onTrue(m_arm.moveToTop());
+    new JoystickButton(m_driverController, OIConstants.kHumanStationButton)
+      .debounce(OIConstants.kDebounceSeconds)
+      .onTrue(m_arm.moveToHumanStation());
   }
 
   public void initCommands() {
