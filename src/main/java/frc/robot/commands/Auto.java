@@ -137,11 +137,11 @@ public class Auto {
     Trajectory trajectory2 = bTrajectoryPlaceCross2(trajectory1, mirror);
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
-      wrist.extendWrist()
+      wrist.extendWristCommand()
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
       .andThen(gripper.openGrippers())
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
-      .andThen(wrist.retractWrist())
+      .andThen(wrist.retractWristCommand())
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, true));
     return new Auto(startingPose, command, team);
   }
@@ -186,11 +186,11 @@ public class Auto {
     Trajectory trajectory1 = eTrajectoryPlaceCross1(trajectory0, mirror);
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
-      wrist.extendWrist()
+      wrist.extendWristCommand()
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
       .andThen(gripper.openGrippers())
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
-      .andThen(wrist.retractWrist())
+      .andThen(wrist.retractWristCommand())
       .andThen(new CrossCharger(team, drive));
     return new Auto(startingPose, command, team);
   }
@@ -261,11 +261,11 @@ public class Auto {
     Trajectory trajectory2 = hTrajectoryPlaceCross2(trajectory1, mirror);
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
-      wrist.extendWrist()
+      wrist.extendWristCommand()
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
       .andThen(gripper.openGrippers())
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
-      .andThen(wrist.retractWrist())
+      .andThen(wrist.retractWristCommand())
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, true));
     return new Auto(startingPose, command, team);
   }

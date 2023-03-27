@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -13,13 +15,10 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.WristConstants;
 import frc.robot.commands.WaitUntilArmRetracted;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ArmSubsystem extends SubsystemBase {
   CANSparkMax m_armMotor = new CANSparkMax(ArmConstants.kArmMotorPort, MotorType.kBrushless);
@@ -54,11 +53,10 @@ public class ArmSubsystem extends SubsystemBase {
     return Commands.runOnce(
       () -> {
         if (m_wrist.getWristPosition() == WristConstants.kWristExtended) {
-          m_wrist.retractWrist();
+          m_wrist.retractWristCommand();
         }
         m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.kHomeHeight),
         ControlType.kPosition);
-        System.out.printf("Moving To Home\n");
       },
       this, m_wrist
     );
@@ -129,16 +127,13 @@ public class ArmSubsystem extends SubsystemBase {
     return 
       runOnce(
         () -> {
-          m_armMotor.getPIDController().setReference(-1095, ControlType.kVelocity);
-          // m_armMotor.getPIDController().setReference(-0.2, ControlType.kDutyCycle);
-          System.out.println("MOVING");
+          m_armMotor.getPIDController().setReference(-1095, ControlType.kVelocity); // TODO: ADD A CONSTANT FOR THE VELOCITY
         }
       )
       .andThen(new WaitUntilArmRetracted(this))
       .andThen(
         () -> {
           // m_armMotor.getPIDController().setReference(0.0, ControlType.kCurrent);
-          System.out.println("MOVING TO OFFSET");
           m_armMotor.getPIDController().setReference(ArmConstants.kHomeCyclesOffset, ControlType.kPosition);
           setCycles(0.0);
           m_initState = InitState.INITIALIZED;
@@ -152,7 +147,6 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putString("Arm State", m_initState.toString());
     if (m_initState != InitState.INITIALIZED) return;
     double cycles = getCycles();
     SmartDashboard.putNumber("Cycles", cycles);

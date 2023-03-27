@@ -149,10 +149,10 @@ public class RobotContainer {
         .onFalse(m_arm.stopVHeight());
     new JoystickButton(m_driverController, 7) //TODO: DELETE WHEN WRIST WORKS
         .debounce(OIConstants.kDebounceSeconds)
-        .onTrue(m_wrist.extendWrist());
+        .onTrue(m_wrist.extendWristCommand());
     new JoystickButton(m_driverController, 8) //TODO: DELETE WHEN WRIST WORKS
         .debounce(OIConstants.kDebounceSeconds)
-        .onTrue(m_wrist.retractWrist());
+        .onTrue(m_wrist.retractWristCommand());
     new JoystickButton(m_driverController, OIConstants.kSlowButton)
       .debounce(OIConstants.kDebounceSeconds)
       .onTrue(Commands.runOnce(() -> {m_driveSpeed = DriveSpeed.SLOW;}))
@@ -176,10 +176,10 @@ public class RobotContainer {
     } else {
       new JoystickButton(m_driverController, OIConstants.kExtendWristButton)
         .debounce(OIConstants.kDebounceSeconds)
-        .onTrue(m_wrist.extendWrist());
+        .onTrue(m_wrist.extendWristCommand());
       new JoystickButton(m_driverController, OIConstants.kRetractWristButton)
         .debounce(OIConstants.kDebounceSeconds)
-        .onTrue(m_wrist.retractWrist());
+        .onTrue(m_wrist.retractWristCommand());
     }
   }
 
