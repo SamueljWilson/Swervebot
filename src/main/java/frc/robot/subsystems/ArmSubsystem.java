@@ -38,10 +38,22 @@ public class ArmSubsystem extends SubsystemBase {
   public ArmSubsystem(WristSubsystem wrist) {
     m_wrist = wrist;
     m_armMotor.setInverted(false);
-    m_armMotor.getPIDController().setP(ArmConstants.kP);
-    m_armMotor.getPIDController().setI(ArmConstants.kI);
-    m_armMotor.getPIDController().setD(ArmConstants.kD);
-    m_armMotor.getPIDController().setOutputRange(-ArmConstants.kMaxOutput, ArmConstants.kMaxOutput);
+    m_armMotor.getPIDController().setP(ArmConstants.kPosP, ArmConstants.kPosPIDSlot);
+    m_armMotor.getPIDController().setI(ArmConstants.kPosI, ArmConstants.kPosPIDSlot);
+    m_armMotor.getPIDController().setD(ArmConstants.kPosD, ArmConstants.kPosPIDSlot);
+    m_armMotor.getPIDController().setFF(ArmConstants.kPosFF, ArmConstants.kPosPIDSlot);
+    m_armMotor.getPIDController().setIZone(ArmConstants.kPosIz, ArmConstants.kPosPIDSlot);
+    m_armMotor.getPIDController().setOutputRange(-ArmConstants.kMaxOutput, ArmConstants.kMaxOutput,
+      ArmConstants.kPosPIDSlot);
+    
+    m_armMotor.getPIDController().setP(ArmConstants.kVelP, ArmConstants.kVelPIDSlot);
+    m_armMotor.getPIDController().setI(ArmConstants.kVelI, ArmConstants.kVelPIDSlot);
+    m_armMotor.getPIDController().setD(ArmConstants.kVelD, ArmConstants.kVelPIDSlot);
+    m_armMotor.getPIDController().setFF(ArmConstants.kVelFF, ArmConstants.kVelPIDSlot);
+    m_armMotor.getPIDController().setIZone(ArmConstants.kVelIz, ArmConstants.kVelPIDSlot);
+    m_armMotor.getPIDController().setOutputRange(-ArmConstants.kMaxOutput, ArmConstants.kMaxOutput,
+      ArmConstants.kVelPIDSlot);
+
     m_armMotor.setIdleMode(IdleMode.kBrake);
   }
 
@@ -56,7 +68,7 @@ public class ArmSubsystem extends SubsystemBase {
           m_wrist.retractWristCommand();
         }
         m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.kHomeHeight),
-        ControlType.kPosition);
+        ControlType.kPosition, ArmConstants.kPosPIDSlot);
       },
       this, m_wrist
     );
@@ -65,8 +77,8 @@ public class ArmSubsystem extends SubsystemBase {
   private Command moveToHeight(double height) {
     return Commands.runOnce(
       () -> {
-        m_armMotor.getPIDController().setReference(ArmInterp.heightToCycles(height), ControlType.kPosition);
-        System.out.printf("Move To Height: %f\n", height);
+        m_armMotor.getPIDController().setReference(ArmInterp.heightToCycles(height), ControlType.kPosition,
+          ArmConstants.kPosPIDSlot);
       },
       this, m_wrist
     );
@@ -94,9 +106,7 @@ public class ArmSubsystem extends SubsystemBase {
         if (m_vHeightInUse.compareAndSet(false, true)) {
           double height = ArmInterp.cyclesToHeight(getCycles());
           double velocity = ArmInterp.vheightToRPM(metersPerSecond, height);
-          SmartDashboard.putNumber("Arm Velocity", velocity);
-          System.out.printf("MoveVHeight %f\n", metersPerSecond);
-          m_armMotor.getPIDController().setReference(velocity, ControlType.kVelocity);
+          m_armMotor.getPIDController().setReference(velocity, ControlType.kVelocity, ArmConstants.kVelPIDSlot);
           m_vHeightInUse.set(false);
         }
       }
@@ -106,8 +116,9 @@ public class ArmSubsystem extends SubsystemBase {
   public Command stopVHeight() {
     return runOnce(
       () -> {
-        m_armMotor.getPIDController().setReference(0.0, ControlType.kVelocity);
-        System.out.printf("Stopping\n");
+        // stopMotor does not brake the motor. Use set to current position to cause braking instead
+        // m_armMotor.stopMotor();
+        m_armMotor.getPIDController().setReference(getCycles(), ControlType.kPosition, ArmConstants.kPosPIDSlot);
       }
     );
   }
@@ -127,14 +138,17 @@ public class ArmSubsystem extends SubsystemBase {
     return 
       runOnce(
         () -> {
-          m_armMotor.getPIDController().setReference(-1095, ControlType.kVelocity); // TODO: ADD A CONSTANT FOR THE VELOCITY
+          m_armMotor.getPIDController().setReference(ArmConstants.KArmInitializeSpeed,
+            ControlType.kVelocity, ArmConstants.kVelPIDSlot);
+          // m_armMotor.getPIDController().setReference(-0.3, ControlType.kDutyCycle);
         }
       )
       .andThen(new WaitUntilArmRetracted(this))
       .andThen(
         () -> {
           // m_armMotor.getPIDController().setReference(0.0, ControlType.kCurrent);
-          m_armMotor.getPIDController().setReference(ArmConstants.kHomeCyclesOffset, ControlType.kPosition);
+          m_armMotor.getPIDController().setReference(ArmConstants.kHomeCyclesOffset, ControlType.kPosition, 
+            ArmConstants.kPosPIDSlot);
           setCycles(0.0);
           m_initState = InitState.INITIALIZED;
         }, this

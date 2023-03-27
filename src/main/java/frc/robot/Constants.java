@@ -93,13 +93,13 @@ public final class Constants {
     public static final double kHomeCyclesOffset = 2.0;
     private static final double kPlacingHeightOffset = 0.20;
     public static final double kHomeHeight = 0.0;
-    public static final double kOffFloorHeight = 0.2; //TODO: FIND REAL VALUES
+    public static final double kOffFloorHeight = 0.22; //TODO: FIND REAL VALUES
     public static final double k2ndRowHeight = 0.87 + kPlacingHeightOffset;
     public static final double k3rdRowHeight = 1.17 + kPlacingHeightOffset;
     public static final double kHumanStationHeight = 0.95 + kPlacingHeightOffset;
 
     public static final double kAdjustVelocity = 0.8;
-    public static final double kMaxOutput = 0.2; //TODO: MAKE FASTER FOR COMPETITION
+    public static final double kMaxOutput = 0.3; //TODO: MAKE FASTER FOR COMPETITION
     public static final double kRetractingVelocity = -50.0; // For zeroing the arm
 
     public static final int kWristSolenoidForwardChannel = 5;
@@ -108,9 +108,22 @@ public final class Constants {
     public static final double kWristExtensionCycles = 24.0;
     public static final double kWristRetractionCycles = 20.0;
 
-    public static final double kP = 1.0;
-    public static final double kI = 0.0;
-    public static final double kD = 0.0;
+    public static final double KArmInitializeSpeed = -1095.0;
+
+    public static final double kVelP = 0.0009;
+    public static final double kVelI = 0.0;
+    public static final double kVelD = 0.001;
+    public static final double kVelIz = 0.0;
+    public static final double kVelFF = 0.01;
+
+    public static final double kPosP = 1.0;
+    public static final double kPosI = 0.0;
+    public static final double kPosD = 0.0;
+    public static final double kPosIz = 0.0;
+    public static final double kPosFF = 0.0;
+
+    public static final int kPosPIDSlot = 0;
+    public static final int kVelPIDSlot = 1;
 
     public static boolean kArmStubOut = false;
   }
@@ -154,7 +167,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final double kMaxRadPerSec = SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond;
     public static final double kMaxMetersPerSec = DriveConstants.kMaxSpeedMetersPerSecond;
-    public static final double kArmAdjustV = 1.0; //TODO: TUNE AFTER INTERPOLATION TABLE FINISHED
+    public static final double kArmAdjustV = 0.025;
     
     public static final int kA = 1;
     public static final int kB = 2;
