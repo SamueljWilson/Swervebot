@@ -15,10 +15,8 @@ public class ArmInterp {
       new HtEntry(0, 0),
       new HtEntry(20.0, 0.19),
       new HtEntry(24.0, 0.21),
-      new HtEntry(25.1, 0.21),
       new HtEntry(27.1, 0.225),
       new HtEntry(29.9, 0.245),
-      new HtEntry(31.9, 0.26),
       new HtEntry(32.0, 0.26),
       new HtEntry(34.5, 0.285),
       new HtEntry(36.1, 0.305),
@@ -66,7 +64,7 @@ public class ArmInterp {
       new HtEntry(84.3, 1.42),
       new HtEntry(85.4, 1.46),
       new HtEntry(86.4, 1.485),
-      new HtEntry(87.0, 1.50),
+      new HtEntry(87.0, 1.50)
   };
 
   public static int cycleIndex(double cycles) {
