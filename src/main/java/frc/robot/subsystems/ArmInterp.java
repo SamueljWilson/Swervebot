@@ -6,8 +6,6 @@ package frc.robot.subsystems;
 
 import java.util.Arrays;
 
-import javax.swing.text.html.HTML;
-
 /** Add your docs here. */
 public class ArmInterp {
   static class HtEntry{double cycles; double height; public HtEntry(double c, double h) {cycles = c; height = h;}}
