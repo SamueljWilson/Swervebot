@@ -165,13 +165,12 @@ public class ArmSubsystem extends SubsystemBase {
     double cycles = getCycles();
     SmartDashboard.putNumber("Cycles", cycles);
     SmartDashboard.putNumber("Height", ArmInterp.cyclesToHeight(cycles));
-    DoubleSolenoid.Value wristPosition = getWristPosition();
     double armPosition = getCycles();
     assert(ArmConstants.kWristRetractionCycles < ArmConstants.kWristExtensionCycles);
-    if (wristPosition == WristConstants.kWristExtended && armPosition <= ArmConstants.kWristRetractionCycles) {
+    if (armPosition <= ArmConstants.kWristRetractionCycles) {
       m_wrist.retractWrist();
     }
-    else if (wristPosition == WristConstants.kWristRetracted && armPosition >= ArmConstants.kWristExtensionCycles) {
+    else if (armPosition >= ArmConstants.kWristExtensionCycles) {
       m_wrist.extendWrist();
     }
   }
