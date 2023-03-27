@@ -146,7 +146,6 @@ public class ArmSubsystem extends SubsystemBase {
       .andThen(new WaitUntilArmRetracted(this))
       .andThen(
         () -> {
-          // m_armMotor.getPIDController().setReference(0.0, ControlType.kCurrent);
           m_armMotor.getPIDController().setReference(ArmConstants.kHomeCyclesOffset, ControlType.kPosition, 
             ArmConstants.kPosPIDSlot);
           setCycles(0.0);

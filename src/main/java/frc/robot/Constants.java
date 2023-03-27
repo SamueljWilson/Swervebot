@@ -93,14 +93,13 @@ public final class Constants {
     public static final double kHomeCyclesOffset = 2.0;
     private static final double kPlacingHeightOffset = 0.20;
     public static final double kHomeHeight = 0.0;
-    public static final double kOffFloorHeight = 0.22; //TODO: FIND REAL VALUES
+    public static final double kOffFloorHeight = 0.22;
     public static final double k2ndRowHeight = 0.87 + kPlacingHeightOffset;
     public static final double k3rdRowHeight = 1.17 + kPlacingHeightOffset;
     public static final double kHumanStationHeight = 0.95 + kPlacingHeightOffset;
 
     public static final double kAdjustVelocity = 0.8;
-    public static final double kMaxOutput = 0.3; //TODO: MAKE FASTER FOR COMPETITION
-    public static final double kRetractingVelocity = -50.0; // For zeroing the arm
+    public static final double kMaxOutput = 0.3;
 
     public static final int kWristSolenoidForwardChannel = 5;
     public static final int kWristSolenoidBackwardChannel = 6;
