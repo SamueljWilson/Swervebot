@@ -65,6 +65,10 @@ public class ArmInterp {
       new HtEntry(87.0, 1.50)
   };
 
+  public static double getMaxCycles() {
+    return htTable[htTable.length-1].cycles;
+  }
+
   public static int cycleIndex(double cycles) {
     assert(cycles >= 0);
     int index = Arrays.binarySearch(htTable, new HtEntry(cycles, 0), (a,b) -> Double.compare(a.cycles, b.cycles));
@@ -73,28 +77,28 @@ public class ArmInterp {
       index = -index - 1;
     }
     assert(index >= 0);
-    assert(index < htTable.length);
     return index;
   }
 
   public static double cyclesToHeight(double cycles) {
     int index = cycleIndex(cycles);
-     if (index == 0) {
+    if (index == 0) {
       return htTable[index].height;
-     }
-     else if (htTable[index].cycles == cycles) {
-       return htTable[index].height;
-     }
-     // Linear Interpolation
-     else {
-      double c0 = htTable[index-1].cycles;
-      double c1 = htTable[index].cycles;
-      double h0 = htTable[index-1].height;
-      double h1 = htTable[index].height;
-      double scaler = (cycles-c0) / (c1 - c0);
-      double heightRange = h1 - h0;
-      return h0 + scaler*heightRange;
-     }
+    } else if (index == htTable.length) {
+      return htTable[htTable.length-1].height;
+    } else if (htTable[index].cycles == cycles) {
+      return htTable[index].height;
+    }
+    // Linear Interpolation
+    else {
+    double c0 = htTable[index-1].cycles;
+    double c1 = htTable[index].cycles;
+    double h0 = htTable[index-1].height;
+    double h1 = htTable[index].height;
+    double scaler = (cycles-c0) / (c1 - c0);
+    double heightRange = h1 - h0;
+    return h0 + scaler*heightRange;
+    }
   }
 
   public static int heightIndex(double height) {

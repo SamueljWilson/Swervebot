@@ -119,43 +119,43 @@ public class RobotContainer {
         }
       )
       .debounce(OIConstants.kDebounceSeconds)
-      .whileActiveContinuous(m_arm.moveVHeight(OIConstants.kArmAdjustV))
-      .onFalse(m_arm.stopVHeight());
+      .whileActiveContinuous(m_arm.moveVHeightCommand(OIConstants.kArmAdjustV))
+      .onFalse(m_arm.stopVHeightCommand());
     new Trigger(() -> {
           int povAngle = m_driverController.getPOV();
           return (povAngle == 225 || povAngle == 180 || povAngle == 135);
         }
       )
       .debounce(OIConstants.kDebounceSeconds)
-      .whileActiveContinuous(m_arm.moveVHeight(-OIConstants.kArmAdjustV))
-      .onFalse(m_arm.stopVHeight());
+      .whileActiveContinuous(m_arm.moveVHeightCommand(-OIConstants.kArmAdjustV))
+      .onFalse(m_arm.stopVHeightCommand());
     new JoystickButton(m_driverController, OIConstants.kArmAdjustUpButton)
         .debounce(OIConstants.kDebounceSeconds)
-        .whileActiveContinuous(m_arm.moveVHeight(OIConstants.kArmAdjustV))
-        .onFalse(m_arm.stopVHeight());
+        .whileActiveContinuous(m_arm.moveVHeightCommand(OIConstants.kArmAdjustV))
+        .onFalse(m_arm.stopVHeightCommand());
     new JoystickButton(m_driverController, OIConstants.kArmAdjustDownButton)
         .debounce(OIConstants.kDebounceSeconds)
-        .whileActiveContinuous(m_arm.moveVHeight(-OIConstants.kArmAdjustV))
-        .onFalse(m_arm.stopVHeight());
+        .whileActiveContinuous(m_arm.moveVHeightCommand(-OIConstants.kArmAdjustV))
+        .onFalse(m_arm.stopVHeightCommand());
     new JoystickButton(m_driverController, OIConstants.kSlowButton)
       .debounce(OIConstants.kDebounceSeconds)
       .onTrue(Commands.runOnce(() -> {m_driveSpeed = DriveSpeed.SLOW;}))
       .onFalse(Commands.runOnce(() -> {m_driveSpeed = DriveSpeed.FAST;}));
     new JoystickButton(m_driverController, OIConstants.kHomeButton)
       .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_arm.moveHome());
+      .onTrue(m_arm.moveHomeCommand());
     new JoystickButton(m_driverController, OIConstants.kPickOffFloorButton)
       .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_arm.moveToOffFloor());
+      .onTrue(m_arm.moveToOffFloorCommand());
     new JoystickButton(m_driverController, OIConstants.k2ndRowButton)
       .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_arm.moveToMiddle());
+      .onTrue(m_arm.moveToMiddleCommand());
     new JoystickButton(m_driverController, OIConstants.k3rdRowButton)
       .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_arm.moveToTop());
+      .onTrue(m_arm.moveToTopCommand());
     new JoystickButton(m_driverController, OIConstants.kHumanStationButton)
       .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_arm.moveToHumanStation());
+      .onTrue(m_arm.moveToHumanStationCommand());
   }
 
   public void initCommands() {

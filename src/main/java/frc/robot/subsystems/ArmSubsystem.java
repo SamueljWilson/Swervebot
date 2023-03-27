@@ -59,7 +59,7 @@ public class ArmSubsystem extends SubsystemBase {
     return m_wrist.getWristPosition();
   }
 
-  public Command moveHome() {
+  public Command moveHomeCommand() {
     return Commands.runOnce(
       () -> {
         if (m_wrist.getWristPosition() == WristConstants.kWristExtended) {
@@ -72,7 +72,7 @@ public class ArmSubsystem extends SubsystemBase {
     );
   }
 
-  private Command moveToHeight(double height) {
+  private Command moveToHeightCommand(double height) {
     return Commands.runOnce(
       () -> {
         m_armMotor.getPIDController().setReference(ArmInterp.heightToCycles(height), ControlType.kPosition,
@@ -82,25 +82,30 @@ public class ArmSubsystem extends SubsystemBase {
     );
   }
 
-  public Command moveToOffFloor() {
-    return moveToHeight(ArmConstants.kOffFloorHeight);
+  public Command moveToOffFloorCommand() {
+    return moveToHeightCommand(ArmConstants.kOffFloorHeight);
   }
 
-  public Command moveToMiddle() {
-    return moveToHeight(ArmConstants.k2ndRowHeight);
+  public Command moveToMiddleCommand() {
+    return moveToHeightCommand(ArmConstants.k2ndRowHeight);
   }
 
-  public Command moveToTop() {
-    return moveToHeight(ArmConstants.k3rdRowHeight);
+  public Command moveToTopCommand() {
+    return moveToHeightCommand(ArmConstants.k3rdRowHeight);
   }
 
-  public Command moveToHumanStation() {
-    return moveToHeight(ArmConstants.kHumanStationHeight);
+  public Command moveToHumanStationCommand() {
+    return moveToHeightCommand(ArmConstants.kHumanStationHeight);
   }
 
-  public Command moveVHeight(double metersPerSecond) {
+  public Command moveVHeightCommand(double metersPerSecond) {
     return runOnce(
       () -> {
+        if (metersPerSecond < 0 && getCycles() <= ArmConstants.kWristExtensionCycles 
+            || metersPerSecond > 0 && getCycles() >= ArmConstants.kMaxExtensionCycles) {
+          stopVHeight();
+          return;
+        }
         double height = ArmInterp.cyclesToHeight(getCycles());
         double velocity = ArmInterp.vheightToRPM(metersPerSecond, height);
         m_armMotor.getPIDController().setReference(velocity, ControlType.kVelocity, ArmConstants.kVelPIDSlot);
@@ -108,12 +113,16 @@ public class ArmSubsystem extends SubsystemBase {
     );
   }
 
-  public Command stopVHeight() {
+  private void stopVHeight() {
+    // stopMotor does not brake the motor. Use set to current position to cause braking instead
+    // m_armMotor.stopMotor();
+    m_armMotor.getPIDController().setReference(getCycles(), ControlType.kPosition, ArmConstants.kPosPIDSlot);
+  }
+
+  public Command stopVHeightCommand() {
     return runOnce(
       () -> {
-        // stopMotor does not brake the motor. Use set to current position to cause braking instead
-        // m_armMotor.stopMotor();
-        m_armMotor.getPIDController().setReference(getCycles(), ControlType.kPosition, ArmConstants.kPosPIDSlot);
+        stopVHeight();
       }
     );
   }
