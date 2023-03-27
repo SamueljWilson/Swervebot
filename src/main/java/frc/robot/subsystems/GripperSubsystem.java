@@ -18,6 +18,7 @@ public class GripperSubsystem extends SubsystemBase {
   }
 
   State m_state = State.CLOSED;
+  
   DoubleSolenoid m_leftSolenoid = new DoubleSolenoid(
     PneumaticsModuleType.REVPH,
     GripperConstants.kLeftSolenoidForwardChannel,
@@ -40,8 +41,8 @@ public class GripperSubsystem extends SubsystemBase {
       () -> {
         if (m_state != State.OPEN) {
           m_state = State.OPEN;
-          m_leftSolenoid.set(Value.kForward);
-          m_rightSolenoid.set(Value.kForward);
+          m_leftSolenoid.set(Value.kReverse);
+          m_rightSolenoid.set(Value.kReverse);
         }
       }
     );
@@ -52,8 +53,8 @@ public class GripperSubsystem extends SubsystemBase {
       () -> {
         if (m_state != State.CLOSED) {
           m_state = State.CLOSED;
-          m_leftSolenoid.set(Value.kReverse);
-          m_rightSolenoid.set(Value.kReverse);
+          m_leftSolenoid.set(Value.kForward);
+          m_rightSolenoid.set(Value.kForward);
         }
       }
     );
