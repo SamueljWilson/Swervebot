@@ -158,12 +158,16 @@ public class RobotContainer {
       .onTrue(m_arm.moveToHumanStationCommand());
   }
 
-  public void initCommands() {
+  public void initSubsystemsCommands() {
     if (!m_ranInits) {
       m_arm.initCommand().schedule();
       m_wrist.initCommand().schedule();
       m_ranInits = true;
     }
+  }
+
+  public boolean subsystemsInitialized() {
+    return m_arm.isInitialized() && m_wrist.isInitialized();
   }
 
   /**

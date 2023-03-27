@@ -108,6 +108,8 @@ public final class Constants {
     public static final double kWristExtensionCycles = 24.0;
     public static final double kWristRetractionCycles = 20.0;
 
+    public static final double kEpsilonHeight = 0.03;
+
     public static final double kMaxExtensionCycles = ArmInterp.getMaxCycles();
 
     public static final double KArmInitializeSpeed = -1095.0;

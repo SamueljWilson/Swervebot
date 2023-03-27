@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -18,6 +19,13 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+
+  private enum State {
+    UNINITIALIZED,
+    INITIALIZED
+  }
+
+  private State m_state = State.UNINITIALIZED;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -56,13 +64,16 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    // m_state = State.UNINITIALIZED;
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    m_robotContainer.initCommands();
-
+    m_robotContainer.initSubsystemsCommands();
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
+    if (m_autonomousCommand != null /*&& m_robotContainer.subsystemsInitialized() && m_state != State.INITIALIZED*/) {
       m_robotContainer.m_robotDrive.initOdometry(m_robotContainer.getAutonomousStartingPose());
-      m_autonomousCommand.schedule();
+      (new WaitUntilCommand(() -> {return m_robotContainer.subsystemsInitialized();})
+      .andThen(m_autonomousCommand)).schedule();
+      // m_autonomousCommand.schedule();
+      m_state = State.INITIALIZED;
     }
   }
 
@@ -76,7 +87,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    m_robotContainer.initCommands();
+    m_robotContainer.initSubsystemsCommands();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
