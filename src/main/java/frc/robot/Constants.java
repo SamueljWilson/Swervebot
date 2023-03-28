@@ -100,7 +100,7 @@ public final class Constants {
     public static final double kHumanStationHeight = 0.95 + kPlacingHeightOffset;
 
     public static final double kAdjustVelocity = 0.8;
-    public static final double kMaxOutput = 0.3;
+    public static final double kMaxOutput = 0.4;
 
     public static final int kWristSolenoidForwardChannel = 5;
     public static final int kWristSolenoidBackwardChannel = 6;
