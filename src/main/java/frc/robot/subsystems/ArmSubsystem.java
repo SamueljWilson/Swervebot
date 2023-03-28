@@ -30,7 +30,14 @@ public class ArmSubsystem extends SubsystemBase {
     INITIALIZED,
   }
 
-  InitState m_initState = InitState.UNINITIALIZED;
+  private enum MotorState {
+    DOWN,
+    STATIONARY,
+    UP
+  }
+
+  private MotorState m_motorState = MotorState.STATIONARY;
+  private InitState m_initState = InitState.UNINITIALIZED;
 
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem(WristSubsystem wrist) {
@@ -62,19 +69,26 @@ public class ArmSubsystem extends SubsystemBase {
   public Command moveHomeCommand() {
     return Commands.runOnce(
       () -> {
-        if (m_wrist.getWristPosition() == WristConstants.kWristExtended) {
-          m_wrist.retractWristCommand();
-        }
+        m_wrist.retractWrist();
         m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.kHomeHeight),
-        ControlType.kPosition, ArmConstants.kPosPIDSlot);
+          ControlType.kPosition, ArmConstants.kPosPIDSlot);
+        m_motorState = MotorState.DOWN;
       },
       this, m_wrist
     );
   }
 
   public void moveToHeight(double height) {
+    double currentHeight = ArmInterp.cyclesToHeight(getCycles());
     m_armMotor.getPIDController().setReference(ArmInterp.heightToCycles(height), ControlType.kPosition,
-          ArmConstants.kPosPIDSlot);
+      ArmConstants.kPosPIDSlot);
+    if (currentHeight > height) {
+      m_motorState = MotorState.DOWN;
+    } else if (currentHeight == height) {
+      m_motorState = MotorState.STATIONARY;
+    } else {
+      m_motorState = MotorState.UP;
+    }
   }
 
   private Command moveToHeightCommand(double height) {
@@ -113,6 +127,11 @@ public class ArmSubsystem extends SubsystemBase {
         double height = ArmInterp.cyclesToHeight(getCycles());
         double velocity = ArmInterp.vheightToRPM(metersPerSecond, height);
         m_armMotor.getPIDController().setReference(velocity, ControlType.kVelocity, ArmConstants.kVelPIDSlot);
+        if (metersPerSecond < 0) {
+          m_motorState = MotorState.DOWN;
+        } else {
+          m_motorState = MotorState.UP;
+        }
       }
     );
   }
@@ -121,6 +140,7 @@ public class ArmSubsystem extends SubsystemBase {
     // stopMotor does not brake the motor. Use set to current position to cause braking instead
     // m_armMotor.stopMotor();
     m_armMotor.getPIDController().setReference(getCycles(), ControlType.kPosition, ArmConstants.kPosPIDSlot);
+    m_motorState = MotorState.STATIONARY;
   }
 
   public Command stopVHeightCommand() {
@@ -137,6 +157,10 @@ public class ArmSubsystem extends SubsystemBase {
 
   public double getCycles() {
     return m_armMotor.getEncoder().getPosition();
+  }
+
+  public double getVelocity() {
+    return m_armMotor.getEncoder().getVelocity();
   }
 
   public Command initCommand() {
@@ -175,11 +199,13 @@ public class ArmSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Height", ArmInterp.cyclesToHeight(cycles));
     double armPosition = getCycles();
     assert(ArmConstants.kWristRetractionCycles < ArmConstants.kWristExtensionCycles);
-    if (armPosition <= ArmConstants.kWristRetractionCycles) {
+    if (armPosition <= ArmConstants.kWristRetractionCycles && m_motorState == MotorState.DOWN) {
       m_wrist.retractWrist();
+      // System.out.println("Retrating in the wrist periodic");
     }
-    else if (armPosition >= ArmConstants.kWristExtensionCycles) {
+    else if (armPosition >= ArmConstants.kWristExtensionCycles && m_motorState == MotorState.UP) {
       m_wrist.extendWrist();
+      // System.out.println("Extending in the wrist periodic");
     }
   }
 }

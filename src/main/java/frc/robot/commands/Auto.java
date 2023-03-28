@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
@@ -34,8 +35,8 @@ public class Auto {
   private static final double kChargingStationMaxEdgeY = 3.98463;
   // private static final double kEChargingStationX = 4.515;
 
-  private static final double kStartingGridX = kGridMaxX + kRobotHalfLength + 0.356;
-  private static final double kPlacingGridX = kGridMaxX + kRobotHalfLength + 0.206;
+  private static final double kStartingGridX = kGridMaxX + kRobotHalfLength + 0.700;
+  private static final double kPlacingGridX = kGridMaxX + kRobotHalfLength;
   private static final double kBGridY = 1.074;
   private static final double kHGridY = kGridMaxY - kBGridY;
   private static final double kEGridY = kGridMaxY / 2;
@@ -144,14 +145,14 @@ public class Auto {
     Trajectory trajectory2 = eTrajectoryPlaceCross2(mirror);
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
-      arm.moveToTopCommand()
+      (MoveArm.moveToTop(arm))
       .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
       .andThen(gripper.openGrippers())
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
-      .andThen(arm.moveHomeCommand())
-      .andThen(new CrossCharger(team, drive))
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, false))
-      .andThen(arm.moveToOffFloorCommand());
+      // .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
+      .andThen(MoveArm.moveHome(arm));
+      // .andThen(new CrossCharger(team, drive))
+      // .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, false))
+      // .andThen(arm.moveToOffFloorCommand());
     return new Auto(startingPose, command, team);
   }
   
