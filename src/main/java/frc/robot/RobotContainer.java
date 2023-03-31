@@ -87,7 +87,8 @@ public class RobotContainer {
   }
 
   private void configureAutoRoutines() {
-    m_chooser.setDefaultOption("Do Nothing", Auto.doNothing(m_robotDrive));
+    m_chooser.setDefaultOption("Blue E Place Cross", Auto.blueEPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
+    // m_chooser.setDefaultOption("Do Nothing", Auto.doNothing(m_robotDrive)); TODO: REVERT BACK
     m_chooser.addOption("Blue B Place Cross", Auto.blueBPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
     m_chooser.addOption("Blue E Place Cross", Auto.blueEPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
     m_chooser.addOption("Blue E Place Cross Charge", Auto.blueEPlaceCrossCharge(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
