@@ -268,7 +268,7 @@ public class Auto {
       DriveTrajectory.generateTrajectory(
         mirror.apply(new Pose2d(0, 0, new Rotation2d(Math.PI))),
         List.of(),
-        mirror.apply(new Pose2d(2.0, 0, new Rotation2d(Math.PI)))); //TOOD: CHANGE BACK TO 0.5
+        mirror.apply(new Pose2d(0.5, 0, new Rotation2d(Math.PI))));
   }
 
   private static Trajectory hTrajectoryPlaceCross0(MirrorInterface mirror) {
