@@ -5,13 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -21,13 +17,9 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  private boolean m_scheduled_init = false;
 
   private RobotContainer m_robotContainer;
-
-  private enum State {
-    UNINITIALIZED,
-    INITIALIZED
-  }
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -71,44 +63,14 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    m_robotContainer.initSubsystemsCommands();
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_robotContainer.m_robotDrive.initOdometry(m_robotContainer.getAutonomousStartingPose());
-      Command cmda = Commands.runOnce(() -> SmartDashboard.putString("debug", "B"));
-      cmda.setName("Printing B");
-      Command cmdb = new WaitUntilCommand(() -> {
-        SmartDashboard.putString("debug 2", "E");
-        return true;
-      });
-      cmdb.setName("Waiting return instantly");
-      Command cmdc = new WaitUntilCommand(() -> {
-        SmartDashboard.putString("debug", "D");
-        return m_robotContainer.subsystemsInitialized();
-      });
-      cmdc.setName("Waiting for subsystems");
-      Command cmdd = m_autonomousCommand;
-      cmdd.setName("Scheduling the auto command");
 
-      // Command cmdSequence = cmda
-      // .andThen(cmdb)
-      // .andThen(cmdc)
-      // .andThen(cmdd);
-      // cmdSequence.setName("Init Command");
-      // cmdSequence.schedule();
-
-      // (Commands.runOnce(() -> SmartDashboard.putString("debug", "B"))
-      // .andThen(new WaitUntilCommand(() -> {
-      //   SmartDashboard.putString("debug 2", "E");
-      //   return true;
-      // }))
-      // .andThen(new WaitUntilCommand(() -> {
-      //   SmartDashboard.putString("debug", "D");
-      //   return m_robotContainer.subsystemsInitialized();
-      // }))
-      // .andThen(() -> SmartDashboard.putString("debug", "C"))
-      // .andThen(m_autonomousCommand)).schedule();
-      m_autonomousCommand.schedule();
+      m_robotContainer.initSubsystemsCommands()
+      .andThen(m_autonomousCommand).schedule();
+      m_scheduled_init = true;
+      // m_autonomousCommand.schedule();
     }
   }
 
@@ -122,9 +84,12 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    m_robotContainer.initSubsystemsCommands();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
+    }
+
+    if (!m_scheduled_init) {
+      m_robotContainer.initSubsystemsCommands().schedule();
     }
   }
 
