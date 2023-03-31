@@ -112,7 +112,7 @@ public final class Constants {
 
     public static final double kMaxExtensionCycles = ArmInterp.getMaxCycles();
 
-    public static final double KArmInitializeSpeed = -1095.0;
+    public static final double KArmInitializeSpeed = -500.0;
 
     public static final double kVelP = 0.0009;
     public static final double kVelI = 0.0;
