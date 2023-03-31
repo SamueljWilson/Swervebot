@@ -10,7 +10,7 @@ import java.util.Arrays;
 public class ArmInterp {
   static class HtEntry{double cycles; double height; public HtEntry(double c, double h) {cycles = c; height = h;}}
   static final HtEntry[] htTable = {
-      new HtEntry(0, 0),
+      new HtEntry(0, 0), //TODO: REPLACE TABLE
       new HtEntry(23.1, 0.21),
       new HtEntry(25.1, 0.215),
       new HtEntry(26.8, 0.225),
