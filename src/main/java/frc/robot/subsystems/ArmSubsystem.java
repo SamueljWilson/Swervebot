@@ -163,28 +163,32 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public Command initCommand() {
-    return 
-      runOnce(
-        () -> {
-          m_armMotor.getPIDController().setReference(ArmConstants.KArmInitializeSpeed,
-            ControlType.kVelocity, ArmConstants.kVelPIDSlot);
-          // SmartDashboard.putString("initCommand", "A");
-        }
-      )
-      // .andThen(() -> SmartDashboard.putString("initCommand", "B"))
-      .andThen(new WaitUntilCommand(() -> {
-        // SmartDashboard.putBoolean("initCommandBoolean", isReverseLimitSwitchPressed());
-        return isReverseLimitSwitchPressed();
-      }))
-      .andThen(
-        () -> {
-          m_armMotor.getPIDController().setReference(ArmConstants.kHomeCyclesOffset, ControlType.kPosition, 
-            ArmConstants.kPosPIDSlot);
-          setCycles(0.0);
-          // SmartDashboard.putString("initCommand", "C");
-          m_initState = InitState.INITIALIZED;
-        }, this
-      );
+    return runOnce(() -> {
+      setCycles(0.0);
+      m_initState = InitState.INITIALIZED;
+    });
+
+      // runOnce(
+      //   () -> {
+      //     m_armMotor.getPIDController().setReference(ArmConstants.KArmInitializeSpeed,
+      //       ControlType.kVelocity, ArmConstants.kVelPIDSlot);
+      //     // SmartDashboard.putString("initCommand", "A");
+      //   }
+      // )
+      // // .andThen(() -> SmartDashboard.putString("initCommand", "B"))
+      // .andThen(new WaitUntilCommand(() -> {
+      //   // SmartDashboard.putBoolean("initCommandBoolean", isReverseLimitSwitchPressed());
+      //   return isReverseLimitSwitchPressed();
+      // }))
+      // .andThen(
+      //   () -> {
+      //     m_armMotor.getPIDController().setReference(ArmConstants.kHomeCyclesOffset, ControlType.kPosition, 
+      //       ArmConstants.kPosPIDSlot);
+      //     setCycles(0.0);
+      //     // SmartDashboard.putString("initCommand", "C");
+      //     m_initState = InitState.INITIALIZED;
+      //   }, this
+      // );
   }
 
   public boolean isReverseLimitSwitchPressed() {
@@ -198,12 +202,12 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // SmartDashboard.putBoolean("Arm Initialized", isInitialized());
-    // SmartDashboard.putBoolean("Reverse Limit Switch Initialized", isReverseLimitSwitchPressed());
+    SmartDashboard.putBoolean("Reverse Limit Switch Initialized", isReverseLimitSwitchPressed());
     if (m_initState != InitState.INITIALIZED) return;
     // SmartDashboard.putBoolean("Forward Limit Switch", m_forwardLimitSwitch.isPressed());
     double cycles = getCycles();
-    // SmartDashboard.putNumber("Cycles", cycles);
-    // SmartDashboard.putNumber("Height", ArmInterp.cyclesToHeight(cycles));
+    SmartDashboard.putNumber("Cycles", cycles);
+    SmartDashboard.putNumber("Height", ArmInterp.cyclesToHeight(cycles));
     double armPosition = getCycles();
     assert(ArmConstants.kWristRetractionCycles < ArmConstants.kWristExtensionCycles);
     if (armPosition <= ArmConstants.kWristRetractionCycles && m_motorState == MotorState.DOWN) {
