@@ -25,6 +25,7 @@ import frc.robot.subsystems.ArmInterp;
  */
 public final class Constants {
   public static final double kDt = 0.02;
+  public static final double kMaxX = 16.542;
   public static final class DriveConstants {
     public static final int kFrontLeftDriveMotorPort = 1; //Q1
     public static final int kRearLeftDriveMotorPort = 2; //Q2
