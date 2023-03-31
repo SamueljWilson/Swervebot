@@ -90,12 +90,12 @@ public class Robot extends TimedRobot {
       Command cmdd = m_autonomousCommand;
       cmdd.setName("Scheduling the auto command");
 
-      Command cmdSequence = cmda
-      .andThen(cmdb)
-      .andThen(cmdc)
-      .andThen(cmdd);
-      cmdSequence.setName("Init Command");
-      cmdSequence.schedule();
+      // Command cmdSequence = cmda
+      // .andThen(cmdb)
+      // .andThen(cmdc)
+      // .andThen(cmdd);
+      // cmdSequence.setName("Init Command");
+      // cmdSequence.schedule();
 
       // (Commands.runOnce(() -> SmartDashboard.putString("debug", "B"))
       // .andThen(new WaitUntilCommand(() -> {
@@ -108,7 +108,7 @@ public class Robot extends TimedRobot {
       // }))
       // .andThen(() -> SmartDashboard.putString("debug", "C"))
       // .andThen(m_autonomousCommand)).schedule();
-      // m_autonomousCommand.schedule();
+      m_autonomousCommand.schedule();
     }
   }
 
