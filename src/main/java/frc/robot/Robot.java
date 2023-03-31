@@ -45,10 +45,10 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
-    CommandScheduler.getInstance().onCommandInitialize(command -> SmartDashboard.putString("Command Initialized", command.getName()));
-    CommandScheduler.getInstance().onCommandExecute(command -> SmartDashboard.putString("Command Executing", command.getName()));
-    CommandScheduler.getInstance().onCommandInterrupt(command -> SmartDashboard.putString("Command Interrupted", command.getName()));
-    CommandScheduler.getInstance().onCommandFinish(command -> SmartDashboard.putString("Command Finished", command.getName()));
+    // CommandScheduler.getInstance().onCommandInitialize(command -> SmartDashboard.putString("Command Initialized", command.getName()));
+    // CommandScheduler.getInstance().onCommandExecute(command -> SmartDashboard.putString("Command Executing", command.getName()));
+    // CommandScheduler.getInstance().onCommandInterrupt(command -> SmartDashboard.putString("Command Interrupted", command.getName()));
+    // CommandScheduler.getInstance().onCommandFinish(command -> SmartDashboard.putString("Command Finished", command.getName()));
     CommandScheduler.getInstance().run();
   }
 
