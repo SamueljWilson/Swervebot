@@ -95,9 +95,9 @@ public final class Constants {
     public static final double kHomeCyclesOffset = 2.0;
     private static final double kPlacingHeightOffset = 0.20;
     public static final double kHomeHeight = 0.0;
-    public static final double kOffFloorHeight = 0.22;
+    public static final double kOffFloorHeight = 0.16;
     public static final double k2ndRowHeight = 0.87 + kPlacingHeightOffset;
-    public static final double k3rdRowHeight = 1.17 + kPlacingHeightOffset + 0.19; //TODO: REMOVE FUDGE FACTOR
+    public static final double k3rdRowHeight = 1.17 + kPlacingHeightOffset;
     public static final double kHumanStationHeight = 0.95 + kPlacingHeightOffset;
 
     public static final double kAdjustVelocity = 1.0;
@@ -106,8 +106,8 @@ public final class Constants {
     public static final int kWristSolenoidForwardChannel = 5;
     public static final int kWristSolenoidBackwardChannel = 6;
     // Extension > Retraction
-    public static final double kWristExtensionCycles = 24.0;
-    public static final double kWristRetractionCycles = 20.0;
+    public static final double kWristExtensionCycles = 22.0;
+    public static final double kWristRetractionCycles = 18.0;
 
     public static final double kEpsilonHeight = 0.03;
 
