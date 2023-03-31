@@ -93,21 +93,21 @@ public class SwerveModule {
     m_encoderOffset = encoderOffset;
   }
 
-  public void resetPID() {
-    System.out.println("resetPID");
-    m_kP = SmartDashboard.getNumber("P", m_kP);
-    m_kI = SmartDashboard.getNumber("I", m_kI);
-    m_kD = SmartDashboard.getNumber("D", m_kD);
-    m_driveMotor.config_kP(0, m_kP, 10);
-    m_driveMotor.config_kI(0, m_kI, 10);
-    m_driveMotor.config_kD(0, m_kD, 10);
-  }
+  // public void resetPID() {
+  //   System.out.println("resetPID");
+  //   m_kP = SmartDashboard.getNumber("P", m_kP);
+  //   m_kI = SmartDashboard.getNumber("I", m_kI);
+  //   m_kD = SmartDashboard.getNumber("D", m_kD);
+  //   m_driveMotor.config_kP(0, m_kP, 10);
+  //   m_driveMotor.config_kI(0, m_kI, 10);
+  //   m_driveMotor.config_kD(0, m_kD, 10);
+  // }
 
-  public void printPID() {
-    SmartDashboard.putNumber("actual P", m_kP);
-    SmartDashboard.putNumber("actual I", m_kI);
-    SmartDashboard.putNumber("actual D", m_kD);
-  }
+  // public void printPID() {
+  //   SmartDashboard.putNumber("actual P", m_kP);
+  //   SmartDashboard.putNumber("actual I", m_kI);
+  //   SmartDashboard.putNumber("actual D", m_kD);
+  // }
 
   /**
    * Returns the current state of the module.

@@ -41,7 +41,7 @@ public class MoveArmSync extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Calling init");
+    // System.out.println("Calling init");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -52,7 +52,7 @@ public class MoveArmSync extends CommandBase {
     } else {
       m_arm.moveToHeight(m_height);
     }
-    System.out.println("Executing");
+    // System.out.println("Executing");
   }
 
   // Called once the command ends or is interrupted.
