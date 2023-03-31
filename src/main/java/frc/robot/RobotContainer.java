@@ -15,9 +15,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.WristConstants;
 import frc.robot.commands.Auto;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -36,7 +34,6 @@ public class RobotContainer {
   public final GripperSubsystem m_gripper = new GripperSubsystem();
   public final WristSubsystem m_wrist = new WristSubsystem();
   public final ArmSubsystem m_arm = new ArmSubsystem(m_wrist);
-  private boolean m_ranInits = false;
 
   // The driver's controller
   GenericHID m_driverController = new GenericHID(OIConstants.kDriverControllerPort);
@@ -159,12 +156,9 @@ public class RobotContainer {
       .onTrue(m_arm.moveToHumanStationCommand());
   }
 
-  public void initSubsystemsCommands() {
-    if (!m_ranInits) {
-      m_arm.initCommand().schedule();
-      m_wrist.initCommand().schedule();
-      m_ranInits = true;
-    }
+  public Command initSubsystemsCommands() {
+    return m_arm.initCommand()
+      .andThen(m_wrist.initCommand());
   }
 
   public boolean subsystemsInitialized() {
