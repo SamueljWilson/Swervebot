@@ -15,6 +15,7 @@ public class CrossCharger extends CommandBase {
   private enum State {
     FLAT,
     CLIMBING,
+    CROSSING, 
     DESCENDING,
     ENDING
   }
@@ -43,7 +44,7 @@ public class CrossCharger extends CommandBase {
     switch (m_state) {
       case FLAT:
         m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecond*m_mirrorFactor, 0, 0, true);
-        if (orientation.getTilt() >= AutoConstants.kChargeAdjustingThreshold) {
+        if (orientation.getTilt() >= AutoConstants.kClimbingThreshold) {
           m_state = State.CLIMBING;
           break;
         }
@@ -51,6 +52,14 @@ public class CrossCharger extends CommandBase {
       
       case CLIMBING:
         if (orientation.isTiltedUp()) {
+          m_state = State.CROSSING;
+          break;
+        }
+        m_drive.drive(AutoConstants.kMaxSpeedMetersPerSecond*m_mirrorFactor, 0, 0, true);
+        break;
+      
+      case CROSSING:
+        if (orientation.getTilt() >= AutoConstants.kDescendingThreshold) {
           m_state = State.DESCENDING;
           break;
         }
