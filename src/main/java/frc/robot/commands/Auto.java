@@ -158,7 +158,7 @@ public class Auto {
       .andThen(MoveArmSync.moveHome(arm))
       .andThen(new CrossCharger(team, drive))
       .andThen(DriveTrajectory.trajectoryCommandRobot(drive, trajectory2, team))
-      .andThen(arm.moveToOffFloorCommand());
+      .andThen(MoveArmSync.moveToOffFloor(arm));
     return new Auto(startingPose, command, team);
   }
   
@@ -177,15 +177,14 @@ public class Auto {
     Trajectory trajectory2 = eTrajectoryPlaceCross2(mirror);
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
-      new CrossCharger(team, drive) //TODO: REMOVE WHEN TESTED
-      // arm.moveToTopCommand()
-      // .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
-      // .andThen(gripper.openGrippers())
-      // .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
-      // .andThen(arm.moveHome())
-      // .andThen(new CrossCharger(team, drive))
-      .andThen(DriveTrajectory.trajectoryCommandRobot(drive, trajectory2, team));
-      // .andThen(new AutoBalance(team, drive));
+      MoveArmSync.moveToTop(arm)
+      .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory0))
+      .andThen(gripper.openGrippers())
+      .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory1))
+      .andThen(MoveArmSync.moveHome(arm))
+      .andThen(new CrossCharger(team, drive))
+      .andThen(DriveTrajectory.trajectoryCommandRobot(drive, trajectory2, team))
+      .andThen(new AutoBalance(team, drive));
       return new Auto(startingPose, command, team);
   }
 
@@ -204,13 +203,13 @@ public class Auto {
     Trajectory trajectory2 = hTrajectoryPlaceCross2(trajectory1, mirror);
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
-      arm.moveToTopCommand()
+      MoveArmSync.moveToTop(arm)
       .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory0))
       .andThen(gripper.openGrippers())
       .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory1))
-      .andThen(arm.moveHomeCommand())
+      .andThen(MoveArmSync.moveHome(arm))
       .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory2))
-      .andThen(arm.moveToOffFloorCommand());
+      .andThen(MoveArmSync.moveToOffFloor(arm));
     return new Auto(startingPose, command, team);
   }
 
