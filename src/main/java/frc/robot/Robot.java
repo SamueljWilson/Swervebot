@@ -5,8 +5,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 /**
@@ -24,8 +28,6 @@ public class Robot extends TimedRobot {
     UNINITIALIZED,
     INITIALIZED
   }
-
-  private State m_state = State.UNINITIALIZED;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -51,6 +53,10 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
+    CommandScheduler.getInstance().onCommandInitialize(command -> SmartDashboard.putString("Command Initialized", command.getName()));
+    CommandScheduler.getInstance().onCommandExecute(command -> SmartDashboard.putString("Command Executing", command.getName()));
+    CommandScheduler.getInstance().onCommandInterrupt(command -> SmartDashboard.putString("Command Interrupted", command.getName()));
+    CommandScheduler.getInstance().onCommandFinish(command -> SmartDashboard.putString("Command Finished", command.getName()));
     CommandScheduler.getInstance().run();
   }
 
@@ -64,23 +70,52 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    // m_state = State.UNINITIALIZED;
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     m_robotContainer.initSubsystemsCommands();
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null /*&& m_robotContainer.subsystemsInitialized() && m_state != State.INITIALIZED*/) {
+    if (m_autonomousCommand != null) {
       m_robotContainer.m_robotDrive.initOdometry(m_robotContainer.getAutonomousStartingPose());
-      (new WaitUntilCommand(() -> {return m_robotContainer.subsystemsInitialized();})
-      .andThen(m_autonomousCommand)).schedule();
+      Command cmda = Commands.runOnce(() -> SmartDashboard.putString("debug", "B"));
+      cmda.setName("Printing B");
+      Command cmdb = new WaitUntilCommand(() -> {
+        SmartDashboard.putString("debug 2", "E");
+        return true;
+      });
+      cmdb.setName("Waiting return instantly");
+      Command cmdc = new WaitUntilCommand(() -> {
+        SmartDashboard.putString("debug", "D");
+        return m_robotContainer.subsystemsInitialized();
+      });
+      cmdc.setName("Waiting for subsystems");
+      Command cmdd = m_autonomousCommand;
+      cmdd.setName("Scheduling the auto command");
+
+      Command cmdSequence = cmda
+      .andThen(cmdb)
+      .andThen(cmdc)
+      .andThen(cmdd);
+      cmdSequence.setName("Init Command");
+      cmdSequence.schedule();
+
+      // (Commands.runOnce(() -> SmartDashboard.putString("debug", "B"))
+      // .andThen(new WaitUntilCommand(() -> {
+      //   SmartDashboard.putString("debug 2", "E");
+      //   return true;
+      // }))
+      // .andThen(new WaitUntilCommand(() -> {
+      //   SmartDashboard.putString("debug", "D");
+      //   return m_robotContainer.subsystemsInitialized();
+      // }))
+      // .andThen(() -> SmartDashboard.putString("debug", "C"))
+      // .andThen(m_autonomousCommand)).schedule();
       // m_autonomousCommand.schedule();
-      m_state = State.INITIALIZED;
     }
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {}
-
+ 
   @Override
   public void teleopInit() {
     // This makes sure that the autonomous stops running when

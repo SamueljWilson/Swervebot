@@ -168,7 +168,9 @@ public class RobotContainer {
   }
 
   public boolean subsystemsInitialized() {
-    return m_arm.isInitialized() && m_wrist.isInitialized();
+    boolean isInitialized = m_arm.isInitialized() && m_wrist.isInitialized();
+    SmartDashboard.putBoolean("Subsystems Initialized", isInitialized);
+    return isInitialized;
   }
 
   /**
