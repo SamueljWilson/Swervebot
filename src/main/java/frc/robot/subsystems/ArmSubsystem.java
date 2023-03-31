@@ -10,14 +10,13 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxLimitSwitch;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.WristConstants;
-import frc.robot.commands.WaitUntilArmRetracted;
 
 public class ArmSubsystem extends SubsystemBase {
   CANSparkMax m_armMotor = new CANSparkMax(ArmConstants.kArmMotorPort, MotorType.kBrushless);
@@ -62,17 +61,17 @@ public class ArmSubsystem extends SubsystemBase {
     m_armMotor.setIdleMode(IdleMode.kBrake);
   }
 
-  private DoubleSolenoid.Value getWristPosition() {
-    return m_wrist.getWristPosition();
+  public void moveHome() {
+    m_wrist.retractWrist();
+    m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.kHomeHeight),
+      ControlType.kPosition, ArmConstants.kPosPIDSlot);
+    m_motorState = MotorState.DOWN;
   }
 
   public Command moveHomeCommand() {
     return Commands.runOnce(
       () -> {
-        m_wrist.retractWrist();
-        m_armMotor.getPIDController().setReference(ArmInterp.cyclesToHeight(ArmConstants.kHomeHeight),
-          ControlType.kPosition, ArmConstants.kPosPIDSlot);
-        m_motorState = MotorState.DOWN;
+        moveHome();
       },
       this, m_wrist
     );
@@ -127,6 +126,7 @@ public class ArmSubsystem extends SubsystemBase {
         double height = ArmInterp.cyclesToHeight(getCycles());
         double velocity = ArmInterp.vheightToRPM(metersPerSecond, height);
         m_armMotor.getPIDController().setReference(velocity, ControlType.kVelocity, ArmConstants.kVelPIDSlot);
+        SmartDashboard.putNumber("Velocity Wanted", velocity);
         if (metersPerSecond < 0) {
           m_motorState = MotorState.DOWN;
         } else {
@@ -169,15 +169,20 @@ public class ArmSubsystem extends SubsystemBase {
         () -> {
           m_armMotor.getPIDController().setReference(ArmConstants.KArmInitializeSpeed,
             ControlType.kVelocity, ArmConstants.kVelPIDSlot);
-          // m_armMotor.getPIDController().setReference(-0.3, ControlType.kDutyCycle);
+          SmartDashboard.putString("initCommand", "A");
         }
       )
-      .andThen(new WaitUntilArmRetracted(this))
+      .andThen(() -> SmartDashboard.putString("initCommand", "B"))
+      .andThen(new WaitUntilCommand(() -> {
+        SmartDashboard.putBoolean("initCommandBoolean", isReverseLimitSwitchPressed());
+        return isReverseLimitSwitchPressed();
+      }))
       .andThen(
         () -> {
           m_armMotor.getPIDController().setReference(ArmConstants.kHomeCyclesOffset, ControlType.kPosition, 
             ArmConstants.kPosPIDSlot);
           setCycles(0.0);
+          SmartDashboard.putString("initCommand", "C");
           m_initState = InitState.INITIALIZED;
         }, this
       );
@@ -193,7 +198,10 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("Arm Initialized", isInitialized());
+    SmartDashboard.putBoolean("Reverse Limit Switch Initialized", isReverseLimitSwitchPressed());
     if (m_initState != InitState.INITIALIZED) return;
+    SmartDashboard.putBoolean("Forward Limit Switch", m_forwardLimitSwitch.isPressed());
     double cycles = getCycles();
     SmartDashboard.putNumber("Cycles", cycles);
     SmartDashboard.putNumber("Height", ArmInterp.cyclesToHeight(cycles));
@@ -201,11 +209,9 @@ public class ArmSubsystem extends SubsystemBase {
     assert(ArmConstants.kWristRetractionCycles < ArmConstants.kWristExtensionCycles);
     if (armPosition <= ArmConstants.kWristRetractionCycles && m_motorState == MotorState.DOWN) {
       m_wrist.retractWrist();
-      // System.out.println("Retrating in the wrist periodic");
     }
     else if (armPosition >= ArmConstants.kWristExtensionCycles && m_motorState == MotorState.UP) {
       m_wrist.extendWrist();
-      // System.out.println("Extending in the wrist periodic");
     }
   }
 }
