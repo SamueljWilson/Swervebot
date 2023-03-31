@@ -59,13 +59,13 @@ public class Auto {
   private static final Translation2d kSM4 = new Translation2d(7.118, 4.578);
 
   private static final Pose2d kPickupStagingMarker1 = new Pose2d(
-    kSM1.getX() - kRobotHalfLength - kPickupOffset,
+    kSM1.getX() - kRobotHalfLength - kPickupOffset + 0.20, //TODO: REMOVE FUDGE FACTOR
     kSM1.getY(),
     new Rotation2d(Math.PI)
   );
 
   private static final Pose2d kPickupStagingMarker4 = new Pose2d(
-    kSM4.getX() - kRobotHalfLength - kPickupOffset,
+    kSM4.getX() - kRobotHalfLength - kPickupOffset + 0.20, //TODO: REMOVE FUDGE FACTOR
     kSM4.getY(),
     new Rotation2d(Math.PI)
   );
