@@ -4,18 +4,21 @@
 
 package frc.robot.commands;
 
+import java.lang.constant.Constable;
 import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
+import frc.robot.Constants;
 
 public class Auto {
   /** Creates a new Auto. */
@@ -110,7 +113,9 @@ public class Auto {
   private static MirrorInterface blueMirror = (Pose2d pose) -> {return copyPose(pose);};
 
   private static MirrorInterface redMirror = (Pose2d pose) -> {
-    return new Pose2d(16.542 - pose.getX(), pose.getY(), new Rotation2d(Math.PI - pose.getRotation().getRadians()));
+    return new Pose2d(
+      Constants.kMaxX - pose.getX(), pose.getY(),
+      new Rotation2d(Math.PI - pose.getRotation().getRadians()));
   };
 
   public static Auto bPlaceCross(
@@ -121,11 +126,11 @@ public class Auto {
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
       arm.moveToTopCommand()
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
+      .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory0))
       .andThen(gripper.openGrippers())
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
+      .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory1))
       .andThen(arm.moveHomeCommand())
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, true))
+      .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory2))
       .andThen(arm.moveToOffFloorCommand());
     return new Auto(startingPose, command, team);
   }
@@ -145,14 +150,15 @@ public class Auto {
     Trajectory trajectory2 = eTrajectoryPlaceCross2(mirror);
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
-      (MoveArm.moveToTop(arm))
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
+      Commands.runOnce(() -> SmartDashboard.putString("debug", "A"))
+      // .andThen(MoveArmSync.moveToTop(arm))
+      .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory0))
       .andThen(gripper.openGrippers())
-      // .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
-      .andThen(MoveArm.moveHome(arm));
+      .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory1))
+      .andThen(MoveArmSync.moveHome(arm))
       // .andThen(new CrossCharger(team, drive))
-      // .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, false))
-      // .andThen(arm.moveToOffFloorCommand());
+      .andThen(DriveTrajectory.trajectoryCommandRobot(drive, trajectory2, team))
+      .andThen(arm.moveToOffFloorCommand());
     return new Auto(startingPose, command, team);
   }
   
@@ -171,13 +177,14 @@ public class Auto {
     Trajectory trajectory2 = eTrajectoryPlaceCross2(mirror);
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
-      arm.moveToTopCommand()
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
+      new CrossCharger(team, drive) //TODO: REMOVE WHEN TESTED
+      // arm.moveToTopCommand()
+      // .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
       // .andThen(gripper.openGrippers())
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
+      // .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
       // .andThen(arm.moveHome())
-      .andThen(new CrossCharger(team, drive))
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, false));
+      // .andThen(new CrossCharger(team, drive))
+      .andThen(DriveTrajectory.trajectoryCommandRobot(drive, trajectory2, team));
       // .andThen(new AutoBalance(team, drive));
       return new Auto(startingPose, command, team);
   }
@@ -198,11 +205,11 @@ public class Auto {
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
       arm.moveToTopCommand()
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory0, true))
+      .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory0))
       .andThen(gripper.openGrippers())
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory1, true))
+      .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory1))
       .andThen(arm.moveHomeCommand())
-      .andThen(DriveTrajectory.trajectoryCommand(drive, trajectory2, true))
+      .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory2))
       .andThen(arm.moveToOffFloorCommand());
     return new Auto(startingPose, command, team);
   }

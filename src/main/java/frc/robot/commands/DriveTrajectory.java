@@ -7,6 +7,7 @@ package frc.robot.commands;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.HolonomicDriveController;
@@ -20,10 +21,12 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
@@ -32,6 +35,7 @@ public class DriveTrajectory extends CommandBase {
   private final Timer m_timer = new Timer();
   private Trajectory m_trajectory;
   private final boolean m_fieldOrigin;
+  private final Auto.Team m_team;
   private final Supplier<Pose2d> m_pose;
   private final SwerveDriveKinematics m_kinematics;
   private final HolonomicDriveController m_controller;
@@ -48,12 +52,24 @@ public class DriveTrajectory extends CommandBase {
     return new Rotation2d(orientationVector.getX(), orientationVector.getY());
   }
   
-  public static Command trajectoryCommand(DriveSubsystem drive, Trajectory trajectory, boolean fieldOrigin) {
+  public static Command trajectoryCommandField(DriveSubsystem drive, Trajectory trajectory) {
     return (
       new DriveTrajectory(
       trajectory,
       drive,
-      fieldOrigin)
+      true,
+      Auto.Team.BLUE)
+      .andThen(() -> drive.drive(0, 0, 0, true))
+    );
+  }
+
+  public static Command trajectoryCommandRobot(DriveSubsystem drive, Trajectory trajectory, Auto.Team team) {
+    return (
+      new DriveTrajectory(
+      trajectory,
+      drive,
+      false,
+      team)
       .andThen(() -> drive.drive(0, 0, 0, true))
     );
   }
@@ -124,6 +140,7 @@ public class DriveTrajectory extends CommandBase {
   public DriveTrajectory(
       Trajectory trajectory,
       boolean fieldOrigin,
+      Auto.Team team,
       Supplier<Pose2d> pose,
       SwerveDriveKinematics kinematics,
       HolonomicDriveController controller,
@@ -131,6 +148,7 @@ public class DriveTrajectory extends CommandBase {
       Subsystem... requirements) {
     m_trajectory = trajectory;
     m_fieldOrigin = fieldOrigin;
+    m_team = team;
     m_pose = pose;
     m_kinematics = kinematics;
     m_controller = controller;
@@ -159,10 +177,11 @@ public class DriveTrajectory extends CommandBase {
     );
   }
   /** Creates a new DriveTrajectory. */
-  public DriveTrajectory(Trajectory trajectory, DriveSubsystem drive, boolean fieldOrigin) {
+  public DriveTrajectory(Trajectory trajectory, DriveSubsystem drive, boolean fieldOrigin, Auto.Team team) {
     this(
       trajectory,
       fieldOrigin,
+      team,
       drive::getPose, // Functional interface to feed supplier
       DriveConstants.kDriveKinematics,
       initDriveController(),
@@ -175,12 +194,35 @@ public class DriveTrajectory extends CommandBase {
     addRequirements(drive);
   }
 
+  private static Pose2d translate(Pose2d pose, Translation2d translation) {
+    return new Pose2d(pose.getTranslation().plus(translation), pose.getRotation());
+  }
+
+  private void translateOrigin() {
+    Pose2d currentPose = m_pose.get();
+    Translation2d originOffset;
+    if (m_team == Auto.Team.BLUE) {
+      originOffset = currentPose.getTranslation();
+    } else {
+      originOffset = currentPose.getTranslation().minus(new Translation2d(Constants.kMaxX, 0));
+    }
+    m_trajectory = new Trajectory(
+      m_trajectory.getStates().stream()
+        .map(
+          state ->
+            new State(
+              state.timeSeconds,
+              state.velocityMetersPerSecond,
+              state.accelerationMetersPerSecondSq,
+              translate(state.poseMeters, originOffset),
+              state.curvatureRadPerMeter))
+        .collect(Collectors.toList()));
+  }
+
   @Override
   public void initialize() {
     if (!m_fieldOrigin) {
-      Pose2d currentPose = m_pose.get();
-      Pose2d transformPose = new Pose2d(currentPose.getTranslation(), new Rotation2d(0));
-      m_trajectory = m_trajectory.relativeTo(transformPose);
+      translateOrigin();
     }
     m_initialRotation = normalizeRotation(m_pose.get().getRotation());
     Pose2d finalPose = m_trajectory.getStates().get(m_trajectory.getStates().size() - 1).poseMeters;
