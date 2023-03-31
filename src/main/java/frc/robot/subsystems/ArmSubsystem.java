@@ -202,12 +202,12 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // SmartDashboard.putBoolean("Arm Initialized", isInitialized());
-    SmartDashboard.putBoolean("Reverse Limit Switch Initialized", isReverseLimitSwitchPressed());
+    // SmartDashboard.putBoolean("Reverse Limit Switch Initialized", isReverseLimitSwitchPressed());
     if (m_initState != InitState.INITIALIZED) return;
     // SmartDashboard.putBoolean("Forward Limit Switch", m_forwardLimitSwitch.isPressed());
     double cycles = getCycles();
-    SmartDashboard.putNumber("Cycles", cycles);
-    SmartDashboard.putNumber("Height", ArmInterp.cyclesToHeight(cycles));
+    // SmartDashboard.putNumber("Cycles", cycles);
+    // SmartDashboard.putNumber("Height", ArmInterp.cyclesToHeight(cycles));
     double armPosition = getCycles();
     assert(ArmConstants.kWristRetractionCycles < ArmConstants.kWristExtensionCycles);
     if (armPosition <= ArmConstants.kWristRetractionCycles && m_motorState == MotorState.DOWN) {
