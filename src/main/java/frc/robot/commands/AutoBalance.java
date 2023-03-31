@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Orientation3d;
@@ -81,7 +82,7 @@ public class AutoBalance extends CommandBase {
           m_timer.reset();
         }
         double tilt = orientation.getTilt() * (orientation.isTiltedUp() ? 1.0 : -1.0);
-        double driveOutput = MathUtil.clamp(m_balancePID.calculate(-1.0 * tilt * m_mirrorFactor),
+        double driveOutput = MathUtil.clamp(m_balancePID.calculate(-1.0 * tilt),
           -AutoConstants.kMaxSpeedMetersPerSecondBalancing,
           AutoConstants.kMaxSpeedMetersPerSecondBalancing);
         double finalDriveOutput = m_mirrorFactor * driveOutput;
