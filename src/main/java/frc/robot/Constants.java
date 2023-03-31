@@ -97,7 +97,7 @@ public final class Constants {
     public static final double kHomeHeight = 0.0;
     public static final double kOffFloorHeight = 0.22;
     public static final double k2ndRowHeight = 0.87 + kPlacingHeightOffset;
-    public static final double k3rdRowHeight = 1.17 + kPlacingHeightOffset;
+    public static final double k3rdRowHeight = 1.17 + kPlacingHeightOffset + 0.19;
     public static final double kHumanStationHeight = 0.95 + kPlacingHeightOffset;
 
     public static final double kAdjustVelocity = 1.0;
