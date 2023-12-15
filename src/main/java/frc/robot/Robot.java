@@ -67,8 +67,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_robotContainer.m_robotDrive.initOdometry(m_robotContainer.getAutonomousStartingPose());
 
-      m_robotContainer.initSubsystemsCommands()
-      .andThen(m_autonomousCommand).schedule();
+      // m_robotContainer.initSubsystemsCommands()
+      // .andThen(m_autonomousCommand).schedule();
       m_scheduled_init = true;
       // m_autonomousCommand.schedule();
     }
@@ -89,7 +89,7 @@ public class Robot extends TimedRobot {
     }
 
     if (!m_scheduled_init) {
-      m_robotContainer.initSubsystemsCommands().schedule();
+      // m_robotContainer.initSubsystemsCommands().schedule();
     }
   }
 

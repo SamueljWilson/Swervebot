@@ -32,8 +32,8 @@ public class RobotContainer {
   // The robot's subsystems
   public final DriveSubsystem m_robotDrive = new DriveSubsystem();
   public final GripperSubsystem m_gripper = new GripperSubsystem();
-  public final WristSubsystem m_wrist = new WristSubsystem();
-  public final ArmSubsystem m_arm = new ArmSubsystem(m_wrist);
+  // public final WristSubsystem m_wrist = new WristSubsystem();
+  // public final ArmSubsystem m_arm = new ArmSubsystem(m_wrist);
 
   // The driver's controller
   GenericHID m_driverController = new GenericHID(OIConstants.kDriverControllerPort);
@@ -72,7 +72,8 @@ public class RobotContainer {
       // Turning is controlled by the X axis of the right stick.
         new RunCommand(
           () -> {
-            double reverseFactor = getTeam() == Auto.Team.BLUE ? -1 : 1;
+            // double reverseFactor = getTeam() == Auto.Team.BLUE ? -1 : 1;
+            double reverseFactor = 1.0;
             m_robotDrive.drive(
               reverseFactor*joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyYAxis))*OIConstants.kMaxMetersPerSec,
               reverseFactor*joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyXAxis))*OIConstants.kMaxMetersPerSec,
@@ -85,17 +86,17 @@ public class RobotContainer {
 
   private void configureAutoRoutines() {
     // m_chooser.setDefaultOption("Blue E Place Cross", Auto.blueEPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
-    m_chooser.setDefaultOption("Do Nothing", Auto.doNothing(m_robotDrive));
-    m_chooser.addOption("Blue B Place Cross", Auto.blueBPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
-    m_chooser.addOption("Blue E Place Cross", Auto.blueEPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
-    m_chooser.addOption("Blue E Place Cross Charge", Auto.blueEPlaceCrossCharge(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
-    m_chooser.addOption("Blue H Place Cross", Auto.blueHPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
+    // m_chooser.setDefaultOption("Do Nothing", Auto.doNothing(m_robotDrive));
+    // m_chooser.addOption("Blue B Place Cross", Auto.blueBPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
+    // m_chooser.addOption("Blue E Place Cross", Auto.blueEPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
+    // m_chooser.addOption("Blue E Place Cross Charge", Auto.blueEPlaceCrossCharge(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
+    // m_chooser.addOption("Blue H Place Cross", Auto.blueHPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.BLUE));
 
-    m_chooser.addOption("Red B Place Cross", Auto.redBPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.RED));
-    m_chooser.addOption("Red E Place Cross", Auto.redEPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.RED));
-    m_chooser.addOption("Red E Place Cross Charge", Auto.redEPlaceCrossCharge(m_robotDrive, m_arm, m_gripper, Auto.Team.RED));
-    m_chooser.addOption("Red H Place Cross", Auto.redHPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.RED));
-    SmartDashboard.putData(m_chooser);
+    // m_chooser.addOption("Red B Place Cross", Auto.redBPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.RED));
+    // m_chooser.addOption("Red E Place Cross", Auto.redEPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.RED));
+    // m_chooser.addOption("Red E Place Cross Charge", Auto.redEPlaceCrossCharge(m_robotDrive, m_arm, m_gripper, Auto.Team.RED));
+    // m_chooser.addOption("Red H Place Cross", Auto.redHPlaceCross(m_robotDrive, m_arm, m_gripper, Auto.Team.RED));
+    // SmartDashboard.putData(m_chooser);
   }
 
   /**
@@ -105,67 +106,67 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new Trigger(()-> m_driverController.getRawAxis(OIConstants.kCloseAxis) >= 0.5)
-      .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_gripper.grab());
-    new Trigger(()-> m_driverController.getRawAxis(OIConstants.kOpenAxis) >= 0.5)
-      .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_gripper.openGrippers());
-    new Trigger(() -> {
-          int povAngle = m_driverController.getPOV();
-          return (povAngle == 315 || povAngle == 0 || povAngle == 45);
-        }
-      )
-      .debounce(OIConstants.kDebounceSeconds)
-      .whileActiveContinuous(m_arm.moveVHeightCommand(OIConstants.kArmAdjustV))
-      .onFalse(m_arm.stopVHeightCommand());
-    new Trigger(() -> {
-          int povAngle = m_driverController.getPOV();
-          return (povAngle == 225 || povAngle == 180 || povAngle == 135);
-        }
-      )
-      .debounce(OIConstants.kDebounceSeconds)
-      .whileActiveContinuous(m_arm.moveVHeightCommand(-OIConstants.kArmAdjustV))
-      .onFalse(m_arm.stopVHeightCommand());
-    new JoystickButton(m_driverController, OIConstants.kArmAdjustUpButton)
-        .debounce(OIConstants.kDebounceSeconds)
-        .whileActiveContinuous(m_arm.moveVHeightCommand(OIConstants.kArmAdjustV))
-        .onFalse(m_arm.stopVHeightCommand());
-    new JoystickButton(m_driverController, OIConstants.kArmAdjustDownButton)
-        .debounce(OIConstants.kDebounceSeconds)
-        .whileActiveContinuous(m_arm.moveVHeightCommand(-OIConstants.kArmAdjustV))
-        .onFalse(m_arm.stopVHeightCommand());
-    new JoystickButton(m_driverController, OIConstants.kSlowButton)
-      .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(Commands.runOnce(() -> {m_driveSpeed = DriveSpeed.SLOW;}))
-      .onFalse(Commands.runOnce(() -> {m_driveSpeed = DriveSpeed.FAST;}));
-    new JoystickButton(m_driverController, OIConstants.kHomeButton)
-      .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_arm.moveHomeCommand());
-    new JoystickButton(m_driverController, OIConstants.kPickOffFloorButton)
-      .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_arm.moveToOffFloorCommand());
-    new JoystickButton(m_driverController, OIConstants.k2ndRowButton)
-      .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_arm.moveToMiddleCommand());
-    new JoystickButton(m_driverController, OIConstants.k3rdRowButton)
-      .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_arm.moveToTopCommand());
-    new JoystickButton(m_driverController, OIConstants.kHumanStationButton)
-      .debounce(OIConstants.kDebounceSeconds)
-      .onTrue(m_arm.moveToHumanStationCommand());
+    // new Trigger(()-> m_driverController.getRawAxis(OIConstants.kCloseAxis) >= 0.5)
+    //   .debounce(OIConstants.kDebounceSeconds)
+    //   .onTrue(m_gripper.grab());
+    // new Trigger(()-> m_driverController.getRawAxis(OIConstants.kOpenAxis) >= 0.5)
+    //   .debounce(OIConstants.kDebounceSeconds)
+    //   .onTrue(m_gripper.openGrippers());
+    // new Trigger(() -> {
+    //       int povAngle = m_driverController.getPOV();
+    //       return (povAngle == 315 || povAngle == 0 || povAngle == 45);
+    //     }
+    //   )
+    //   .debounce(OIConstants.kDebounceSeconds)
+    //   .whileActiveContinuous(m_arm.moveVHeightCommand(OIConstants.kArmAdjustV))
+    //   .onFalse(m_arm.stopVHeightCommand());
+    // new Trigger(() -> {
+    //       int povAngle = m_driverController.getPOV();
+    //       return (povAngle == 225 || povAngle == 180 || povAngle == 135);
+    //     }
+    //   )
+    //   .debounce(OIConstants.kDebounceSeconds)
+    //   .whileActiveContinuous(m_arm.moveVHeightCommand(-OIConstants.kArmAdjustV))
+    //   .onFalse(m_arm.stopVHeightCommand());
+    // new JoystickButton(m_driverController, OIConstants.kArmAdjustUpButton)
+    //     .debounce(OIConstants.kDebounceSeconds)
+    //     .whileActiveContinuous(m_arm.moveVHeightCommand(OIConstants.kArmAdjustV))
+    //     .onFalse(m_arm.stopVHeightCommand());
+    // new JoystickButton(m_driverController, OIConstants.kArmAdjustDownButton)
+    //     .debounce(OIConstants.kDebounceSeconds)
+    //     .whileActiveContinuous(m_arm.moveVHeightCommand(-OIConstants.kArmAdjustV))
+    //     .onFalse(m_arm.stopVHeightCommand());
+    // new JoystickButton(m_driverController, OIConstants.kSlowButton)
+    //   .debounce(OIConstants.kDebounceSeconds)
+    //   .onTrue(Commands.runOnce(() -> {m_driveSpeed = DriveSpeed.SLOW;}))
+    //   .onFalse(Commands.runOnce(() -> {m_driveSpeed = DriveSpeed.FAST;}));
+    // new JoystickButton(m_driverController, OIConstants.kHomeButton)
+    //   .debounce(OIConstants.kDebounceSeconds)
+    //   .onTrue(m_arm.moveHomeCommand());
+    // new JoystickButton(m_driverController, OIConstants.kPickOffFloorButton)
+    //   .debounce(OIConstants.kDebounceSeconds)
+    //   .onTrue(m_arm.moveToOffFloorCommand());
+    // new JoystickButton(m_driverController, OIConstants.k2ndRowButton)
+    //   .debounce(OIConstants.kDebounceSeconds)
+    //   .onTrue(m_arm.moveToMiddleCommand());
+    // new JoystickButton(m_driverController, OIConstants.k3rdRowButton)
+    //   .debounce(OIConstants.kDebounceSeconds)
+    //   .onTrue(m_arm.moveToTopCommand());
+    // new JoystickButton(m_driverController, OIConstants.kHumanStationButton)
+    //   .debounce(OIConstants.kDebounceSeconds)
+    //   .onTrue(m_arm.moveToHumanStationCommand());
   }
 
-  public Command initSubsystemsCommands() {
-    return m_arm.initCommand()
-      .andThen(m_wrist.initCommand());
-  }
+  // public Command initSubsystemsCommands() {
+  //   return m_arm.initCommand()
+  //     .andThen(m_wrist.initCommand());
+  // }
 
-  public boolean subsystemsInitialized() {
-    boolean isInitialized = m_arm.isInitialized() && m_wrist.isInitialized();
-    // SmartDashboard.putBoolean("Subsystems Initialized", isInitialized);
-    return isInitialized;
-  }
+  // public boolean subsystemsInitialized() {
+  //   boolean isInitialized = m_arm.isInitialized() && m_wrist.isInitialized();
+  //   // SmartDashboard.putBoolean("Subsystems Initialized", isInitialized);
+  //   return isInitialized;
+  // }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -180,7 +181,7 @@ public class RobotContainer {
     return m_chooser.getSelected().getInitialPose();
   }
 
-  public Auto.Team getTeam() {
-    return m_chooser.getSelected().getTeam();
-  }
+  // public Auto.Team getTeam() {
+  //   return m_chooser.getSelected().getTeam();
+  // }
 }
