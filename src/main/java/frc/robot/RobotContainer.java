@@ -73,7 +73,7 @@ public class RobotContainer {
         new RunCommand(
           () -> {
             // double reverseFactor = getTeam() == Auto.Team.BLUE ? -1 : 1;
-            double reverseFactor = 1.0;
+            double reverseFactor = -1.0;
             m_robotDrive.drive(
               reverseFactor*joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyYAxis))*OIConstants.kMaxMetersPerSec,
               reverseFactor*joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyXAxis))*OIConstants.kMaxMetersPerSec,
