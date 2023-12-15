@@ -4,13 +4,13 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Orientation3d;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.Auto.Team;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class CrossCharger extends CommandBase {
+public class CrossCharger extends Command {
   /** Creates a new CrossCharger. */
   private enum State {
     FLAT,

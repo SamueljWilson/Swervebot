@@ -8,13 +8,13 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Orientation3d;
 import frc.robot.commands.Auto.Team;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class AutoBalance extends CommandBase {
+public class AutoBalance extends Command {
   /** Creates a new AutoBalance. */
   private enum State {
     STOPPED,

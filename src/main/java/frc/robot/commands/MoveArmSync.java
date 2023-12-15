@@ -5,12 +5,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.ArmInterp;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class MoveArmSync extends CommandBase {
+public class MoveArmSync extends Command {
   ArmSubsystem m_arm;
   double m_height;
   boolean m_isGoingHome = false;
