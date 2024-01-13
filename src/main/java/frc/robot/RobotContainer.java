@@ -5,15 +5,12 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.Auto;
 import frc.robot.subsystems.DriveSubsystem;
 
 /*
@@ -30,7 +27,6 @@ public class RobotContainer {
 
   // The driver's controller
   GenericHID m_driverController = new GenericHID(OIConstants.kDriverControllerPort);
-  private final SendableChooser<Auto> m_chooser = new SendableChooser<>();
 
   private enum DriveSpeed {
     FAST,
@@ -167,14 +163,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_chooser.getSelected().getCommand();
+    return new Command() {};
   }
-
-  public Pose2d getAutonomousStartingPose() {
-    return m_chooser.getSelected().getInitialPose();
-  }
-
-  // public Auto.Team getTeam() {
-  //   return m_chooser.getSelected().getTeam();
-  // }
 }
