@@ -71,9 +71,7 @@ public class RobotContainer {
       );
   }
 
-  private void configureAutoRoutines() {
-  
-  }
+  private void configureAutoRoutines() {}
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
