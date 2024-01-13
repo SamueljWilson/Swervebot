@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
+import com.ctre.phoenix6.hardware.CANcoder;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -22,15 +23,23 @@ import frc.robot.TrapezoidalConstraint;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxPIDController;
+
 public class SwerveModule {
-  private final WPI_TalonFX m_driveMotor;
-  private final WPI_TalonFX m_turningMotor;
+  private final CANSparkMax m_driveMotor;
+  private final CANSparkMax m_turningMotor;
+  private final SparkMaxPIDController m_pidController;
   private double m_kP;
   private double m_kI;
   private double m_kD;
   private double m_idealVelocity = 0;
 
-  private final WPI_CANCoder m_turningEncoder;
+  private final RelativeEncoder m_driveEncoder;
+  private final CANcoder m_turningEncoder;
 
   // Using a TrapezoidProfile PIDController to allow for smooth turning
   private final ProfiledPIDController m_turningPIDController =
@@ -67,24 +76,29 @@ public class SwerveModule {
     m_kI = SwerveModuleConstants.kIDriveController;
     m_kD = SwerveModuleConstants.kDDriveController;
     
-    m_driveMotor = new WPI_TalonFX(driveMotorChannel);
-    m_driveMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-    m_driveMotor.setSensorPhase(false);
+    m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
+    m_driveMotor.restoreFactoryDefaults();
     m_driveMotor.setInverted(driveMotorReversed);
-    m_driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 10);
-    m_driveMotor.config_kP(0, m_kP, 10);
-    m_driveMotor.config_kI(0, m_kI, 10);
-    m_driveMotor.config_kD(0, m_kD, 10);
-    m_driveMotor.config_kF(0, 0, 10);
-    m_driveMotor.configSupplyCurrentLimit(DriveConstants.kSupplyCurrentLimit);
 
-    m_turningMotor = new WPI_TalonFX(turningMotorChannel);
+    m_driveEncoder = m_driveMotor.getEncoder();
+
+    m_pidController = m_driveMotor.getPIDController();
+    m_pidController.setFeedbackDevice(m_driveEncoder);
+    // m_driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 10);
+    m_pidController.setP(m_kP, 0);
+    m_pidController.setI(m_kI, 0);
+    m_pidController.setD(m_kD, 0);
+    m_pidController.setFF(0);
+    
+    m_driveMotor.setSmartCurrentLimit(DriveConstants.kSmartCurrentLimit);
+
+    m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
     m_turningMotor.setInverted(turningMotorReversed);
-    m_turningMotor.configSupplyCurrentLimit(DriveConstants.kSupplyCurrentLimit);
+    m_turningMotor.setSmartCurrentLimit(DriveConstants.kSmartCurrentLimit);
 
-    m_turningEncoder = new WPI_CANCoder(turningEncoderChannel);
-    m_turningEncoder.configSensorDirection(turningEncoderReversed, 10);
-    m_turningEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
+    m_turningEncoder = new CANcoder(turningEncoderChannel);
+    // m_turningEncoder.configSensorDirection(turningEncoderReversed, 10);
+    // m_turningEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.

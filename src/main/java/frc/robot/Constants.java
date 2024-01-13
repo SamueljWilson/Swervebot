@@ -61,9 +61,7 @@ public final class Constants {
     public static final Rotation2d kRearRightEncoderOffset = new Rotation2d(Math.toRadians(250.137)); //Q3
     public static final Rotation2d kFrontRightEncoderOffset = new Rotation2d(Math.toRadians(45.703)); //Q4
 
-    public static final SupplyCurrentLimitConfiguration kSupplyCurrentLimit =
-      new SupplyCurrentLimitConfiguration(true, 30, 35, 0.5);
-
+    public static final int kSmartCurrentLimit = 40;
     public static final double kTrackWidth = 0.431;
     // Distance between centers of right and left wheels on robot
     public static final double kWheelBase = 0.681;
