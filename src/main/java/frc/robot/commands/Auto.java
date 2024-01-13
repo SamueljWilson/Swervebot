@@ -4,16 +4,20 @@
 
 package frc.robot.commands;
 
-
+import java.lang.constant.Constable;
 import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants.ArmConstants;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.Constants;
 
 public class Auto {
@@ -115,50 +119,62 @@ public class Auto {
   };
 
   public static Auto bPlaceCross(
-      DriveSubsystem drive, Team team, MirrorInterface mirror) {
+      DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Team team, MirrorInterface mirror) {
     Trajectory trajectory0 = bTrajectoryPlaceCross0(mirror);
     Trajectory trajectory1 = bTrajectoryPlaceCross1(trajectory0, mirror);
     Trajectory trajectory2 = bTrajectoryPlaceCross2(trajectory1, mirror);
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
-      (DriveTrajectory.trajectoryCommandField(drive, trajectory0))
+      MoveArmSync.moveToTop(arm)
+      .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory0))
+      .andThen(gripper.openGrippers())
       .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory1))
-      .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory2));
+      .andThen(MoveArmSync.moveHome(arm))
+      .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory2))
+      .andThen(MoveArmSync.moveToOffFloor(arm));
     return new Auto(startingPose, command, team);
   }
 
-  public static Auto blueBPlaceCross(DriveSubsystem drive, Team team) {
-    return bPlaceCross(drive, team, blueMirror);
-  } 
-  public static Auto redBPlaceCross(DriveSubsystem drive, Team team) {
-    return bPlaceCross(drive, team, redMirror);
+  public static Auto blueBPlaceCross(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Team team) {
+    return bPlaceCross(drive, arm, gripper, team, blueMirror);
+  }
+
+  public static Auto redBPlaceCross(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Team team) {
+    return bPlaceCross(drive, arm, gripper, team, redMirror);
   }
 
   public static Auto ePlaceCross(
-      DriveSubsystem drive, Team team, MirrorInterface mirror) {
+      DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Team team, MirrorInterface mirror) {
     Trajectory trajectory0 = eTrajectoryPlaceCross0(mirror);
     Trajectory trajectory1 = eTrajectoryPlaceCross1(trajectory0, mirror);
     Trajectory trajectory2 = eTrajectoryPlaceCross2(mirror);
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
       // Commands.runOnce(() -> SmartDashboard.putString("debug", "A"))
-      (DriveTrajectory.trajectoryCommandField(drive, trajectory0))
+      MoveArmSync.moveToTop(arm)
+      .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory0))
+      .andThen(gripper.openGrippers())
       .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory1))
-      .andThen(DriveTrajectory.trajectoryCommandRobot(drive, trajectory2, team));
+      .andThen(MoveArmSync.moveHome(arm))
+      .andThen(new CrossCharger(team, drive))
+      .andThen(DriveTrajectory.trajectoryCommandRobot(drive, trajectory2, team))
+      .andThen(MoveArmSync.moveToOffFloor(arm));
     return new Auto(startingPose, command, team);
   }
   
-  public static Auto blueEPlaceCross(DriveSubsystem drive, Team team) {
-    return ePlaceCross(drive, team, blueMirror);
+  public static Auto blueEPlaceCross(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Team team) {
+    return ePlaceCross(drive, arm, gripper, team, blueMirror);
   }
    
-  public static Auto redEPlaceCross(DriveSubsystem drive, Team team) {
-    return ePlaceCross(drive, team, redMirror);
+  public static Auto redEPlaceCross(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Team team) {
+    return ePlaceCross(drive, arm, gripper, team, redMirror);
   }
 
   public static Auto ePlaceCrossCharge(
-      DriveSubsystem drive, Team team, MirrorInterface mirror) {
+      DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Team team, MirrorInterface mirror) {
     Trajectory trajectory0 = eTrajectoryPlaceCross0(mirror);
+    Trajectory trajectory1 = eTrajectoryPlaceCross1(trajectory0, mirror);
+    Trajectory trajectory2 = eTrajectoryPlaceCross2(mirror);
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
       // MoveArmSync.moveToTop(arm)
@@ -172,33 +188,37 @@ public class Auto {
       return new Auto(startingPose, command, team);
   }
 
-  public static Auto blueEPlaceCrossCharge(DriveSubsystem drive, Team team) {
-    return ePlaceCrossCharge(drive, team, blueMirror);
+  public static Auto blueEPlaceCrossCharge(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Team team) {
+    return ePlaceCrossCharge(drive, arm, gripper, team, blueMirror);
   }
 
-  public static Auto redEPlaceCrossCharge(DriveSubsystem drive, Team team) {
-    return ePlaceCrossCharge(drive, team, redMirror);
+  public static Auto redEPlaceCrossCharge(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Team team) {
+    return ePlaceCrossCharge(drive, arm, gripper, team, redMirror);
   }
 
   public static Auto hPlaceCross(
-      DriveSubsystem drive, Team team, MirrorInterface mirror) {
+      DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Team team, MirrorInterface mirror) {
     Trajectory trajectory0 = hTrajectoryPlaceCross0(mirror);
     Trajectory trajectory1 = hTrajectoryPlaceCross1(trajectory0, mirror);
     Trajectory trajectory2 = hTrajectoryPlaceCross2(trajectory1, mirror);
     Pose2d startingPose = copyPose(trajectory0.getInitialPose());
     Command command =
-      (DriveTrajectory.trajectoryCommandField(drive, trajectory0))
+      MoveArmSync.moveToTop(arm)
+      .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory0))
+      .andThen(gripper.openGrippers())
       .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory1))
-      .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory2));
+      .andThen(MoveArmSync.moveHome(arm))
+      .andThen(DriveTrajectory.trajectoryCommandField(drive, trajectory2))
+      .andThen(MoveArmSync.moveToOffFloor(arm));
     return new Auto(startingPose, command, team);
   }
 
-  public static Auto blueHPlaceCross(DriveSubsystem drive, Team team) {
-    return hPlaceCross(drive, team, blueMirror);
+  public static Auto blueHPlaceCross(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Team team) {
+    return hPlaceCross(drive, arm, gripper, team, blueMirror);
   }
 
-  public static Auto redHPlaceCross(DriveSubsystem drive, Team team) {
-    return hPlaceCross(drive, team, redMirror);
+  public static Auto redHPlaceCross(DriveSubsystem drive, ArmSubsystem arm, GripperSubsystem gripper, Team team) {
+    return hPlaceCross(drive, arm, gripper, team, redMirror);
   }
 
   private static Trajectory bTrajectoryPlaceCross0(MirrorInterface mirror) {

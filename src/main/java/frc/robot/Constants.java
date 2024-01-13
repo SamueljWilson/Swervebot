@@ -13,6 +13,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import frc.robot.subsystems.ArmInterp;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -109,6 +110,8 @@ public final class Constants {
     public static final double kWristRetractionCycles = 18.0;
 
     public static final double kEpsilonHeight = 0.03;
+
+    public static final double kMaxExtensionCycles = ArmInterp.getMaxCycles();
 
     public static final double KArmInitializeSpeed = -500.0;
 
