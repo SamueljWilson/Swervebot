@@ -81,6 +81,8 @@ public class SwerveModule {
     m_driveMotor.setInverted(driveMotorReversed);
 
     m_driveEncoder = m_driveMotor.getEncoder();
+    m_driveEncoder.setVelocityConversionFactor(SwerveModuleConstants.kDriveEncoderDistancePerPulse * 10.0);
+    m_driveEncoder.setPositionConversionFactor(SwerveModuleConstants.kDriveEncoderDistancePerPulse);
 
     m_pidController = m_driveMotor.getPIDController();
     m_pidController.setFeedbackDevice(m_driveEncoder);
@@ -112,14 +114,14 @@ public class SwerveModule {
    */
   public SwerveModuleState getState() {
     return new SwerveModuleState(
-      m_driveMotor.getSelectedSensorVelocity()*SwerveModuleConstants.kDriveEncoderDistancePerPulse*10.0,
+      m_driveEncoder.getVelocity(),
       getPosR2d()
     );
   }
 
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
-      m_driveMotor.getSelectedSensorPosition()*SwerveModuleConstants.kDriveEncoderDistancePerPulse,
+      m_driveEncoder.getPosition(),
       getPosR2d()
     );
   }
@@ -159,13 +161,13 @@ public class SwerveModule {
 
   /** Zeroes all the SwerveModule encoders. */
   public void resetEncoders() {
-    m_driveMotor.setSelectedSensorPosition(0, 0, 10);
-    m_turningMotor.setSelectedSensorPosition(0, 0, 10);
+    m_driveEncoder.setPosition(0);
     m_turningEncoder.setPosition(0, 10);
   }
 
   private Rotation2d getPosR2d() {
-    Rotation2d encoderRotation = new Rotation2d(Math.toRadians(m_turningEncoder.getAbsolutePosition()));
+    var absolutePositionSignal = m_turningEncoder.getAbsolutePosition();
+    Rotation2d encoderRotation = new Rotation2d(Math.toRadians(absolutePositionSignal.getValue()));
     return encoderRotation.minus(m_encoderOffset);
   }
 }
