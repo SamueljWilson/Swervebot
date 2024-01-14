@@ -4,7 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -92,10 +95,12 @@ public class SwerveModule {
     m_turningMotor.setSmartCurrentLimit(DriveConstants.kSmartCurrentLimit);
 
     m_turningEncoder = new CANcoder(turningEncoderChannel);
-    // TODO figure out how to do this in Phoenix6
-    // m_turningEncoder.configSensorDirection(turningEncoderReversed, 10);
-    // m_turningEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
-
+    var turningEncoderConfigurator = m_turningEncoder.getConfigurator();
+    var encoderConfig = new CANcoderConfiguration();
+    encoderConfig.MagnetSensor.SensorDirection = turningEncoderReversed ? SensorDirectionValue.Clockwise_Positive : SensorDirectionValue.CounterClockwise_Positive;
+    encoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
+    turningEncoderConfigurator.apply(encoderConfig);
+    
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
