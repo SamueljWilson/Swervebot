@@ -18,7 +18,6 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController;
@@ -81,7 +80,6 @@ public class SwerveModule {
 
     m_pidController = m_driveMotor.getPIDController();
     m_pidController.setFeedbackDevice(m_driveEncoder);
-    // m_driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 10);
     m_pidController.setP(m_kP, 0);
     m_pidController.setI(m_kI, 0);
     m_pidController.setD(m_kD, 0);
@@ -94,6 +92,7 @@ public class SwerveModule {
     m_turningMotor.setSmartCurrentLimit(DriveConstants.kSmartCurrentLimit);
 
     m_turningEncoder = new CANcoder(turningEncoderChannel);
+    // TODO figure out how to do this in Phoenix6
     // m_turningEncoder.configSensorDirection(turningEncoderReversed, 10);
     // m_turningEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
 
