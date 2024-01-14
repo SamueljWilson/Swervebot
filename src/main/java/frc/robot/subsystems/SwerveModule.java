@@ -4,12 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.sensors.AbsoluteSensorRange;
-import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.ctre.phoenix6.hardware.CANcoder;
 
 import edu.wpi.first.math.MathUtil;
@@ -28,6 +22,7 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 
 public class SwerveModule {
   private final CANSparkMax m_driveMotor;
@@ -145,6 +140,7 @@ public class SwerveModule {
     
     m_idealVelocity = profile.calculate(driveVelocityDesired, m_idealVelocity, Constants.kDt);
 
+    
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput =
         MathUtil.clamp(
@@ -154,9 +150,9 @@ public class SwerveModule {
            1
           );
 
-    m_driveMotor.set(ControlMode.Velocity, m_idealVelocity/10.0);
+    m_pidController.setReference(m_idealVelocity / 10.0, ControlType.kVelocity);
 
-    m_turningMotor.set(ControlMode.PercentOutput, turnOutput);
+    m_turningMotor.set(turnOutput);
   }
 
   /** Zeroes all the SwerveModule encoders. */
