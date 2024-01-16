@@ -22,14 +22,14 @@ import frc.robot.Constants.SwerveModuleConstants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 
 public class SwerveModule {
   private final CANSparkMax m_driveMotor;
   private final CANSparkMax m_turningMotor;
-  private final SparkMaxPIDController m_pidController;
+  private final SparkPIDController m_pidController;
   private double m_kP;
   private double m_kI;
   private double m_kD;
@@ -91,6 +91,7 @@ public class SwerveModule {
     m_driveMotor.setSmartCurrentLimit(DriveConstants.kSmartCurrentLimit);
 
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
+    m_turningMotor.restoreFactoryDefaults();
     m_turningMotor.setInverted(turningMotorReversed);
     m_turningMotor.setSmartCurrentLimit(DriveConstants.kSmartCurrentLimit);
 
