@@ -168,7 +168,7 @@ public class SwerveModule {
 
   private Rotation2d getPosR2d() {
     var absolutePositionSignal = m_turningEncoder.getAbsolutePosition();
-    Rotation2d encoderRotation = new Rotation2d(Math.toRadians(absolutePositionSignal.getValue()));
+    Rotation2d encoderRotation = new Rotation2d(absolutePositionSignal.getValue() * 2 * Math.PI);
     return encoderRotation.minus(m_encoderOffset);
   }
 }
