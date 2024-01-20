@@ -155,10 +155,13 @@ private final SwerveModule m_frontRight = //Q4
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     var swerveModuleStates =
         DriveConstants.kDriveKinematics.toSwerveModuleStates(
+          ChassisSpeeds.discretize(
             fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getRotation2d())
-                : new ChassisSpeeds(xSpeed, ySpeed, rot));
-        setModuleStates(swerveModuleStates);
+              ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getRotation2d())
+              : new ChassisSpeeds(xSpeed, ySpeed, rot)
+            , 0.02));
+
+    setModuleStates(swerveModuleStates);
   }
 
   /**
