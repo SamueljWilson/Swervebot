@@ -139,7 +139,7 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond;
     public static final double kMaxAccelerationMetersPerSecond = 7.5;
 
-    public static final double kDriveEncoderCPR = 2048.0;
+    public static final double kDriveEncoderCPR = 42.0;
     public static final double kAbsoluteEncoderCPR = 4096.0;
     public static final double kWheelDiameterMeters = 0.09525;
 
