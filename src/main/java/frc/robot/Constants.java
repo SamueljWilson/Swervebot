@@ -148,7 +148,7 @@ public final class Constants {
     public static final double kDriveEncoderDistancePerPulse =
         (kWheelDiameterMeters * Math.PI) / (kDriveEncoderCPR * kDriveGearRatio);
 
-    public static final double kPTurningController = 0.25;
+    public static final double kPTurningController = 0.2;
     public static final double kITurningController = 0.0;
     public static final double kDTurningController = 0.0;
 
