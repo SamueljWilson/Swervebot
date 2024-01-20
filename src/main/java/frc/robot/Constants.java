@@ -152,7 +152,7 @@ public final class Constants {
     public static final double kITurningController = 0.0;
     public static final double kDTurningController = 0.0;
 
-    public static final double kPDriveController = 0.0625;
+    public static final double kPDriveController = 0.01;
     public static final double kIDriveController = 0.0;
     public static final double kDDriveController = 0.0;
   }
