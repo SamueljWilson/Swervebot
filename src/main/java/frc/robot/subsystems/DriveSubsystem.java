@@ -16,6 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -159,7 +160,7 @@ private final SwerveModule m_frontRight = //Q4
             fieldRelative
               ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getRotation2d())
               : new ChassisSpeeds(xSpeed, ySpeed, rot)
-            , 0.02));
+            , Constants.kDt));
 
     setModuleStates(swerveModuleStates);
   }
