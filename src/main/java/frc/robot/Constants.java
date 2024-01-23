@@ -7,10 +7,6 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -22,7 +18,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
  */
 public final class Constants {
   public static final double kDt = 0.02;
-  public static final double kMaxX = 16.542;
   public static final class DriveConstants {
     public static final int kFrontLeftDriveMotorPort = 1; //Q1
     public static final int kRearLeftDriveMotorPort = 2; //Q2
@@ -60,10 +55,8 @@ public final class Constants {
     public static final Rotation2d kFrontRightEncoderOffset = new Rotation2d(Math.toRadians(45.703)); //Q4
 
     public static final int kSmartCurrentLimit = 40;
-    public static final double kTrackWidth = 0.431;
-    // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = 0.681;
-    // Distance between front and back wheels on robot
+    public static final double kTrackWidth = 0.431; // Distance between centers of right and left wheels on robot
+    public static final double kWheelBase = 0.681; // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics =
       new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2), //Q1
@@ -74,62 +67,6 @@ public final class Constants {
     public static final boolean kGyroReversed = false;
 
     public static final double kMaxSpeedMetersPerSecond = 0.5;
-  }
-
-  public static final class GripperConstants {
-    public static final int kLeftSolenoidForwardChannel = 5;
-    public static final int kLeftSolenoidBackwardChannel = 6;
-
-    public static final int kRightSolenoidForwardChannel = 3;
-    public static final int kRightSolenoidBackwardChannel = 4;
-  }
-
-  public static final class ArmConstants {
-    public static final int kArmMotorPort = 13;
-
-    public static final double kHomeCyclesOffset = 2.0;
-    private static final double kPlacingHeightOffset = 0.20;
-    public static final double kHomeHeight = 0.0;
-    public static final double kOffFloorHeight = 0.16;
-    public static final double k2ndRowHeight = 0.87 + kPlacingHeightOffset;
-    public static final double k3rdRowHeight = 1.17 + kPlacingHeightOffset;
-    public static final double kHumanStationHeight = 0.95 + kPlacingHeightOffset;
-
-    public static final double kAdjustVelocity = 1.0;
-    public static final double kMaxOutput = 0.4;
-
-    public static final int kWristSolenoidForwardChannel = 5;
-    public static final int kWristSolenoidBackwardChannel = 6;
-    // Extension > Retraction
-    public static final double kWristExtensionCycles = 22.0;
-    public static final double kWristRetractionCycles = 18.0;
-
-    public static final double kEpsilonHeight = 0.03;
-
-    public static final double KArmInitializeSpeed = -500.0;
-
-    public static final double kVelP = 0.0009;
-    public static final double kVelI = 0.0;
-    public static final double kVelD = 0.001;
-    public static final double kVelIz = 0.0;
-    public static final double kVelFF = 0.01;
-
-    public static final double kPosP = 1.0;
-    public static final double kPosI = 0.0;
-    public static final double kPosD = 0.0;
-    public static final double kPosIz = 0.0;
-    public static final double kPosFF = 0.0;
-
-    public static final int kPosPIDSlot = 0;
-    public static final int kVelPIDSlot = 1;
-  }
-
-  public static final class WristConstants {
-    public static final int kWristSolenoidForwardChannel = 1;
-    public static final int kWristSolenoidBackwardChannel = 2;
-
-    public static final DoubleSolenoid.Value kWristExtended = Value.kForward;
-    public static final DoubleSolenoid.Value kWristRetracted = Value.kReverse;
   }
 
   public static final class SwerveModuleConstants {
@@ -161,7 +98,6 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final double kMaxRadPerSec = SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond;
     public static final double kMaxMetersPerSec = DriveConstants.kMaxSpeedMetersPerSecond;
-    public static final double kArmAdjustV = 0.025;
     
     public static final int kA = 1;
     public static final int kB = 2;
@@ -206,32 +142,5 @@ public final class Constants {
     public static final double kMaxAccelerationMetersPerSecondSquared = 1;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
-
-    public static final double kPBalanceController = 1.0;
-    public static final double kIBalanceController = 0.0;
-    public static final double kDBalanceController = 0.0;
-
-    public static final double kPXController = 1;
-    public static final double kPYController = 1;
-    public static final double kPThetaController = 1;
-
-    public static final double kMaxSpeedMetersPerSecondBalancing = 0.25;
-    public static final double kChargeAdjustingThreshold = Math.toRadians(7);
-    public static final double kClimbingThreshold = Math.toRadians(8);
-    public static final double kLevelThreshold = Math.toRadians(4);
-    public static final double kDescendingThreshold = Math.toRadians(8);
-    public static double kEngagedTimeThreshold = 1.0;
-
-    public static final TrajectoryConfig kDriveTrajectoryConfig =
-        new TrajectoryConfig(
-                AutoConstants.kMaxSpeedMetersPerSecond,
-                AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-            // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(DriveConstants.kDriveKinematics);
-
-    // Constraint for the motion profiled robot angle controller
-    public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
-        new TrapezoidProfile.Constraints(
-            kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
 }
