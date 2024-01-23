@@ -35,6 +35,7 @@ public class SwerveModule {
   private double m_idealVelocity = 0;
 
   private final RelativeEncoder m_driveEncoder;
+  private final double m_driveEncoderDtFactor; // Factor to convert from m/[encoder measurement period] to m/s.
   private final CANcoder m_turningEncoder;
 
   // Using a TrapezoidProfile PIDController to allow for smooth turning
@@ -77,7 +78,9 @@ public class SwerveModule {
     m_driveMotor.setInverted(driveMotorReversed);
 
     m_driveEncoder = m_driveMotor.getEncoder();
-    m_driveEncoder.setVelocityConversionFactor(SwerveModuleConstants.kDriveEncoderDistancePerPulse * 10.0);
+    m_driveEncoderDtFactor = 1000.0 /* 1000ms=1s */ / m_driveEncoder.getMeasurementPeriod() /* ms */;
+    m_driveEncoder.setVelocityConversionFactor(
+      SwerveModuleConstants.kDriveEncoderDistancePerPulse * m_driveEncoderDtFactor);
     m_driveEncoder.setPositionConversionFactor(SwerveModuleConstants.kDriveEncoderDistancePerPulse);
 
     m_pidController = m_driveMotor.getPIDController();
@@ -149,7 +152,7 @@ public class SwerveModule {
            1
           );
 
-    m_pidController.setReference(m_idealVelocity / 10.0, ControlType.kVelocity);
+    m_pidController.setReference(m_idealVelocity / m_driveEncoderDtFactor, ControlType.kVelocity);
 
     m_turningMotor.set(turnOutput);
   }
