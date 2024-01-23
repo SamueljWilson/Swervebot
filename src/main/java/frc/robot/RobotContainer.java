@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.PhotonVisionConstants;
+import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Limelight;
 import frc.robot.commands.TargetNote;
@@ -30,6 +32,8 @@ public class RobotContainer {
   public final DriveSubsystem m_robotDrive = new DriveSubsystem();
   public final Limelight m_limelight = new Limelight();
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
+  private final CameraSubsystem m_cameras = new CameraSubsystem(PhotonVisionConstants.kCameraName1, PhotonVisionConstants.kCameraName2);
+  public final DriveSubsystem m_robotDrive = new DriveSubsystem(m_cameras);
 
   // The driver's controller
   GenericHID m_driverController = new GenericHID(OIConstants.kDriverControllerPort);
@@ -74,7 +78,7 @@ public class RobotContainer {
               reverseFactor*joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyXAxis))*OIConstants.kMaxMetersPerSec,
               -joystickTransform(m_driverController.getRawAxis(OIConstants.kRightJoyXAxis))*OIConstants.kMaxRadPerSec,
               true);
-          }, m_robotDrive
+          }, m_robotDrive, m_cameras
         )
       );
 
