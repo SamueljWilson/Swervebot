@@ -16,7 +16,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.Constants;
-import frc.robot.TrapezoidalConstraint;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
 
@@ -139,12 +138,7 @@ public class SwerveModule {
     final double driveVelocityDesired = state.speedMetersPerSecond
       / (SwerveModuleConstants.kDriveEncoderDistancePerPulse);
     
-    TrapezoidalConstraint profile = new TrapezoidalConstraint(
-      SwerveModuleConstants.kMaxSpeedMetersPerSecond / (SwerveModuleConstants.kDriveEncoderDistancePerPulse),
-      SwerveModuleConstants.kMaxAccelerationMetersPerSecond / (SwerveModuleConstants.kDriveEncoderDistancePerPulse));
-    
-    m_idealVelocity = profile.calculate(driveVelocityDesired, m_idealVelocity, Constants.kDt);
-
+    m_idealVelocity = SwerveModuleConstants.kVelocityProfile.calculate(driveVelocityDesired, m_idealVelocity, Constants.kDt);
     
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput =

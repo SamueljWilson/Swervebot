@@ -92,6 +92,11 @@ public final class Constants {
     public static final double kPDriveController = 0.01;
     public static final double kIDriveController = 0.0;
     public static final double kDDriveController = 0.0;
+
+    public static final TrapezoidalConstraint kVelocityProfile = new TrapezoidalConstraint(
+      kMaxSpeedMetersPerSecond / (kDriveEncoderDistancePerPulse),
+      kMaxAccelerationMetersPerSecond / (kDriveEncoderDistancePerPulse)
+    );
   }
 
   public static final class OIConstants {
