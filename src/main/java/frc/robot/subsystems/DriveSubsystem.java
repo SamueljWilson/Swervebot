@@ -5,17 +5,21 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.mechanisms.swerve.SimSwerveDrivetrain.SimSwerveModule;
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
@@ -65,11 +69,13 @@ private final SwerveModule m_frontRight = //Q4
           DriveConstants.kFrontRightTurningMotorReversed,
           DriveConstants.kFrontRightEncoderReversed,
           DriveConstants.kFrontRightEncoderOffset);
+
   // The gyro sensor uses NavX
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
   private double m_pitch0; // Radians
   private double m_roll0; // Radians
   private Pose2d m_initialPose = new Pose2d();
+  private CameraSubsystem m_photonCameras;
 
   private SwerveModulePosition[] getPositions() {
     SwerveModulePosition[] positions = {
@@ -82,11 +88,17 @@ private final SwerveModule m_frontRight = //Q4
   }
 
   // Odometry class for tracking robot pose
-  SwerveDriveOdometry m_odometry =
-      new SwerveDriveOdometry(DriveConstants.kDriveKinematics, getRotation2d(), getPositions());
+  SwerveDrivePoseEstimator m_odometry =
+      new SwerveDrivePoseEstimator(
+        DriveConstants.kDriveKinematics,
+        getRotation2d(),
+        getPositions(),
+        m_initialPose,
+        VecBuilder.fill(0.005, 0.005, Math.toRadians(1)),
+        VecBuilder.fill(0.05, 0.05, Math.toRadians(5)));
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() {
+  public DriveSubsystem(CameraSubsystem cameraSubsystem) {
     m_gyro.enableBoardlevelYawReset(true);
     // We have to wait for the gyro to callibrate before we can reset the gyro
     while (m_gyro.isCalibrating()) {Thread.yield();}
@@ -118,7 +130,18 @@ private final SwerveModule m_frontRight = //Q4
         getRotation2d(),
         getPositions()
         );
-        SmartDashboard.putNumber(("Yaw"), getYaw());
+
+    for (int i=0; i<m_photonCameras.getFieldRelativePoseEstimators().size(); i++) {
+      Optional<EstimatedRobotPose> robotPoseEstimator = m_photonCameras.getFieldRelativePoseEstimators().get(i);
+      if (!robotPoseEstimator.isEmpty()) {
+        String formattedString = String.format("Estimated Pose for Cam %d", i+1);
+        m_odometry.addVisionMeasurement(robotPoseEstimator.get().estimatedPose.toPose2d(), robotPoseEstimator.get().timestampSeconds);
+        SmartDashboard.putString(formattedString, robotPoseEstimator.get().estimatedPose.getTranslation().toString() + " | Rotation: " + Math.toDegrees(robotPoseEstimator.get().estimatedPose.getRotation().getAngle()));
+      }
+    }
+    
+    SmartDashboard.putString("Swerve Drive Pose Estimator", m_odometry.getEstimatedPosition().toString());
+    SmartDashboard.putNumber(("Yaw"), getYaw());
   }
 
   /**
@@ -127,7 +150,7 @@ private final SwerveModule m_frontRight = //Q4
    * @return The pose.
    */
   public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
+    return m_odometry.getEstimatedPosition();
   }
 
   private double getPitchUncorrected() {
