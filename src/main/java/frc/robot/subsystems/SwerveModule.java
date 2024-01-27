@@ -35,7 +35,6 @@ public class SwerveModule {
   private double m_idealVelocity = 0;
 
   private final RelativeEncoder m_driveEncoder;
-  private final double m_driveEncoderDtFactor; // Factor to convert from m/[encoder measurement period] to m/s.
   private final CANcoder m_turningEncoder;
 
   // Using a TrapezoidProfile PIDController to allow for smooth turning
@@ -78,10 +77,18 @@ public class SwerveModule {
     m_driveMotor.setInverted(driveMotorReversed);
 
     m_driveEncoder = m_driveMotor.getEncoder();
-    m_driveEncoderDtFactor = 1000.0 /* 1000ms=1s */ / m_driveEncoder.getMeasurementPeriod() /* ms */;
-    m_driveEncoder.setVelocityConversionFactor(
-      SwerveModuleConstants.kDriveEncoderDistancePerPulse * m_driveEncoderDtFactor);
-    m_driveEncoder.setPositionConversionFactor(SwerveModuleConstants.kDriveEncoderDistancePerPulse);
+
+    // The native position units are motor rotations, but we want meters.
+    final double positionConversionFactor =
+      (SwerveModuleConstants.kWheelDiameterMeters * Math.PI)
+      / SwerveModuleConstants.kDriveGearRatio;
+    m_driveEncoder.setPositionConversionFactor(positionConversionFactor);
+    
+    // The native velocity units are motor rotations [aka revolutions] per minute (RPM), but we want meters per second.
+    final double velocityConversionFactor =
+      positionConversionFactor
+      / 60.0 /* s */;
+    m_driveEncoder.setVelocityConversionFactor(velocityConversionFactor);
 
     m_pidController = m_driveMotor.getPIDController();
     m_pidController.setFeedbackDevice(m_driveEncoder);
@@ -138,8 +145,7 @@ public class SwerveModule {
     SwerveModuleState state =
       SwerveModuleState.optimize(desiredState, getPosR2d());
 
-    final double driveVelocityDesired = state.speedMetersPerSecond
-      / (SwerveModuleConstants.kDriveEncoderDistancePerPulse);
+    final double driveVelocityDesired = state.speedMetersPerSecond;
     
     m_idealVelocity = SwerveModuleConstants.kVelocityProfile.calculate(driveVelocityDesired, m_idealVelocity, Constants.kDt);
     
@@ -152,7 +158,7 @@ public class SwerveModule {
            1
           );
 
-    m_pidController.setReference(m_idealVelocity / m_driveEncoderDtFactor, ControlType.kVelocity);
+    m_pidController.setReference(m_idealVelocity, ControlType.kVelocity);
 
     m_turningMotor.set(turnOutput);
   }
