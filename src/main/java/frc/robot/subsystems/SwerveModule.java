@@ -4,12 +4,10 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.sensors.AbsoluteSensorRange;
-import com.ctre.phoenix.sensors.WPI_CANCoder;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -18,19 +16,27 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.Constants;
-import frc.robot.TrapezoidalConstraint;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
+
 public class SwerveModule {
-  private final WPI_TalonFX m_driveMotor;
-  private final WPI_TalonFX m_turningMotor;
+  private final CANSparkMax m_driveMotor;
+  private final CANSparkMax m_turningMotor;
+  private final SparkPIDController m_pidController;
   private double m_kP;
   private double m_kI;
   private double m_kD;
   private double m_idealVelocity = 0;
 
-  private final WPI_CANCoder m_turningEncoder;
+  private final RelativeEncoder m_driveEncoder;
+  private final double m_driveEncoderDtFactor; // Factor to convert from m/[encoder measurement period] to m/s.
+  private final CANcoder m_turningEncoder;
 
   // Using a TrapezoidProfile PIDController to allow for smooth turning
   private final ProfiledPIDController m_turningPIDController =
@@ -67,25 +73,37 @@ public class SwerveModule {
     m_kI = SwerveModuleConstants.kIDriveController;
     m_kD = SwerveModuleConstants.kDDriveController;
     
-    m_driveMotor = new WPI_TalonFX(driveMotorChannel);
-    m_driveMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-    m_driveMotor.setSensorPhase(false);
+    m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
+    m_driveMotor.restoreFactoryDefaults();
     m_driveMotor.setInverted(driveMotorReversed);
-    m_driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 10);
-    m_driveMotor.config_kP(0, m_kP, 10);
-    m_driveMotor.config_kI(0, m_kI, 10);
-    m_driveMotor.config_kD(0, m_kD, 10);
-    m_driveMotor.config_kF(0, 0, 10);
-    m_driveMotor.configSupplyCurrentLimit(DriveConstants.kSupplyCurrentLimit);
 
-    m_turningMotor = new WPI_TalonFX(turningMotorChannel);
+    m_driveEncoder = m_driveMotor.getEncoder();
+    m_driveEncoderDtFactor = 1000.0 /* 1000ms=1s */ / m_driveEncoder.getMeasurementPeriod() /* ms */;
+    m_driveEncoder.setVelocityConversionFactor(
+      SwerveModuleConstants.kDriveEncoderDistancePerPulse * m_driveEncoderDtFactor);
+    m_driveEncoder.setPositionConversionFactor(SwerveModuleConstants.kDriveEncoderDistancePerPulse);
+
+    m_pidController = m_driveMotor.getPIDController();
+    m_pidController.setFeedbackDevice(m_driveEncoder);
+    m_pidController.setP(m_kP, 0);
+    m_pidController.setI(m_kI, 0);
+    m_pidController.setD(m_kD, 0);
+    m_pidController.setFF(0);
+    
+    m_driveMotor.setSmartCurrentLimit(DriveConstants.kSmartCurrentLimit);
+
+    m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
+    m_turningMotor.restoreFactoryDefaults();
     m_turningMotor.setInverted(turningMotorReversed);
-    m_turningMotor.configSupplyCurrentLimit(DriveConstants.kSupplyCurrentLimit);
+    m_turningMotor.setSmartCurrentLimit(DriveConstants.kSmartCurrentLimit);
 
-    m_turningEncoder = new WPI_CANCoder(turningEncoderChannel);
-    m_turningEncoder.configSensorDirection(turningEncoderReversed, 10);
-    m_turningEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
-
+    m_turningEncoder = new CANcoder(turningEncoderChannel);
+    var turningEncoderConfigurator = m_turningEncoder.getConfigurator();
+    var encoderConfig = new CANcoderConfiguration();
+    encoderConfig.MagnetSensor.SensorDirection = turningEncoderReversed ? SensorDirectionValue.Clockwise_Positive : SensorDirectionValue.CounterClockwise_Positive;
+    encoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
+    turningEncoderConfigurator.apply(encoderConfig);
+    
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
@@ -98,14 +116,14 @@ public class SwerveModule {
    */
   public SwerveModuleState getState() {
     return new SwerveModuleState(
-      m_driveMotor.getSelectedSensorVelocity()*SwerveModuleConstants.kDriveEncoderDistancePerPulse*10.0,
+      m_driveEncoder.getVelocity(),
       getPosR2d()
     );
   }
 
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
-      m_driveMotor.getSelectedSensorPosition()*SwerveModuleConstants.kDriveEncoderDistancePerPulse,
+      m_driveEncoder.getPosition(),
       getPosR2d()
     );
   }
@@ -123,12 +141,8 @@ public class SwerveModule {
     final double driveVelocityDesired = state.speedMetersPerSecond
       / (SwerveModuleConstants.kDriveEncoderDistancePerPulse);
     
-    TrapezoidalConstraint profile = new TrapezoidalConstraint(
-      SwerveModuleConstants.kMaxSpeedMetersPerSecond / (SwerveModuleConstants.kDriveEncoderDistancePerPulse),
-      SwerveModuleConstants.kMaxAccelerationMetersPerSecond / (SwerveModuleConstants.kDriveEncoderDistancePerPulse));
+    m_idealVelocity = SwerveModuleConstants.kVelocityProfile.calculate(driveVelocityDesired, m_idealVelocity, Constants.kDt);
     
-    m_idealVelocity = profile.calculate(driveVelocityDesired, m_idealVelocity, Constants.kDt);
-
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput =
         MathUtil.clamp(
@@ -138,20 +152,20 @@ public class SwerveModule {
            1
           );
 
-    m_driveMotor.set(ControlMode.Velocity, m_idealVelocity/10.0);
+    m_pidController.setReference(m_idealVelocity / m_driveEncoderDtFactor, ControlType.kVelocity);
 
-    m_turningMotor.set(ControlMode.PercentOutput, turnOutput);
+    m_turningMotor.set(turnOutput);
   }
 
   /** Zeroes all the SwerveModule encoders. */
   public void resetEncoders() {
-    m_driveMotor.setSelectedSensorPosition(0, 0, 10);
-    m_turningMotor.setSelectedSensorPosition(0, 0, 10);
+    m_driveEncoder.setPosition(0);
     m_turningEncoder.setPosition(0, 10);
   }
 
   private Rotation2d getPosR2d() {
-    Rotation2d encoderRotation = new Rotation2d(Math.toRadians(m_turningEncoder.getAbsolutePosition()));
+    var absolutePositionSignal = m_turningEncoder.getAbsolutePosition();
+    Rotation2d encoderRotation = new Rotation2d(absolutePositionSignal.getValue() * 2 * Math.PI);
     return encoderRotation.minus(m_encoderOffset);
   }
 }

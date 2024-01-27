@@ -16,6 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -131,11 +132,11 @@ private final SwerveModule m_frontRight = //Q4
 
   public void lock() {
     SwerveModuleState desiredState0 = new SwerveModuleState(0.0, new Rotation2d(Math.PI/4));
-    SwerveModuleState desiredStates1 = new SwerveModuleState(0.0, new Rotation2d((3*Math.PI)/4));
+    SwerveModuleState desiredState1 = new SwerveModuleState(0.0, new Rotation2d((3*Math.PI)/4));
     m_frontLeft.setDesiredState(desiredState0);
     m_rearRight.setDesiredState(desiredState0);
-    m_frontRight.setDesiredState(desiredStates1);
-    m_rearLeft.setDesiredState(desiredStates1);
+    m_frontRight.setDesiredState(desiredState1);
+    m_rearLeft.setDesiredState(desiredState1);
   }
 
   public void initOdometry(Pose2d initialPose) {
@@ -155,10 +156,13 @@ private final SwerveModule m_frontRight = //Q4
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     var swerveModuleStates =
         DriveConstants.kDriveKinematics.toSwerveModuleStates(
+          ChassisSpeeds.discretize(
             fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getRotation2d())
-                : new ChassisSpeeds(xSpeed, ySpeed, rot));
-        setModuleStates(swerveModuleStates);
+              ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getRotation2d())
+              : new ChassisSpeeds(xSpeed, ySpeed, rot)
+            , Constants.kDt));
+
+    setModuleStates(swerveModuleStates);
   }
 
   /**
