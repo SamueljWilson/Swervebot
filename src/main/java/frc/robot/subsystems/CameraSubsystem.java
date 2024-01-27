@@ -19,6 +19,7 @@ import org.photonvision.PhotonPoseEstimator;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -43,10 +44,7 @@ public class CameraSubsystem extends SubsystemBase {
   AprilTag aprilTag3 = new AprilTag(3, new Pose3d(new Translation3d(4.0, 1.5+kAprilTagOffsetMeters, PhotonVisionConstants.kTarget3HeightMeters), new Rotation3d(0.0, 0.0, Math.PI)));
   List<AprilTag> aprilTagList = Arrays.asList(aprilTag1, aprilTag2, aprilTag3);
 
-  AprilTagFieldLayout m_aprilTagFieldLayout = 
-    new AprilTagFieldLayout(
-      aprilTagList, FieldConstants.kFieldLength, FieldConstants.kFieldWidth
-    );
+  AprilTagFieldLayout m_aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
   //Constructor
   public CameraSubsystem(String Camera1Name, String Camera2Name) {
