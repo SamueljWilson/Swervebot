@@ -67,7 +67,7 @@ public final class Constants {
 
     public static final boolean kGyroReversed = false;
 
-    public static final double kMaxSpeedMetersPerSecond = 0.5;
+    public static final double kMaxSpeedMetersPerSecond = 5.0;
   }
 
   public static final class SwerveModuleConstants {
@@ -77,26 +77,22 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond;
     public static final double kMaxAccelerationMetersPerSecond = 7.5;
 
-    public static final double kDriveEncoderCPR = 42.0;
     public static final double kAbsoluteEncoderCPR = 4096.0;
     public static final double kWheelDiameterMeters = 0.09525;
 
     public static final double kDriveGearRatio = 6.75;
 
-    public static final double kDriveEncoderDistancePerPulse =
-        (kWheelDiameterMeters * Math.PI) / (kDriveEncoderCPR * kDriveGearRatio);
-
-    public static final double kPTurningController = 0.2;
+    public static final double kPTurningController = 0.5;
     public static final double kITurningController = 0.0;
     public static final double kDTurningController = 0.0;
 
-    public static final double kPDriveController = 0.01;
+    public static final double kPDriveController = 0.5;
     public static final double kIDriveController = 0.0;
     public static final double kDDriveController = 0.0;
 
     public static final TrapezoidalConstraint kVelocityProfile = new TrapezoidalConstraint(
-      kMaxSpeedMetersPerSecond / (kDriveEncoderDistancePerPulse),
-      kMaxAccelerationMetersPerSecond / (kDriveEncoderDistancePerPulse)
+      kMaxSpeedMetersPerSecond,
+      kMaxAccelerationMetersPerSecond
     );
   }
 
