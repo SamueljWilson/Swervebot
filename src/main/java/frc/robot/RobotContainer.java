@@ -92,6 +92,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand(){
     // Load the path you want to follow using its name in the GUI
+    // To add or modify paths use the pathplanner GUI, https://pathplanner.dev/gui-getting-started.html
     return new PathPlannerAuto("two note auto");
   }
 }
