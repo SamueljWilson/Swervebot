@@ -95,7 +95,7 @@ private final SwerveModule m_frontRight = //Q4
         getPositions(),
         m_initialPose,
         VecBuilder.fill(0.005, 0.005, Math.toRadians(1)),
-        VecBuilder.fill(0.05, 0.05, Math.toRadians(5)));
+        VecBuilder.fill(0.005, 0.005, Math.toRadians(1)));
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem(CameraSubsystem cameraSubsystem) {
