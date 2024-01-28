@@ -9,6 +9,8 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -27,6 +29,7 @@ public class RobotContainer {
   // The robot's subsystems
   public final DriveSubsystem m_robotDrive = new DriveSubsystem();
   public final Limelight m_limelight = new Limelight();
+  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   // The driver's controller
   GenericHID m_driverController = new GenericHID(OIConstants.kDriverControllerPort);
@@ -74,6 +77,9 @@ public class RobotContainer {
           }, m_robotDrive
         )
       );
+
+      m_chooser.setDefaultOption("TargetNote", new TargetNote(m_robotDrive, m_limelight));
+      SmartDashboard.putData(m_chooser);
   }
 
   private void configureAutoRoutines() {}
@@ -92,10 +98,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-
-  public Command getAutonomousCommand(){
-    // Load the path you want to follow using its name in the GUI
-    // To add or modify paths use the pathplanner GUI, https://pathplanner.dev/gui-getting-started.html
-    return new PathPlannerAuto("two note auto");
+  public Command getAutonomousCommand() {
+    return m_chooser.getSelected();
   }
 }
