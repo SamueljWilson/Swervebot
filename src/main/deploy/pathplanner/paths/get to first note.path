@@ -65,7 +65,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "two note auto folder",
   "previewStartingState": {
     "rotation": -118.47420361000079,
     "velocity": 0
