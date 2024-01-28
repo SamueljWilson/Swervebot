@@ -59,9 +59,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
-      m_robotContainer.m_robotDrive.initOdometry(new Pose2d(3.99, 5.43, Rotation2d.fromDegrees(-12.14)));
       m_autonomousCommand.schedule();
     }
   }
