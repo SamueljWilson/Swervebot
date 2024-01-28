@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.8937455058073507,
-        "y": 6.980792553134402
+        "x": 2.908198492453323,
+        "y": 5.5210409012367325
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.012113320001288,
-        "y": 6.272596207164246
+        "x": 2.0265663066472603,
+        "y": 4.812844555266576
       },
       "isLocked": false,
       "linkedName": "Goto left note endpoint"
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
