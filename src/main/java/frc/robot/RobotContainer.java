@@ -79,6 +79,7 @@ public class RobotContainer {
       );
 
       m_chooser.setDefaultOption("TargetNote", new TargetNote(m_robotDrive, m_limelight));
+      m_chooser.addOption("Two Note Path", new PathPlannerAuto("two note auto"));
       SmartDashboard.putData(m_chooser);
   }
 
