@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -87,7 +89,10 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    return new Command() {};
+
+  public Command getAutonomousCommand(){
+    // Load the path you want to follow using its name in the GUI
+    // To add or modify paths use the pathplanner GUI, https://pathplanner.dev/gui-getting-started.html
+    return new PathPlannerAuto("two note auto");
   }
 }
