@@ -1,0 +1,55 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ShooterCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "First Path"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Go back Path"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShooterCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Second Path"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Third Path"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShooterCommand"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
