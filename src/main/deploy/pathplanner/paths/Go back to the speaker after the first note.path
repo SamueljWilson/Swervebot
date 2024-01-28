@@ -8,40 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.466638963764963,
-        "y": 4.984806655848793
+        "x": 1.9543013733914794,
+        "y": 5.4921349279318274
       },
       "isLocked": false,
       "linkedName": "First Endpoint"
     },
     {
       "anchor": {
-        "x": 5.220676356845671,
-        "y": 4.668314688742054
+        "x": 1.49180580051301,
+        "y": 5.535493887889185
       },
       "prevControl": {
-        "x": 3.5903783833022063,
-        "y": 5.313818600281346
-      },
-      "nextControl": {
-        "x": 6.496420739320352,
-        "y": 4.163193537654682
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 8.371427447080245,
-        "y": 4.090195222643967
-      },
-      "prevControl": {
-        "x": 6.160120489255063,
-        "y": 4.30699002243075
+        "x": 2.908198492453323,
+        "y": 5.50658791458428
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Second Endpoint"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -59,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "3 note stage auto",
   "previewStartingState": null,
   "useDefaultConstraints": false
 }
