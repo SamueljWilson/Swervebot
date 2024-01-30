@@ -166,8 +166,8 @@ public final class Constants {
   }
 
   public static class PhotonVisionConstants {
-    public static final String kCameraName1 = "Camera1";
-    public static final String kCameraName2 = "Camera2";
+    public static final String kCameraName1 = "camera1";
+    public static final String kCameraName2 = "camera2";
     public static final Transform3d kCamera1ToRobotOffset = new Transform3d();
     public static final Transform3d kCamera2ToRobotOffset = new Transform3d(0.0, -0.12, 0.0, new Rotation3d());
 
