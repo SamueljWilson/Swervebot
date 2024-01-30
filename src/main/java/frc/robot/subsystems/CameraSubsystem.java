@@ -12,6 +12,7 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.estimation.TargetModel;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.PhotonPoseEstimator;
@@ -54,6 +55,9 @@ public class CameraSubsystem extends SubsystemBase {
       m_camera2,
       PhotonVisionConstants.kCamera2ToRobotOffset
     );
+
+    m_photonPoseEstimatorCam1.setTagModel(TargetModel.kAprilTag36h11);
+    m_photonPoseEstimatorCam2.setTagModel(TargetModel.kAprilTag36h11);
   }
 
   public PoseStrategy getEstimatorStrategy() {
