@@ -25,8 +25,8 @@ import frc.robot.subsystems.DriveSubsystem;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final CameraSubsystem m_cameras = new CameraSubsystem(PhotonVisionConstants.kCameraName1, PhotonVisionConstants.kCameraName2);
-  public final DriveSubsystem m_robotDrive = new DriveSubsystem(m_cameras);
+  private final CameraSubsystem m_cameraSystem = new CameraSubsystem(PhotonVisionConstants.kCameraName1, PhotonVisionConstants.kCameraName2);
+  public final DriveSubsystem m_robotDrive = new DriveSubsystem(m_cameraSystem);
 
   // The driver's controller
   GenericHID m_driverController = new GenericHID(OIConstants.kDriverControllerPort);
@@ -71,7 +71,7 @@ public class RobotContainer {
               reverseFactor*joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyXAxis))*OIConstants.kMaxMetersPerSec,
               -joystickTransform(m_driverController.getRawAxis(OIConstants.kRightJoyXAxis))*OIConstants.kMaxRadPerSec,
               true);
-          }, m_robotDrive, m_cameras
+          }, m_robotDrive
         )
       );
   }
