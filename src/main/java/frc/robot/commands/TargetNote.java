@@ -6,6 +6,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.SwerveModuleConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Limelight;
 
@@ -29,7 +30,7 @@ public class TargetNote extends Command {
   @Override
   public void initialize() {
     thetaController.reset(0);
-    thetaController.setTolerance(Units.degreesToRadians(5));
+    thetaController.setTolerance(VisionConstants.kTargetingTolerance);
   }
 
   @Override

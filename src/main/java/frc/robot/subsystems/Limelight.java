@@ -5,8 +5,10 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.VisionConstants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.filter.MedianFilter;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -23,10 +25,6 @@ public class Limelight extends SubsystemBase {
   double filteredX = 0.0;
   double filteredY = 0.0;
 
-  double limelightMountDegrees = 0;
-  double limelightLensHeightInches = 10.5;
-  double noteHeightInches = 2.0;
-
   public Limelight() {}
 
   @Override
@@ -42,7 +40,9 @@ public class Limelight extends SubsystemBase {
     SmartDashboard.putNumber("LimeLightX", filteredX);
     SmartDashboard.putNumber("LimeLightY", filteredY);
     SmartDashboard.putNumber("LimeLightArea", area);
-    SmartDashboard.putNumber("LimelightV", v);
+    SmartDashboard.putBoolean("Note", v == 1);
+    var distance = getDistance();
+    SmartDashboard.putNumber("Distance to Note (in)", distance);
   }
 
   public double getX() {
@@ -55,11 +55,10 @@ public class Limelight extends SubsystemBase {
 
   public double getDistance() {
     double noteOffsetAngle_Vertical = getY();
-    double angleToNoteDegrees = limelightMountDegrees + noteOffsetAngle_Vertical;
-    double angleToNoteRadians = angleToNoteDegrees * (3.14159 / 180.0);
-    double distanceFromLightToNote = (noteHeightInches - limelightLensHeightInches) / Math.tan(angleToNoteRadians);
+    double angleToNoteDegrees = VisionConstants.kLimelightMountDegrees + noteOffsetAngle_Vertical;
+    double angleToNoteRadians = Units.degreesToRadians(angleToNoteDegrees);
+    double distanceFromLightToNote = (VisionConstants.kNoteHeightInches - VisionConstants.kLimelightLensHeightInches) / Math.tan(angleToNoteRadians);
 
-    SmartDashboard.putNumber("Distance to Note (in)", distanceFromLightToNote);
     return distanceFromLightToNote;
   }
 }
