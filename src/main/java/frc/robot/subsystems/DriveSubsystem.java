@@ -76,7 +76,7 @@ private final SwerveModule m_frontRight = //Q4
   private double m_pitch0; // Radians
   private double m_roll0; // Radians
   private Pose2d m_initialPose = new Pose2d();
-  private CameraSubsystem m_photonCameras;
+  private CameraSubsystem m_cameraSystem;
 
   private SwerveModulePosition[] getPositions() {
     SwerveModulePosition[] positions = {
@@ -99,8 +99,8 @@ private final SwerveModule m_frontRight = //Q4
         VecBuilder.fill(0.005, 0.005, Math.toRadians(1)));
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem(CameraSubsystem cameraSubsystem) {
-    m_photonCameras = cameraSubsystem;
+  public DriveSubsystem(CameraSubsystem cameraSystem) {
+    m_cameraSystem = cameraSystem;
     m_gyro.enableBoardlevelYawReset(true);
     // We have to wait for the gyro to callibrate before we can reset the gyro
     while (m_gyro.isCalibrating()) {Thread.yield();}
