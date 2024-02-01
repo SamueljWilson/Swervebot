@@ -177,43 +177,5 @@ public final class Constants {
     public static final String kCameraName2 = "camera2";
     public static final Transform3d kCamera1ToRobotOffset = new Transform3d();
     public static final Transform3d kCamera2ToRobotOffset = new Transform3d(0.0, -0.12, 0.0, new Rotation3d());
-
-
-    public static final double kCamera1HeightMeters = 0.215;
-    public static final double kCamera2HeightMeters = 0.0;
-    public static final double kCamera3HeightMeters = 0.0;
-
-    public static final double KCameraPitchRadians = 0.0;
-
-    public static final double kTarget1HeightMeters = 0.540;
-    public static final double kTarget2HeightMeters = 0.522;
-    public static final double kTarget3HeightMeters = 0.530;
-    public static final double kTarget4HeightMeters = 0.0;
-    public static final double kTarget5HeightMeters = 0.0;
-    public static final double kTarget6HeightMeters = 0.0;
-    public static final double kTarget7HeightMeters = 0.0;
-    public static final double kTarget8HeightMeters = 0.0;
-
-    public static double findTargetHeight(int targetID) {
-      switch(targetID) {
-        case 1: targetID = 1;
-          return kTarget1HeightMeters;
-        case 2: targetID = 2;
-          return kTarget2HeightMeters;
-        case 3: targetID = 3;
-          return kTarget3HeightMeters;
-        case 4: targetID = 4;
-          return kTarget4HeightMeters;
-        case 5: targetID = 5;
-          return kTarget5HeightMeters;
-        case 6: targetID = 6;
-          return kTarget6HeightMeters;
-        case 7: targetID = 7;
-          return kTarget7HeightMeters;
-        case 8: targetID = 8;
-          return kTarget8HeightMeters;
-        default: throw new Error("Invalid Target ID");
-      }
-    }
   }
 }
