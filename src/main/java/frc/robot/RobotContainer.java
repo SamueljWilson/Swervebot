@@ -22,6 +22,9 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Limelight;
 import frc.robot.commands.PickupCommand;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Limelight;
+import frc.robot.commands.JoystickTarget;
 import frc.robot.commands.TargetNote;
 
 /*
@@ -100,7 +103,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling passing it to a
    * {@link JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    new JoystickButton(m_driverController, OIConstants.kY)
+      .whileTrue(new JoystickTarget(m_robotDrive, m_limelight, m_driverController));
+  }
    
 
   /**
