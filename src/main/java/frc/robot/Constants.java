@@ -4,12 +4,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.numbers.N3;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -60,6 +63,10 @@ public final class Constants {
     public static final int kSmartCurrentLimit = 40;
     public static final double kTrackWidth = 0.431; // Distance between centers of right and left wheels on robot
     public static final double kWheelBase = 0.681; // Distance between front and back wheels on robot
+
+    public static final Vector<N3> stateStdDeviations = VecBuilder.fill(0.005, 0.005, Math.toRadians(1));
+    public static final Vector<N3> visionStdDeviations = VecBuilder.fill(0.005, 0.005, Math.toRadians(1));
+
     public static final SwerveDriveKinematics kDriveKinematics =
       new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2), //Q1
