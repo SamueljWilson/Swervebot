@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -147,5 +148,12 @@ public final class Constants {
     public static final double kMaxAccelerationMetersPerSecondSquared = 1;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+  }
+  
+  public static final class VisionConstants {
+    public static final double kTargetingTolerance = Units.degreesToRadians(5);
+    public static final double kLimelightMountDegrees = -5;
+    public static final double kLimelightLensHeightInches = 16.25;
+    public static final double kNoteHeightInches = 2.0;
   }
 }
