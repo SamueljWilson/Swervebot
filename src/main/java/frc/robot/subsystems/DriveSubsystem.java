@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.mechanisms.swerve.SimSwerveDrivetrain.SimSwerveModule;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -15,7 +14,6 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -133,15 +131,14 @@ private final SwerveModule m_frontRight = //Q4
         getPositions()
         );
     
-    ArrayList<Optional<EstimatedRobotPose>> photonRobotPoseList = m_photonCameras.getFieldRelativePoseEstimators();
-    for (int i=0; i<photonRobotPoseList.size(); i++) {
-      Optional<EstimatedRobotPose> robotPoseEstimator = photonRobotPoseList.get(i);
+    ArrayList<Optional<EstimatedRobotPose>> photonRobotPoseList = m_cameraSystem.getFieldRelativePoseEstimators();
+    photonRobotPoseList.forEach(robotPoseEstimator -> {
       if (!robotPoseEstimator.isEmpty()) {
-        String formattedString = String.format("Estimated Pose for Cam %d", i+1);
+        String formattedString = String.format("Estimated Pose for Cam %d", photonRobotPoseList.indexOf(robotPoseEstimator)+1);
         m_odometry.addVisionMeasurement(robotPoseEstimator.get().estimatedPose.toPose2d(), robotPoseEstimator.get().timestampSeconds);
         SmartDashboard.putString(formattedString, robotPoseEstimator.get().estimatedPose.getTranslation().toString() + " | Rotation: " + Math.toDegrees(robotPoseEstimator.get().estimatedPose.getRotation().getAngle()));
-      }
-    }
+      } 
+    });
 
     SmartDashboard.putString("Swerve Drive Pose Estimator", m_odometry.getEstimatedPosition().toString());
     SmartDashboard.putNumber(("Yaw"), getYaw());
