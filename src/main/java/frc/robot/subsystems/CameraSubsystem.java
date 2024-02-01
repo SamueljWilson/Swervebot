@@ -20,7 +20,6 @@ import org.photonvision.PhotonPoseEstimator;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PhotonVisionConstants;
 
@@ -91,17 +90,6 @@ public class CameraSubsystem extends SubsystemBase {
     estimatorList.add(m_photonPoseEstimatorCam1.update(m_resultCam1));
     estimatorList.add(m_photonPoseEstimatorCam2.update(m_resultCam2));
     return estimatorList;
-  }
-
-  public double getDistanceToTarget(PhotonTrackedTarget target) {
-    return (
-      PhotonUtils.calculateDistanceToTargetMeters(
-        PhotonVisionConstants.kCamera1HeightMeters,
-        PhotonVisionConstants.findTargetHeight(target.getFiducialId()),
-        PhotonVisionConstants.KCameraPitchRadians,
-        Units.degreesToRadians(target.getPitch())
-      )
-    );
   }
 
   public Pose3d getFieldRelativePose(PhotonTrackedTarget target) {
