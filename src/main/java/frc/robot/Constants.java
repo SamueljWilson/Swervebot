@@ -75,6 +75,7 @@ public final class Constants {
 
     public static final double kMaxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond;
     public static final double kMaxAccelerationMetersPerSecond = 7.5;
+    public static final double kMaxDecelerationMetersPerSecond = 15.0;
 
     public static final double kAbsoluteEncoderCPR = 4096.0;
     public static final double kWheelDiameterMeters = 0.09525;
@@ -91,7 +92,8 @@ public final class Constants {
 
     public static final TrapezoidalConstraint kVelocityProfile = new TrapezoidalConstraint(
       kMaxSpeedMetersPerSecond,
-      kMaxAccelerationMetersPerSecond
+      kMaxAccelerationMetersPerSecond,
+      kMaxDecelerationMetersPerSecond
     );
   }
 
