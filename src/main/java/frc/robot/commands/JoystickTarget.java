@@ -5,8 +5,8 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.TunableConstant;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveModuleConstants;
 import frc.robot.Constants.VisionConstants;
@@ -14,9 +14,10 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Limelight;
 
 public class JoystickTarget extends Command {
-  private DriveSubsystem m_drive;
-  private Limelight m_limelight;
-  private GenericHID m_driverController;
+  private final DriveSubsystem m_drive;
+  private final Limelight m_limelight;
+  private final GenericHID m_driverController;
+
   private ProfiledPIDController thetaController = new ProfiledPIDController(
       SwerveModuleConstants.kPTurningController,
       SwerveModuleConstants.kITurningController,
@@ -24,7 +25,13 @@ public class JoystickTarget extends Command {
       new TrapezoidProfile.Constraints(
         SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond,
         SwerveModuleConstants.kMaxAngularAccelerationRadiansPerSecondSquared));
-  
+
+  private TunableConstant maxAngularSpeed = new TunableConstant("Max Angular Speed", SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond);
+  private TunableConstant maxAngularAcceleration = new TunableConstant("Max Angular Acceleration", SwerveModuleConstants.kMaxAngularAccelerationRadiansPerSecondSquared);
+  private TunableConstant p = new TunableConstant("kP", SwerveModuleConstants.kPTurningController);
+  private TunableConstant i = new TunableConstant("kI", SwerveModuleConstants.kITurningController);
+  private TunableConstant d = new TunableConstant("kD", SwerveModuleConstants.kDTurningController);
+
   public JoystickTarget(DriveSubsystem drive, Limelight limelight, GenericHID driverController) {
     m_drive = drive;
     m_limelight = limelight;
@@ -36,11 +43,6 @@ public class JoystickTarget extends Command {
   public void initialize() {
     thetaController.reset(0);
     thetaController.setTolerance(VisionConstants.kTargetingTolerance);
-    SmartDashboard.putNumber("Max Angular Speed", SmartDashboard.getNumber("Max Angular Speed", SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond));
-    SmartDashboard.putNumber("Max Angular Acceleration", SmartDashboard.getNumber("Max Angular Acceleration", SwerveModuleConstants.kMaxAngularAccelerationRadiansPerSecondSquared));
-    SmartDashboard.putNumber("kP", SmartDashboard.getNumber("kP", SwerveModuleConstants.kPTurningController));
-    SmartDashboard.putNumber("kI", SmartDashboard.getNumber("kI", SwerveModuleConstants.kITurningController));
-    SmartDashboard.putNumber("kD", SmartDashboard.getNumber("kD", SwerveModuleConstants.kDTurningController));
   }
 
   @Override
@@ -65,21 +67,12 @@ public class JoystickTarget extends Command {
   }
 
   private void updateConstants() {
-    double maxAngularSpeed = SmartDashboard.getNumber("Max Angular Speed", SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond);
-    double maxAngularAcceleration = SmartDashboard.getNumber("Max Angular Acceleration", SwerveModuleConstants.kMaxAngularAccelerationRadiansPerSecondSquared);
-    double currentMaxAngularSpeed = thetaController.getConstraints().maxVelocity;
-    double currentMaxAngularAcceleration = thetaController.getConstraints().maxAcceleration;
-    if (currentMaxAngularSpeed != maxAngularSpeed || currentMaxAngularAcceleration != maxAngularAcceleration) {
-      System.out.println("updating constraints");
-      thetaController.setConstraints(new TrapezoidProfile.Constraints(maxAngularSpeed, maxAngularAcceleration));
+    if (maxAngularSpeed.hasChanged() || maxAngularAcceleration.hasChanged()) {
+      thetaController.setConstraints(new TrapezoidProfile.Constraints(maxAngularSpeed.get(), maxAngularAcceleration.get()));
     }
 
-    double p = SmartDashboard.getNumber("kP", SwerveModuleConstants.kPTurningController);
-    double i = SmartDashboard.getNumber("kI", SwerveModuleConstants.kITurningController);
-    double d = SmartDashboard.getNumber("kD", SwerveModuleConstants.kDTurningController);
-    if (thetaController.getP() != p || thetaController.getI() != i || thetaController.getD() != d) {
-      System.out.println("updating pid");
-      thetaController.setPID(p, i, d);
+    if (p.hasChanged() || i.hasChanged() || d.hasChanged()) {
+      thetaController.setPID(p.get(), i.get(), d.get());
     }
   }
 }
