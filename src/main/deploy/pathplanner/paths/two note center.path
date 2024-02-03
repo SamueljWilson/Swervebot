@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.8937455058073507,
-        "y": 5.56439986119409
+        "x": 2.9371044657582277,
+        "y": 6.995245539789129
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4628998272081055,
-        "y": 5.50658791458428
+        "x": 4.440215077613254,
+        "y": 7.212040339573637
       },
       "isLocked": false,
-      "linkedName": "Middle note endpoint"
+      "linkedName": "rotate again!"
     },
     {
       "anchor": {
-        "x": 1.4773528138605576,
-        "y": 5.535493887889185
+        "x": 2.9371044657582277,
+        "y": 6.30150218046915
       },
       "prevControl": {
-        "x": 2.5035148661846622,
-        "y": 5.56439986119409
+        "x": 3.6019418517710275,
+        "y": 6.76399775334762
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Shoot from middle endpoint"
+      "linkedName": "shoot"
     }
   ],
   "rotationTargets": [],
@@ -39,11 +39,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
-    "rotateFast": false
+    "rotation": -153.0,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "4 note auto",
-  "previewStartingState": null,
+  "folder": "two note left auto folder",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
   "useDefaultConstraints": false
 }

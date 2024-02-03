@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3783760900855135,
-      "y": 5.556120001128891
+      "x": 0.855874387805114,
+      "y": 6.937433593177046
     },
     "rotation": 180.0
   },
@@ -14,30 +14,36 @@
         {
           "type": "path",
           "data": {
-            "pathName": "get to first note"
+            "pathName": "shoot"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.5
+            "name": "ShooterCommand"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "go back to speaker from first note"
+            "pathName": "get and shoot first note"
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.5
+            "pathName": "two note center"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShooterCommand"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "two note auto folder",
   "choreoAuto": false
 }

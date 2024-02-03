@@ -1,16 +1,16 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.4484468405556532,
-      "y": 5.535493887889185
-    },
-    "rotation": 180.0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "shoot"
+          }
+        },
         {
           "type": "named",
           "data": {
@@ -20,13 +20,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Goto left note"
+            "pathName": "get and shoot first note"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Shoot from left"
+            "pathName": "two note center"
           }
         },
         {
@@ -44,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Shoot from middle"
+            "pathName": "rotate 180 degrees"
           }
         },
         {
@@ -57,12 +57,6 @@
           "type": "path",
           "data": {
             "pathName": "Right note"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Goto speaker"
           }
         },
         {

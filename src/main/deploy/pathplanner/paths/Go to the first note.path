@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8686726496887707,
-        "y": 5.565873600441298
+        "x": 3.587488865118576,
+        "y": 5.651117781108802
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9847845062416432,
-        "y": 5.53650223579517
+        "x": 4.512480010875516,
+        "y": 5.723382714371063
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "shooting position"
     },
     {
       "anchor": {
-        "x": 2.9804634257155844,
+        "x": 2.908198492453323,
         "y": 5.535493887889185
       },
       "prevControl": {
-        "x": 2.921720696423329,
-        "y": 5.506122523243056
+        "x": 2.749215639276349,
+        "y": 5.5210409012367325
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,11 +45,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": 0.0,
     "rotateFast": true
   },
   "reversed": false,
   "folder": "3 note stage auto",
-  "previewStartingState": null,
+  "previewStartingState": {
+    "rotation": 0.0,
+    "velocity": 0
+  },
   "useDefaultConstraints": false
 }

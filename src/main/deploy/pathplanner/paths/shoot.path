@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.371427447080245,
-        "y": 4.090195222643967
+        "x": 0.855874387805114,
+        "y": 6.937433593177046
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.868316835225219,
-        "y": 3.2519219968017405
+        "x": 1.7953185202145054,
+        "y": 6.402673087036315
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.8937455058008714,
-        "y": 5.578852847846542
+        "x": 2.9371044657582277,
+        "y": 6.30150218046915
       },
       "prevControl": {
-        "x": 1.9759808533701584,
-        "y": 6.1208398473134995
+        "x": 1.2605580140737749,
+        "y": 6.50384399360348
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "shoot"
     }
   ],
   "rotationTargets": [],
@@ -39,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
-    "rotateFast": true
+    "rotation": -153.0,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "3 note stage auto",
+  "folder": "two note left auto folder",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

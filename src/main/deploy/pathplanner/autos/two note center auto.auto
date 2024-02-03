@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "center shot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShooterCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "rotate the prequel"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "rotate around the circumfrence"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShooterCommand"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "two note auto folder",
+  "choreoAuto": false
+}

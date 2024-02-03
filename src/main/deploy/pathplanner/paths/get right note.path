@@ -3,32 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.371427447080245,
-        "y": 4.090195222643967
+        "x": 3.6597537983808364,
+        "y": 4.81
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.868316835225219,
-        "y": 3.2519219968017405
+        "x": 5.76988984963903,
+        "y": 0.9538971190568607
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "start of right"
     },
     {
       "anchor": {
-        "x": 2.8937455058008714,
-        "y": 5.578852847846542
+        "x": 2.7492156392765246,
+        "y": 4.350348982383123
       },
       "prevControl": {
-        "x": 1.9759808533701584,
-        "y": 6.1208398473134995
+        "x": -0.49140154618319865,
+        "y": 3.7866825029325044
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "get right note"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 154.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -39,11 +45,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
-    "rotateFast": true
+    "rotation": 151.0,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "3 note stage auto",
+  "folder": "two note right auto ",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

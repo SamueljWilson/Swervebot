@@ -3,38 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0871221742421069,
-        "y": 6.850715673264221
+        "x": 0.9859512676771837,
+        "y": 4.104648209296419
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0410192933039504,
-        "y": 6.128066340641611
+        "x": 2.0410192933061926,
+        "y": 4.422613915650367
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.9081984924510813,
-        "y": 5.5643998611959775
+        "x": 3.6597537983808364,
+        "y": 4.81
       },
       "prevControl": {
-        "x": 2.3923762284129575,
-        "y": 5.957976927692981
+        "x": 1.9543013733914794,
+        "y": 4.853358959957356
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "start of right"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1,
-      "rotationDegrees": 160.0,
-      "rotateFast": true
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -49,10 +43,10 @@
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "two note auto folder",
+  "folder": "two note right auto ",
   "previewStartingState": {
-    "rotation": -118.47420361000079,
+    "rotation": 180.0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
