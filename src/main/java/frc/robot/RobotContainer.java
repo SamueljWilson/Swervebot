@@ -29,7 +29,6 @@ import frc.robot.commands.TargetNote;
  */
 public class RobotContainer {
   // The robot's subsystems
-  public final DriveSubsystem m_robotDrive = new DriveSubsystem();
   public final Limelight m_limelight = new Limelight();
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
   private final CameraSubsystem m_cameraSystem = new CameraSubsystem(PhotonVisionConstants.kCameraName1, PhotonVisionConstants.kCameraName2);
