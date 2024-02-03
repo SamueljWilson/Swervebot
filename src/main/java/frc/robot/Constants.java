@@ -66,16 +66,18 @@ public final class Constants {
 
     public static final boolean kGyroReversed = false;
 
+    // Note that SwerveModuleConstants.kMaxSpeedMedersPerSecond may saturate if this is set too high, in combination with
+    // SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond.
     public static final double kMaxSpeedMetersPerSecond = 5.0;
   }
 
   public static final class SwerveModuleConstants {
-    public static final double kMaxAngularSpeedRadiansPerSecond = 2 * Math.PI;
-    public static final double kMaxAngularAccelerationRadiansPerSecondSquared = 4 * Math.PI;
+    public static final double kMaxAngularSpeedRadiansPerSecond = 3.0 * Math.PI;
+    public static final double kMaxAngularAccelerationRadiansPerSecondSquared = 1.5 * Math.PI;
 
-    public static final double kMaxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond;
-    public static final double kMaxAccelerationMetersPerSecond = 7.5;
-    public static final double kMaxDecelerationMetersPerSecond = 15.0;
+    public static final double kMaxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond * 2.0;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 7.5;
+    public static final double kMaxDecelerationMetersPerSecondSquared = 15.0;
 
     public static final double kAbsoluteEncoderCPR = 4096.0;
     public static final double kWheelDiameterMeters = 0.09525;
@@ -90,10 +92,11 @@ public final class Constants {
     public static final double kIDriveController = 0.0;
     public static final double kDDriveController = 0.0;
 
+
     public static final TrapezoidalConstraint kVelocityProfile = new TrapezoidalConstraint(
       kMaxSpeedMetersPerSecond,
-      kMaxAccelerationMetersPerSecond,
-      kMaxDecelerationMetersPerSecond
+      kMaxAccelerationMetersPerSecondSquared,
+      kMaxDecelerationMetersPerSecondSquared
     );
   }
 
