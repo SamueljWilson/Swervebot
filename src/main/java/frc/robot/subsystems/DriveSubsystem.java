@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.mechanisms.swerve.SimSwerveDrivetrain.SimSwerveModule;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -19,7 +18,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
@@ -118,7 +116,6 @@ private final SwerveModule m_frontRight = //Q4
         getRotation2d(),
         getPositions()
         );
-        SmartDashboard.putNumber(("Yaw"), getYaw());
   }
 
   /**
@@ -181,13 +178,12 @@ private final SwerveModule m_frontRight = //Q4
    */
   @SuppressWarnings("ParameterName")
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    ChassisSpeeds chassisSpeeds = fieldRelative
+      ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getRotation2d())
+      : new ChassisSpeeds(xSpeed, ySpeed, rot);
     var swerveModuleStates =
         DriveConstants.kDriveKinematics.toSwerveModuleStates(
-          ChassisSpeeds.discretize(
-            fieldRelative
-              ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getRotation2d())
-              : new ChassisSpeeds(xSpeed, ySpeed, rot)
-            , Constants.kDt));
+          ChassisSpeeds.discretize(chassisSpeeds, Constants.kDt));
 
     setModuleStates(swerveModuleStates);
   }
@@ -206,7 +202,7 @@ private final SwerveModule m_frontRight = //Q4
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
+        desiredStates, Constants.SwerveModuleConstants.kMaxSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(desiredStates[0]); //Q1
     m_rearLeft.setDesiredState(desiredStates[1]); //Q2
     m_rearRight.setDesiredState(desiredStates[2]); //Q3
