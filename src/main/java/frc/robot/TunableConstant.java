@@ -10,7 +10,7 @@ public class TunableConstant {
   public TunableConstant(String key, double defaultValue) {
     this.key = key;
     this.defaultValue = defaultValue;
-    SmartDashboard.putNumber(key, SmartDashboard.getNumber(key, defaultValue));
+    SmartDashboard.putNumber(key, defaultValue);
   }
 
   public double get() {

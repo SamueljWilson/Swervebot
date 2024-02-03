@@ -35,7 +35,7 @@ public class TargetNote extends Command {
   @Override
   public void execute() {
     double x = m_limelight.getX();
-    double xVelocity = thetaController.calculate(Units.degreesToRadians(x));
+    double xVelocity = thetaController.calculate(Units.degreesToRadians(x)) * VisionConstants.kTargetingTolerance;
     m_drive.drive(0, 0, xVelocity, false);
   }
 
