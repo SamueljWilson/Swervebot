@@ -6,6 +6,12 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "Shooting position"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "ShooterCommand"
@@ -20,7 +26,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Go back to the speaker after the first note"
+            "pathName": "rotate part two"
           }
         },
         {
@@ -45,6 +51,12 @@
           "type": "named",
           "data": {
             "name": "ShooterCommand"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 10.0
           }
         }
       ]

@@ -5,10 +5,13 @@
   "pathFolders": [
     "3 note stage auto",
     "4 note auto",
-    "two note auto folder"
+    "5 note auto",
+    "two note right auto ",
+    "Two note center auto",
+    "two note left auto folder"
   ],
   "autoFolders": [
-    "New Folder"
+    "two note auto folder"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

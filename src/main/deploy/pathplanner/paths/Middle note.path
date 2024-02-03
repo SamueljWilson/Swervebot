@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.908198492453323,
-        "y": 5.5210409012367325
+        "x": 2.864839532495967,
+        "y": 6.966339566483053
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9226514790992955,
-        "y": 4.494878848912628
+        "x": 5.480830116589811,
+        "y": 7.486647085970229
       },
       "isLocked": false,
       "linkedName": "Goto left note endpoint"
     },
     {
       "anchor": {
-        "x": 2.8937455058073507,
-        "y": 5.56439986119409
+        "x": 2.864839532495967,
+        "y": 5.549946874541637
       },
       "prevControl": {
-        "x": 2.908198492453323,
-        "y": 6.287049193816698
+        "x": 5.003881557057298,
+        "y": 6.258143220512896
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,11 +39,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": 30.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "4 note auto",
-  "previewStartingState": null,
+  "previewStartingState": {
+    "rotation": 30.0,
+    "velocity": 0
+  },
   "useDefaultConstraints": false
 }

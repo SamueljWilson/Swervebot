@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.49180580051301,
+        "x": 2.82148057253861,
         "y": 5.535493887889185
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9779813385623877,
+        "x": 4.307656110587988,
         "y": 4.984806655848793
       },
       "isLocked": false,
-      "linkedName": "Speaker first note"
+      "linkedName": "rotate part two"
     },
     {
       "anchor": {
-        "x": 8.284709527165534,
-        "y": 4.104648209296419
+        "x": 8.270256540513081,
+        "y": 4.119101195948871
       },
       "prevControl": {
-        "x": 6.654411553622069,
-        "y": 4.750152120835711
-      },
-      "nextControl": {
-        "x": 9.560453909640215,
-        "y": 3.5995270582090475
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.49180580051301,
-        "y": 5.535493887889185
-      },
-      "prevControl": {
-        "x": -0.7195011573121723,
-        "y": 5.752288687675968
+        "x": 6.001137636078089,
+        "y": 3.7433235429851144
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1,
+      "waypointRelativePos": 0.5,
       "rotationDegrees": 180.0,
       "rotateFast": true
     }
