@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -16,7 +18,8 @@ import frc.robot.subsystems.Limelight;
 public class JoystickTarget extends Command {
   private final DriveSubsystem m_drive;
   private final Limelight m_limelight;
-  private final GenericHID m_driverController;
+  private final Supplier<Double> m_xVelocitySupplier;
+  private final Supplier<Double> m_yVelocitySupplier;
 
   private ProfiledPIDController thetaController = new ProfiledPIDController(
       SwerveModuleConstants.kPTurningController,
@@ -26,16 +29,18 @@ public class JoystickTarget extends Command {
         SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond,
         SwerveModuleConstants.kMaxAngularAccelerationRadiansPerSecondSquared));
 
+  private TunableConstant targetVelocityCoefficient = new TunableConstant("kTargetCoefficient", VisionConstants.kTargetCoefficient);
   private TunableConstant maxAngularSpeed = new TunableConstant("Max Angular Speed", SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond);
   private TunableConstant maxAngularAcceleration = new TunableConstant("Max Angular Acceleration", SwerveModuleConstants.kMaxAngularAccelerationRadiansPerSecondSquared);
   private TunableConstant p = new TunableConstant("kP", SwerveModuleConstants.kPTurningController);
   private TunableConstant i = new TunableConstant("kI", SwerveModuleConstants.kITurningController);
   private TunableConstant d = new TunableConstant("kD", SwerveModuleConstants.kDTurningController);
 
-  public JoystickTarget(DriveSubsystem drive, Limelight limelight, GenericHID driverController) {
+  public JoystickTarget(DriveSubsystem drive, Limelight limelight, Supplier<Double> xVelocitySupplier, Supplier<Double> yVelocitySupplier) {
     m_drive = drive;
     m_limelight = limelight;
-    m_driverController = driverController;
+    m_xVelocitySupplier = xVelocitySupplier;
+    m_yVelocitySupplier = yVelocitySupplier;
     addRequirements(drive, limelight);
   }
 
@@ -49,21 +54,13 @@ public class JoystickTarget extends Command {
   public void execute() {
     updateConstants();
     double x = m_limelight.getX();
-    double xVelocity = thetaController.calculate(Units.degreesToRadians(x));
-    double reverseFactor = -1.0;
+    double thetaVelocity = thetaController.calculate(Units.degreesToRadians(x)) * targetVelocityCoefficient.get();
     m_drive.drive(
-      reverseFactor * joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyYAxis)) * OIConstants.kMaxMetersPerSec,
-      reverseFactor * joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyXAxis)) * OIConstants.kMaxMetersPerSec,
-      -joystickTransform(m_driverController.getRawAxis(OIConstants.kRightJoyXAxis)) + xVelocity,
+      m_xVelocitySupplier.get(),
+      m_yVelocitySupplier.get(),
+      thetaVelocity,
       true
     );
-  }
-
-  private static double joystickTransform(double value) {
-    double speedCoef = 1;
-    double postDeadbandValue = MathUtil.applyDeadband(value, OIConstants.kJoystickDeadband);
-    double postDeadbandValueSquared = postDeadbandValue * Math.abs(postDeadbandValue);
-    return postDeadbandValueSquared * speedCoef;
   }
 
   private void updateConstants() {
