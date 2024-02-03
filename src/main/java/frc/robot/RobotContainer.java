@@ -43,6 +43,9 @@ public class RobotContainer {
   // The driver's controller
   GenericHID m_driverController = new GenericHID(OIConstants.kDriverControllerPort);
 
+  // double reverseFactor = getTeam() == Auto.Team.BLUE ? -1 : 1;
+  double reverseFactor = -1.0;
+
   private enum DriveSpeed {
     FAST,
     SLOW
@@ -79,8 +82,6 @@ public class RobotContainer {
       // Turning is controlled by the X axis of the right stick.
         new RunCommand(
           () -> {
-            // double reverseFactor = getTeam() == Auto.Team.BLUE ? -1 : 1;
-            double reverseFactor = -1.0;
             m_robotDrive.drive(
               reverseFactor*joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyYAxis))*OIConstants.kMaxMetersPerSec,
               reverseFactor*joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyXAxis))*OIConstants.kMaxMetersPerSec,
@@ -105,7 +106,12 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(m_driverController, OIConstants.kY)
-      .whileTrue(new JoystickTarget(m_robotDrive, m_limelight, m_driverController));
+      .whileTrue(new JoystickTarget(
+        m_robotDrive,
+        m_limelight,
+        () -> reverseFactor * joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyYAxis)) * OIConstants.kMaxMetersPerSec,
+        () -> reverseFactor * joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyXAxis)) * OIConstants.kMaxMetersPerSec
+      ));
   }
    
 
