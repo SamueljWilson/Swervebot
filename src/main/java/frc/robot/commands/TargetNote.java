@@ -8,10 +8,12 @@ import frc.robot.Constants.SwerveModuleConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Limelight;
+import edu.wpi.first.wpilibj.Relay;
 
 public class TargetNote extends Command {
   private DriveSubsystem m_drive;
   private Limelight m_limelight;
+  private Relay m_relay = new Relay(VisionConstants.kRelayPort);
   private ProfiledPIDController thetaController = new ProfiledPIDController(
       SwerveModuleConstants.kPTurningController,
       SwerveModuleConstants.kITurningController,
@@ -30,6 +32,7 @@ public class TargetNote extends Command {
   public void initialize() {
     thetaController.reset(0);
     thetaController.setTolerance(VisionConstants.kTargetingTolerance);
+    m_relay.set(Relay.Value.kOn);
   }
 
   @Override
@@ -42,5 +45,10 @@ public class TargetNote extends Command {
   @Override
   public boolean isFinished() {
     return thetaController.atGoal();
+  }
+
+  @Override
+  public void end(boolean isInterrupted) {
+    m_relay.set(Relay.Value.kOff);
   }
 }
