@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 1.2171990541164184,
+      "y": 5.4921349279318274
+    },
+    "rotation": 180.0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -8,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "center shot"
+            "pathName": "B shot"
           }
         },
         {
@@ -20,13 +26,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "rotate the prequel"
+            "pathName": "rotate 180"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "rotate around the circumfrence"
+            "pathName": "rotate around the B note"
           }
         },
         {

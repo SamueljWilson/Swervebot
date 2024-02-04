@@ -3,34 +3,34 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.82148057253861,
-        "y": 5.535493887889185
+        "x": 3.587488865118576,
+        "y": 5.651117781108802
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.307656110587988,
-        "y": 4.984806655848793
+        "x": 1.983207346696384,
+        "y": 7.8768777255864375
       },
       "isLocked": false,
-      "linkedName": "rotate part two"
+      "linkedName": "shooting position"
     },
     {
       "anchor": {
-        "x": 8.270256540513081,
-        "y": 4.119101195948871
+        "x": 3.587488865118576,
+        "y": 5.651117781108802
       },
       "prevControl": {
-        "x": 6.001137636078089,
-        "y": 3.7433235429851144
+        "x": 1.332822947336036,
+        "y": 4.942921435138645
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "First Endpoint"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0,
       "rotationDegrees": 180.0,
       "rotateFast": true
     }
@@ -46,10 +46,13 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": 180.0,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "3 note stage auto",
-  "previewStartingState": null,
+  "folder": "BF three note",
+  "previewStartingState": {
+    "rotation": 180.0,
+    "velocity": 0
+  },
   "useDefaultConstraints": false
 }

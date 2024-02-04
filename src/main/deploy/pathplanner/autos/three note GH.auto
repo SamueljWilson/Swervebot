@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 0.9859512676771837,
+      "y": 4.104648209296419
+    },
+    "rotation": 160.0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -8,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "shoot"
+            "pathName": "start of C auto"
           }
         },
         {
@@ -20,13 +26,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "get and shoot first note"
+            "pathName": "get G note"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "two note center"
+            "pathName": "shoot G note"
           }
         },
         {
@@ -38,25 +44,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle note"
+            "pathName": "get H note"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "rotate 180 degrees"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShooterCommand"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right note"
+            "pathName": "shoot H note"
           }
         },
         {
@@ -68,6 +62,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "three note auto folder",
   "choreoAuto": false
 }

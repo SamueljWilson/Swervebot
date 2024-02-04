@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.922651479105775,
-        "y": 5.535493887889185
+        "x": 8.255570858190017,
+        "y": 0.7783411631223989
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.922651479105775,
-        "y": 5.035493887889185
+        "x": 7.903114482436479,
+        "y": 2.2175380307826815
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.82148057253861,
-        "y": 5.535493887889185
+        "x": 3.6597537983808364,
+        "y": 4.81
       },
       "prevControl": {
-        "x": 3.6019418517710275,
-        "y": 6.402673087036315
+        "x": 4.584150277423991,
+        "y": 6.153300893363863
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "rotate part two"
+      "linkedName": "start of right"
     }
   ],
   "rotationTargets": [],
@@ -39,14 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": 160.0,
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "3 note stage auto",
-  "previewStartingState": {
-    "rotation": 180.0,
-    "velocity": 0
-  },
+  "folder": "GH three note ",
+  "previewStartingState": null,
   "useDefaultConstraints": false
 }

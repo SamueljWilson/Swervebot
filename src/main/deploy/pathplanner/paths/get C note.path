@@ -3,32 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.864839532495967,
-        "y": 5.549946874541637
+        "x": 3.6597537983808364,
+        "y": 4.81
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.864839532495967,
-        "y": 5.049946874541637
+        "x": 5.76988984963903,
+        "y": 0.9538971190568607
       },
       "isLocked": false,
-      "linkedName": "Middle note endpoint"
+      "linkedName": "start of right"
     },
     {
       "anchor": {
-        "x": 2.8937455058073507,
-        "y": 5.56439986119409
+        "x": 2.7492156392765246,
+        "y": 4.350348982383123
       },
       "prevControl": {
-        "x": 2.6437455058073507,
-        "y": 7.0643998611940875
+        "x": -0.49140154618319865,
+        "y": 3.7866825029325044
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "get right note"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 154.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -39,11 +45,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": 151.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "4 note auto",
+  "folder": "C two note",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0
