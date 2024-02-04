@@ -105,7 +105,7 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, OIConstants.kY)
+    new JoystickButton(m_driverController, OIConstants.kJoystickTargetNoteButton)
       .whileTrue(new JoystickTargetNote(
         m_robotDrive,
         m_limelight,
