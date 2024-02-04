@@ -147,6 +147,8 @@ public final class Constants {
     public static final int kArmAdjustUpButton = kRightBumper;
     public static final int kArmAdjustDownButton = kLeftBumper;
 
+    public static final int kJoystickTargetNoteButton = kY;
+
     public static final double kDebounceSeconds = 0.01;
 
     public static final double kJoystickDeadband = 0.05;
