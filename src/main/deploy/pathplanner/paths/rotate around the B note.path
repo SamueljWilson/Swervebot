@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.855874387805114,
-        "y": 6.937433593177046
+        "x": 2.93935385724081,
+        "y": 5.580559282764361
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7953185202145054,
-        "y": 6.402673087036315
+        "x": 2.954039539563874,
+        "y": 5.565873600441298
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "rotate the prequel"
     },
     {
       "anchor": {
-        "x": 2.9371044657582277,
-        "y": 6.30150218046915
+        "x": 3.835180478947721,
+        "y": 5.580559282764361
       },
       "prevControl": {
-        "x": 1.2605580140737749,
-        "y": 6.50384399360348
+        "x": 3.879237525916913,
+        "y": 5.609930647410491
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "shoot"
+      "linkedName": "center shot"
     }
   ],
   "rotationTargets": [],
@@ -39,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -153.0,
-    "rotateFast": false
+    "rotation": 180.0,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "two note left auto folder",
+  "folder": "B two note",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

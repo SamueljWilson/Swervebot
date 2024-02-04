@@ -3,38 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.587488865118576,
+        "x": 1.5351647604703664,
         "y": 5.651117781108802
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.512480010875516,
-        "y": 5.723382714371063
+        "x": 2.1132842265684535,
+        "y": 6.63392087347555
       },
       "isLocked": false,
-      "linkedName": "shooting position"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.908198492453323,
-        "y": 5.535493887889185
+        "x": 3.587488865118576,
+        "y": 5.651117781108802
       },
       "prevControl": {
-        "x": 2.749215639276349,
-        "y": 5.5210409012367325
+        "x": 2.835933559191063,
+        "y": 6.9374335931770466
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "First Endpoint"
+      "linkedName": "shooting position"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0,
-      "rotationDegrees": 180.0,
-      "rotateFast": true
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -45,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
-    "rotateFast": true
+    "rotation": 180.0,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "3 note stage auto",
+  "folder": "BF three note",
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

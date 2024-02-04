@@ -3,14 +3,16 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "3 note stage auto",
-    "4 note auto",
-    "5 note auto",
-    "two note right auto ",
-    "Two note center auto",
-    "two note left auto folder"
+    "A two note",
+    "AB three note ",
+    "ABC four note",
+    "B two note",
+    "BF three note",
+    "C two note",
+    "GH three note "
   ],
   "autoFolders": [
+    "three note auto folder",
     "two note auto folder"
   ],
   "defaultMaxVel": 3.0,

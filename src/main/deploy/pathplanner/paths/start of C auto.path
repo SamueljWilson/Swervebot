@@ -3,38 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.8964894267816708,
-        "y": 5.4921349279318274
+        "x": 0.9859512676771837,
+        "y": 4.104648209296419
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4167969462713383,
-        "y": 6.5038439936021915
+        "x": 2.0410192933061926,
+        "y": 4.422613915650367
       },
       "isLocked": false,
-      "linkedName": "Shoot first ring"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.299162513819375,
-        "y": 7.486647085968939
+        "x": 3.6597537983808364,
+        "y": 4.81
       },
       "prevControl": {
-        "x": 8.342521473776731,
-        "y": 8.715150951427376
+        "x": 1.9543013733914794,
+        "y": 4.853358959957356
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Goto outer ring"
+      "linkedName": "start of right"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0,
-      "rotationDegrees": 180.0,
-      "rotateFast": true
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -45,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": 160.0,
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "5 note auto",
+  "folder": "C two note",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

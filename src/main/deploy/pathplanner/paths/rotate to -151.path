@@ -3,38 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.95155745241068,
-        "y": 5.535493887889185
+        "x": 2.9371044657582277,
+        "y": 6.3882201003838635
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9253957715277608,
-        "y": 5.4921261380496365
+        "x": 2.966475830404356,
+        "y": 6.344163053414672
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "shoot"
     },
     {
       "anchor": {
-        "x": 1.49180580051301,
-        "y": 5.535493887889185
+        "x": 2.983410904210002,
+        "y": 6.314843398917567
       },
       "prevControl": {
-        "x": 2.908198492453323,
-        "y": 5.50658791458428
+        "x": 2.9980965865330664,
+        "y": 6.300157716594503
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Speaker first note"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0,
-      "rotationDegrees": 180.0,
-      "rotateFast": true
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -45,11 +39,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
-    "rotateFast": false
+    "rotation": -151.0,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "3 note stage auto",
-  "previewStartingState": null,
+  "folder": "A two note",
+  "previewStartingState": {
+    "rotation": 180.0,
+    "velocity": 0
+  },
   "useDefaultConstraints": false
 }

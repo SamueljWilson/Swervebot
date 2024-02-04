@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.855874387805114,
-      "y": 6.937433593177046
+      "x": 1.2358147077653734,
+      "y": 5.651117781108802
     },
     "rotation": 180.0
   },
@@ -14,13 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "A shooting pos"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "rotate to -151"
+            "pathName": "B Shooting position"
           }
         },
         {
@@ -32,24 +26,42 @@
         {
           "type": "path",
           "data": {
-            "pathName": "get A note"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "return to A shooting pos"
+            "pathName": "Go to the B note"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "ShooterCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Go to the F note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Goto B shooting pos after F note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShooterCommand"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 10.0
           }
         }
       ]
     }
   },
-  "folder": "two note auto folder",
+  "folder": "three note auto folder",
   "choreoAuto": false
 }

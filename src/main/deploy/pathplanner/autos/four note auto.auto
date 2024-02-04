@@ -46,10 +46,34 @@
           "data": {
             "name": "ShooterCommand"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "collect B note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShooterCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "goto C note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShooterCommand"
+          }
         }
       ]
     }
   },
-  "folder": "two note auto folder",
+  "folder": null,
   "choreoAuto": false
 }
