@@ -24,7 +24,7 @@ import frc.robot.commands.PickupCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Limelight;
-import frc.robot.commands.JoystickTarget;
+import frc.robot.commands.JoystickTargetNote;
 import frc.robot.commands.TargetNote;
 
 /*
@@ -106,7 +106,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(m_driverController, OIConstants.kY)
-      .whileTrue(new JoystickTarget(
+      .whileTrue(new JoystickTargetNote(
         m_robotDrive,
         m_limelight,
         () -> reverseFactor * joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyYAxis)) * OIConstants.kMaxMetersPerSec,
