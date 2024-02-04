@@ -11,7 +11,7 @@ import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Limelight;
 
-public class JoystickTarget extends Command {
+public class JoystickTargetNote extends Command {
   private final DriveSubsystem m_drive;
   private final Limelight m_limelight;
   private final Supplier<Double> m_xVelocitySupplier;
@@ -32,7 +32,7 @@ public class JoystickTarget extends Command {
   private TunableConstant i = new TunableConstant("kI", SwerveModuleConstants.kITurningController);
   private TunableConstant d = new TunableConstant("kD", SwerveModuleConstants.kDTurningController);
 
-  public JoystickTarget(DriveSubsystem drive, Limelight limelight, Supplier<Double> xVelocitySupplier, Supplier<Double> yVelocitySupplier) {
+  public JoystickTargetNote(DriveSubsystem drive, Limelight limelight, Supplier<Double> xVelocitySupplier, Supplier<Double> yVelocitySupplier) {
     m_drive = drive;
     m_limelight = limelight;
     m_xVelocitySupplier = xVelocitySupplier;
