@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.TunableConstant;
 import frc.robot.Constants.SwerveModuleConstants;
@@ -12,6 +13,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Limelight;
 
 public class JoystickTargetNote extends Command {
+  private Relay m_relay = new Relay(VisionConstants.kRelayPort);
   private final DriveSubsystem m_drive;
   private final Limelight m_limelight;
   private final Supplier<Double> m_xVelocitySupplier;
@@ -44,6 +46,7 @@ public class JoystickTargetNote extends Command {
   public void initialize() {
     thetaController.reset(0);
     thetaController.setTolerance(VisionConstants.kTargetingTolerance);
+    m_relay.set(Relay.Value.kOn);
   }
 
   @Override
@@ -67,5 +70,10 @@ public class JoystickTargetNote extends Command {
     if (p.hasChanged() || i.hasChanged() || d.hasChanged()) {
       thetaController.setPID(p.get(), i.get(), d.get());
     }
+  }
+
+  @Override
+  public void end(boolean isInterrupted) {
+    m_relay.set(Relay.Value.kOff);
   }
 }
