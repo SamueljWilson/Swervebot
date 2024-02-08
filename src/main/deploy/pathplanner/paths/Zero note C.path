@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.371427447080245,
-        "y": 4.090195222643967
+        "x": 0.8414214011526617,
+        "y": 2.84723837053308
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.868316835225219,
-        "y": 3.2519219968017405
+        "x": 2.0554722799586447,
+        "y": 2.832785383880628
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.835180478947721,
-        "y": 5.580559282764361
+        "x": 3.457411985246506,
+        "y": 2.85
       },
       "prevControl": {
-        "x": 2.917415826517008,
-        "y": 6.122546282231319
+        "x": 2.1277372132209056,
+        "y": 2.818332397228175
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "center shot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -40,10 +40,10 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": 180.0,
-    "rotateFast": true
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "BF three note",
+  "folder": null,
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0
