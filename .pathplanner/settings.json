@@ -12,8 +12,10 @@
     "GH three note "
   ],
   "autoFolders": [
+    "two note auto folder",
     "three note auto folder",
-    "two note auto folder"
+    "Zero note",
+    "one note folder"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
