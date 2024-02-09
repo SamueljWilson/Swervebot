@@ -8,6 +8,11 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -16,14 +21,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.Constants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
 
 public class SwerveModule {
   private final CANSparkMax m_driveMotor;
@@ -98,13 +96,13 @@ public class SwerveModule {
     m_pidController.setD(m_kD, 0);
     m_pidController.setFF(0);
     
-    m_driveMotor.setSmartCurrentLimit(DriveConstants.kSmartCurrentLimit);
+    m_driveMotor.setSmartCurrentLimit(SwerveModuleConstants.kDriveMotorCurrentLimit);
 
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
     m_turningMotor.restoreFactoryDefaults();
     m_turningMotor.setClosedLoopRampRate(SwerveModuleConstants.kTurningMotorRampRate);
     m_turningMotor.setInverted(turningMotorReversed);
-    m_turningMotor.setSmartCurrentLimit(DriveConstants.kSmartCurrentLimit);
+    m_turningMotor.setSmartCurrentLimit(SwerveModuleConstants.kTurningMotorCurrentLimit);
 
     m_turningEncoder = new CANcoder(turningEncoderChannel);
     var turningEncoderConfigurator = m_turningEncoder.getConfigurator();
