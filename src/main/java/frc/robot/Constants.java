@@ -75,6 +75,10 @@ public final class Constants {
 
     public static final boolean kGyroReversed = false;
 
+    // If the aggregate velocity of the swerve modules is beneath this threshold, the robot is considered to be at rest,
+    // in which case housekeeping such as re-synchronizing the turning encoders may take place.
+    public static final double kAggregateSpeedThresholdMetersPerSecond = 0.01;
+
     // Note that SwerveModuleConstants.kMaxSpeedMedersPerSecond may saturate if this is set too high, in combination with
     // SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond.
     public static final double kMaxSpeedMetersPerSecond = 5.0;
@@ -92,6 +96,25 @@ public final class Constants {
     public static final double kWheelDiameterMeters = 0.09525;
 
     public static final double kDriveGearRatio = 6.75;
+    public static final double kTurningGearRatio = 150.0 / 7.0;
+
+    // The native position units are motor rotations, but we want meters.
+    public static final double kDrivePositionConversionFactor =
+      (SwerveModuleConstants.kWheelDiameterMeters * Math.PI)
+      / SwerveModuleConstants.kDriveGearRatio;
+    // The native velocity units are motor rotations [aka revolutions] per minute (RPM),
+    // but we want meters per second.
+    public static final double kDriveVelocityConversionFactor =
+      kDrivePositionConversionFactor
+      / 60.0 /* s */;
+
+    // The native position units are motor rotations, but we want radians.
+    public static final double kTurningPositionConversionFactor =
+      Units.rotationsToRadians(1.0 / SwerveModuleConstants.kTurningGearRatio);
+    // The native velocity units are motor rotations [aka revolutions] per minute (RPM), but we want radians per second.
+    public static final double kTurningVelocityConversionFactor =
+      kTurningPositionConversionFactor
+      / 60.0 /* s */;
 
     public static final PID kDrivePID = new PID(0.5, 0.0, 0.0);
     public static final PID kTurningPID = new PID(0.5, 0.0, 0.0);
@@ -107,6 +130,8 @@ public final class Constants {
       kMaxAccelerationMetersPerSecondSquared,
       kMaxDecelerationMetersPerSecondSquared
     );
+
+    public static final long kValueCacheTtlMicroseconds = 15;
   }
 
   public static final class OIConstants {

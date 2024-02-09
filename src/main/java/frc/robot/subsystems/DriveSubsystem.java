@@ -133,11 +133,19 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    // Update turning encoder offsets if the robot is stationary.
+    double aggregateSpeedMetersPerSecond = 0.0;
+    for (SwerveModuleState moduleState : getModuleStates()) {
+      aggregateSpeedMetersPerSecond += moduleState.speedMetersPerSecond;
+    }
+    if (aggregateSpeedMetersPerSecond < DriveConstants.kAggregateSpeedThresholdMetersPerSecond) {
+      for (SwerveModule module : m_modules) {
+        module.updateTurningEncoderOffset();
+      }
+    }
+
     // Update the odometry in the periodic block
-    m_odometry.update(
-        getRotation2d(),
-        getPositions()
-        );
+    m_odometry.update(getRotation2d(), getPositions());
     
     ArrayList<Optional<EstimatedRobotPose>> photonRobotPoseList = m_cameraSystem.getFieldRelativePoseEstimators();
     photonRobotPoseList.forEach(robotPoseEstimator -> {
@@ -249,14 +257,6 @@ public class DriveSubsystem extends SubsystemBase {
       .map(module -> module.getState())
       .toArray(size -> new SwerveModuleState[size]);
     return states;
-  }
-
-  /** Resets the drive encoders to currently read a position of 0. */
-  public void resetEncoders() {
-    m_frontLeft.resetEncoders(); //Q1
-    m_rearLeft.resetEncoders(); //Q2
-    m_rearRight.resetEncoders(); //Q3
-    m_frontRight.resetEncoders(); //Q4
   }
 
   /** Zeroes the heading of the robot. */
