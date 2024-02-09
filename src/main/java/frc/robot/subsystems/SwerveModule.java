@@ -107,7 +107,9 @@ public class SwerveModule {
     m_turningEncoder = new CANcoder(turningEncoderChannel);
     var turningEncoderConfigurator = m_turningEncoder.getConfigurator();
     var encoderConfig = new CANcoderConfiguration();
-    encoderConfig.MagnetSensor.SensorDirection = turningEncoderReversed ? SensorDirectionValue.Clockwise_Positive : SensorDirectionValue.CounterClockwise_Positive;
+    encoderConfig.MagnetSensor.SensorDirection = turningEncoderReversed
+      ? SensorDirectionValue.Clockwise_Positive
+      : SensorDirectionValue.CounterClockwise_Positive;
     encoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
     turningEncoderConfigurator.apply(encoderConfig);
     
