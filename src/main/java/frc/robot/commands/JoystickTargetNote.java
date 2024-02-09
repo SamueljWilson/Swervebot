@@ -19,9 +19,9 @@ public class JoystickTargetNote extends Command {
   private final Supplier<Double> m_yVelocitySupplier;
 
   private ProfiledPIDController thetaController = new ProfiledPIDController(
-      SwerveModuleConstants.kPTurningController,
-      SwerveModuleConstants.kITurningController,
-      SwerveModuleConstants.kDTurningController,
+      SwerveModuleConstants.kTurningPID.p(),
+      SwerveModuleConstants.kTurningPID.i(),
+      SwerveModuleConstants.kTurningPID.d(),
       new TrapezoidProfile.Constraints(
         SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond,
         SwerveModuleConstants.kMaxAngularAccelerationRadiansPerSecondSquared));
@@ -29,9 +29,9 @@ public class JoystickTargetNote extends Command {
   private TunableConstant targetVelocityCoefficient = new TunableConstant("kTargetCoefficient", VisionConstants.kTargetCoefficient);
   private TunableConstant maxAngularSpeed = new TunableConstant("Max Angular Speed", SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond);
   private TunableConstant maxAngularAcceleration = new TunableConstant("Max Angular Acceleration", SwerveModuleConstants.kMaxAngularAccelerationRadiansPerSecondSquared);
-  private TunableConstant p = new TunableConstant("kP", SwerveModuleConstants.kPTurningController);
-  private TunableConstant i = new TunableConstant("kI", SwerveModuleConstants.kITurningController);
-  private TunableConstant d = new TunableConstant("kD", SwerveModuleConstants.kDTurningController);
+  private TunableConstant p = new TunableConstant("kP", SwerveModuleConstants.kTurningPID.p());
+  private TunableConstant i = new TunableConstant("kI", SwerveModuleConstants.kTurningPID.i());
+  private TunableConstant d = new TunableConstant("kD", SwerveModuleConstants.kTurningPID.d());
 
   public JoystickTargetNote(DriveSubsystem drive, Limelight limelight, Supplier<Double> xVelocitySupplier, Supplier<Double> yVelocitySupplier) {
     m_drive = drive;

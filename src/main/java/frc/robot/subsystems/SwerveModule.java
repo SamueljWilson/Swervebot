@@ -21,26 +21,28 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.Constants;
+import frc.robot.PID;
 import frc.robot.Constants.SwerveModuleConstants;
 
 public class SwerveModule {
   private final CANSparkMax m_driveMotor;
   private final CANSparkMax m_turningMotor;
-  private final SparkPIDController m_pidController;
-  private double m_kP;
-  private double m_kI;
-  private double m_kD;
+
+  private PID m_drivePid;
+
+  private final SparkPIDController m_drivePidController;
+
   private double m_idealVelocity = 0;
 
   private final RelativeEncoder m_driveEncoder;
-  private final CANcoder m_turningEncoder;
+  private final CANcoder m_absoluteRotationEncoder;
 
   // Using a TrapezoidProfile PIDController to allow for smooth turning
   private final ProfiledPIDController m_turningPIDController =
     new ProfiledPIDController(
-      SwerveModuleConstants.kPTurningController,
-      SwerveModuleConstants.kITurningController,
-      SwerveModuleConstants.kDTurningController,
+      SwerveModuleConstants.kTurningPID.p(),
+      SwerveModuleConstants.kTurningPID.i(),
+      SwerveModuleConstants.kTurningPID.d(),
       new TrapezoidProfile.Constraints(
         SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond,
         SwerveModuleConstants.kMaxAngularAccelerationRadiansPerSecondSquared));
@@ -66,14 +68,13 @@ public class SwerveModule {
       boolean turningEncoderReversed,
       Rotation2d encoderOffset) {
     
-    m_kP = SwerveModuleConstants.kPDriveController;
-    m_kI = SwerveModuleConstants.kIDriveController;
-    m_kD = SwerveModuleConstants.kDDriveController;
+    m_drivePid = SwerveModuleConstants.kDrivePID;
     
     m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
     m_driveMotor.restoreFactoryDefaults();
     m_driveMotor.setClosedLoopRampRate(SwerveModuleConstants.kDriveMotorRampRate);
     m_driveMotor.setInverted(driveMotorReversed);
+    m_driveMotor.setSmartCurrentLimit(SwerveModuleConstants.kDriveMotorCurrentLimit);
 
     m_driveEncoder = m_driveMotor.getEncoder();
 
@@ -89,14 +90,12 @@ public class SwerveModule {
       / 60.0 /* s */;
     m_driveEncoder.setVelocityConversionFactor(velocityConversionFactor);
 
-    m_pidController = m_driveMotor.getPIDController();
-    m_pidController.setFeedbackDevice(m_driveEncoder);
-    m_pidController.setP(m_kP, 0);
-    m_pidController.setI(m_kI, 0);
-    m_pidController.setD(m_kD, 0);
-    m_pidController.setFF(0);
-    
-    m_driveMotor.setSmartCurrentLimit(SwerveModuleConstants.kDriveMotorCurrentLimit);
+    m_drivePidController = m_driveMotor.getPIDController();
+    m_drivePidController.setFeedbackDevice(m_driveEncoder);
+    m_drivePidController.setP(m_drivePid.p(), 0);
+    m_drivePidController.setI(m_drivePid.i(), 0);
+    m_drivePidController.setD(m_drivePid.d(), 0);
+    m_drivePidController.setFF(0);
 
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
     m_turningMotor.restoreFactoryDefaults();
@@ -104,8 +103,8 @@ public class SwerveModule {
     m_turningMotor.setInverted(turningMotorReversed);
     m_turningMotor.setSmartCurrentLimit(SwerveModuleConstants.kTurningMotorCurrentLimit);
 
-    m_turningEncoder = new CANcoder(turningEncoderChannel);
-    var turningEncoderConfigurator = m_turningEncoder.getConfigurator();
+    m_absoluteRotationEncoder = new CANcoder(turningEncoderChannel);
+    var turningEncoderConfigurator = m_absoluteRotationEncoder.getConfigurator();
     var encoderConfig = new CANcoderConfiguration();
     encoderConfig.MagnetSensor.SensorDirection = turningEncoderReversed
       ? SensorDirectionValue.Clockwise_Positive
@@ -160,7 +159,7 @@ public class SwerveModule {
            1
           );
 
-    m_pidController.setReference(m_idealVelocity, ControlType.kVelocity);
+    m_drivePidController.setReference(m_idealVelocity, ControlType.kVelocity);
 
     m_turningMotor.set(turnOutput);
   }
@@ -168,11 +167,11 @@ public class SwerveModule {
   /** Zeroes all the SwerveModule encoders. */
   public void resetEncoders() {
     m_driveEncoder.setPosition(0);
-    m_turningEncoder.setPosition(0);
+    m_absoluteRotationEncoder.setPosition(0);
   }
 
   private Rotation2d getPosR2d() {
-    var absolutePositionSignal = m_turningEncoder.getAbsolutePosition();
+    var absolutePositionSignal = m_absoluteRotationEncoder.getAbsolutePosition();
     Rotation2d encoderRotation = new Rotation2d(absolutePositionSignal.getValue() * 2 * Math.PI);
     return encoderRotation.minus(m_encoderOffset);
   }

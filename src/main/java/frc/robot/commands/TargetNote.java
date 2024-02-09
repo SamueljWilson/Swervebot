@@ -13,9 +13,9 @@ public class TargetNote extends Command {
   private DriveSubsystem m_drive;
   private Limelight m_limelight;
   private ProfiledPIDController thetaController = new ProfiledPIDController(
-      SwerveModuleConstants.kPTurningController,
-      SwerveModuleConstants.kITurningController,
-      SwerveModuleConstants.kDTurningController,
+      SwerveModuleConstants.kTurningPID.p(),
+      SwerveModuleConstants.kTurningPID.i(),
+      SwerveModuleConstants.kTurningPID.d(),
       new TrapezoidProfile.Constraints(
         SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond,
         SwerveModuleConstants.kMaxAngularAccelerationRadiansPerSecondSquared));
