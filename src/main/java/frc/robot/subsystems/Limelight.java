@@ -14,31 +14,31 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Limelight extends SubsystemBase {
-  NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-  NetworkTableEntry tx = table.getEntry("tx");
-  NetworkTableEntry ty = table.getEntry("ty");
-  NetworkTableEntry ta = table.getEntry("ta");
-  NetworkTableEntry tv = table.getEntry("tv");
+  private NetworkTable m_table = NetworkTableInstance.getDefault().getTable("limelight");
+  private NetworkTableEntry m_tx = m_table.getEntry("tx");
+  private NetworkTableEntry m_ty = m_table.getEntry("ty");
+  private NetworkTableEntry m_ta = m_table.getEntry("ta");
+  private NetworkTableEntry m_tv = m_table.getEntry("tv");
 
-  MedianFilter xFilter = new MedianFilter(5);
-  MedianFilter yFilter = new MedianFilter(5);
-  double filteredX = 0.0;
-  double filteredY = 0.0;
+  private MedianFilter m_xFilter = new MedianFilter(5);
+  private MedianFilter m_yFilter = new MedianFilter(5);
+  private double m_filteredX = 0.0;
+  private double m_filteredY = 0.0;
 
   public Limelight() {}
 
   @Override
   public void periodic() {
-    double x = tx.getDouble(0.0);
-    double y = ty.getDouble(0.0);
-    double area = ta.getDouble(0.0);
-    double v = tv.getDouble(0.0);
+    double x = m_tx.getDouble(0.0);
+    double y = m_ty.getDouble(0.0);
+    double area = m_ta.getDouble(0.0);
+    double v = m_tv.getDouble(0.0);
 
-    filteredX = xFilter.calculate(x);
-    filteredY = yFilter.calculate(y);
+    m_filteredX = m_xFilter.calculate(x);
+    m_filteredY = m_yFilter.calculate(y);
 
-    SmartDashboard.putNumber("LimeLightX", filteredX);
-    SmartDashboard.putNumber("LimeLightY", filteredY);
+    SmartDashboard.putNumber("LimeLightX", m_filteredX);
+    SmartDashboard.putNumber("LimeLightY", m_filteredY);
     SmartDashboard.putNumber("LimeLightArea", area);
     SmartDashboard.putBoolean("Note", v == 1);
     var distance = getDistance();
@@ -46,11 +46,11 @@ public class Limelight extends SubsystemBase {
   }
 
   public double getX() {
-    return filteredX;
+    return m_filteredX;
   }
 
   public double getY() {
-    return filteredY;
+    return m_filteredY;
   }
 
   public double getDistance() {
