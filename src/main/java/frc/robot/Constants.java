@@ -93,13 +93,8 @@ public final class Constants {
 
     public static final double kDriveGearRatio = 6.75;
 
-    public static final double kPTurningController = 0.5;
-    public static final double kITurningController = 0.0;
-    public static final double kDTurningController = 0.0;
-
-    public static final double kPDriveController = 0.5;
-    public static final double kIDriveController = 0.0;
-    public static final double kDDriveController = 0.0;
+    public static final PID kDrivePID = new PID(0.5, 0.0, 0.0);
+    public static final PID kTurningPID = new PID(0.5, 0.0, 0.0);
 
     public static final int kDriveMotorCurrentLimit = 40;
     public static final int kTurningMotorCurrentLimit = 20;
