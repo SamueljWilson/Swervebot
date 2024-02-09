@@ -74,6 +74,7 @@ public class SwerveModule {
     
     m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
     m_driveMotor.restoreFactoryDefaults();
+    m_driveMotor.setClosedLoopRampRate(SwerveModuleConstants.kDriveMotorRampRate);
     m_driveMotor.setInverted(driveMotorReversed);
 
     m_driveEncoder = m_driveMotor.getEncoder();
@@ -101,6 +102,7 @@ public class SwerveModule {
 
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
     m_turningMotor.restoreFactoryDefaults();
+    m_turningMotor.setClosedLoopRampRate(SwerveModuleConstants.kTurningMotorRampRate);
     m_turningMotor.setInverted(turningMotorReversed);
     m_turningMotor.setSmartCurrentLimit(DriveConstants.kSmartCurrentLimit);
 

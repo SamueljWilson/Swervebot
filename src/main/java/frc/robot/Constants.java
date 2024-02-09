@@ -102,7 +102,9 @@ public final class Constants {
     public static final double kIDriveController = 0.0;
     public static final double kDDriveController = 0.0;
 
-
+    public static final double kDriveMotorRampRate = 0.25;
+    public static final double kTurningMotorRampRate = 0.25;
+    
     public static final TrapezoidalConstraint kVelocityProfile = new TrapezoidalConstraint(
       kMaxSpeedMetersPerSecond,
       kMaxAccelerationMetersPerSecondSquared,
