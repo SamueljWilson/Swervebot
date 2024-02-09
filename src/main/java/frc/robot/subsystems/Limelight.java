@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.math.util.Units;
@@ -25,7 +26,19 @@ public class Limelight extends SubsystemBase {
   private double m_filteredX = 0.0;
   private double m_filteredY = 0.0;
 
-  public Limelight() {}
+  private Relay m_relay = new Relay(VisionConstants.kRelayPort);
+
+  public Limelight() {
+    lightsOff();
+  }
+
+  public void lightsOn() {
+    m_relay.set(Relay.Value.kOn);
+  }
+
+  public void lightsOff() {
+    m_relay.set(Relay.Value.kOff);
+  }
 
   @Override
   public void periodic() {
