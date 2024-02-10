@@ -48,7 +48,7 @@ public class RobotContainer {
     FAST,
     SLOW
   }
-  private static DriveSpeed m_driveSpeed = DriveSpeed.SLOW;
+  private static DriveSpeed m_driveSpeed = DriveSpeed.FAST;
 
   // Applies deadband and slows down the robot if the m_driveSpeed enum is set to SLOW
   private static double joystickTransform(double value) {

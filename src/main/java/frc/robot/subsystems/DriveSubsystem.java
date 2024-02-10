@@ -141,11 +141,11 @@ private final SwerveModule m_frontRight = //Q4
       } 
     });
 
-    var pose = getPose();
-    SmartDashboard.putData("Field", m_field);
-    SmartDashboard.putNumber("X", pose.getX());
-    SmartDashboard.putNumber("Y", pose.getY());
-    m_field.setRobotPose(pose);
+  //   var pose = getPose();
+  //   SmartDashboard.putData("Field", m_field);
+  //   SmartDashboard.putNumber("X", pose.getX());
+  //   SmartDashboard.putNumber("Y", pose.getY());
+  //   m_field.setRobotPose(pose);
   }
 
   /**
