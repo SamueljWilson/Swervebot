@@ -22,6 +22,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
@@ -95,6 +97,8 @@ private final SwerveModule m_frontRight = //Q4
         DriveConstants.stateStdDeviations,
         DriveConstants.visionStdDeviations);
 
+  private final Field2d m_field = new Field2d();
+
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem(CameraSubsystem cameraSystem) {
     m_cameraSystem = cameraSystem;
@@ -136,6 +140,12 @@ private final SwerveModule m_frontRight = //Q4
         m_odometry.addVisionMeasurement(robotPoseEstimator.get().estimatedPose.toPose2d(), robotPoseEstimator.get().timestampSeconds);
       } 
     });
+
+    var pose = getPose();
+    SmartDashboard.putData("Field", m_field);
+    SmartDashboard.putNumber("X", pose.getX());
+    SmartDashboard.putNumber("Y", pose.getY());
+    m_field.setRobotPose(pose);
   }
 
   /**
