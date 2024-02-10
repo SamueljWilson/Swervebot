@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Translation2d;
 
 public class TrapezoidalConstraint {
   private final double m_maxSpeed;
@@ -21,5 +22,18 @@ public class TrapezoidalConstraint {
     double deltaV = acceleration * deltaT;
     double newVelocity = currentVelocity + deltaV;
     return MathUtil.clamp(newVelocity, -m_maxSpeed, m_maxSpeed);
+  }
+
+  public Translation2d calculateTranslation2d(Translation2d desiredVelocity, Translation2d currentVelocity, double deltaT) {
+    if (desiredVelocity.equals(currentVelocity)) {
+      return desiredVelocity;
+    }
+    Translation2d desiredDeltaVelocity = desiredVelocity.minus(currentVelocity);
+    Translation2d desiredAcceleration = desiredDeltaVelocity.div(deltaT);
+    double desiredAccelerationMagnitude = desiredAcceleration.getNorm();
+    assert(desiredAccelerationMagnitude != 0.0);
+    double clampedAccelerationMagnitude = MathUtil.clamp(desiredAccelerationMagnitude, -m_maxDeceleration, m_maxAcceleration);
+    double accelerationScalar = clampedAccelerationMagnitude / desiredAccelerationMagnitude;
+    return currentVelocity.plus(desiredDeltaVelocity.times(accelerationScalar));
   }
 }

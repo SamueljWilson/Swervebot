@@ -82,6 +82,14 @@ public final class Constants {
     // Note that SwerveModuleConstants.kMaxSpeedMedersPerSecond may saturate if this is set too high, in combination with
     // SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond.
     public static final double kMaxSpeedMetersPerSecond = 5.0;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 7.5;
+    public static final double kMaxDecelerationMetersPerSecondSquared = 15.0;
+    
+    public static final TrapezoidalConstraint kVelocityProfile = new TrapezoidalConstraint(
+      kMaxSpeedMetersPerSecond,
+      kMaxAccelerationMetersPerSecondSquared,
+      kMaxDecelerationMetersPerSecondSquared
+    );
   }
 
   public static final class SwerveModuleConstants {
@@ -89,8 +97,6 @@ public final class Constants {
     public static final double kMaxAngularAccelerationRadiansPerSecondSquared = 1.5 * Math.PI;
 
     public static final double kMaxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond * 2.0;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 7.5;
-    public static final double kMaxDecelerationMetersPerSecondSquared = 15.0;
 
     public static final double kAbsoluteEncoderCPR = 4096.0;
     public static final double kWheelDiameterMeters = 0.09525;
@@ -124,12 +130,6 @@ public final class Constants {
 
     public static final double kDriveMotorRampRate = 0.25;
     public static final double kTurningMotorRampRate = 0.25;
-
-    public static final TrapezoidalConstraint kVelocityProfile = new TrapezoidalConstraint(
-      kMaxSpeedMetersPerSecond,
-      kMaxAccelerationMetersPerSecondSquared,
-      kMaxDecelerationMetersPerSecondSquared
-    );
 
     public static final long kValueCacheTtlMicroseconds = 15;
   }

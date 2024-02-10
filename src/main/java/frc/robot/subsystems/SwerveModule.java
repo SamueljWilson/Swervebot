@@ -18,7 +18,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import frc.robot.Constants;
 import frc.robot.Constants.SwerveModuleConstants;
 import frc.robot.PID;
 import frc.robot.ValueCache;
@@ -32,8 +31,6 @@ public class SwerveModule {
 
   private final SparkPIDController m_drivePidController;
   private final SparkPIDController m_turningPidController;
-
-  private double m_idealVelocity = 0;
 
   private final RelativeEncoder m_driveEncoder;
   private final CANcoder m_absoluteRotationEncoder;
@@ -155,11 +152,7 @@ public class SwerveModule {
     SwerveModuleState state =
       SwerveModuleState.optimize(desiredState, getRotation2d());
 
-    final double driveVelocityDesired = state.speedMetersPerSecond;
-    
-    m_idealVelocity = SwerveModuleConstants.kVelocityProfile.calculate(driveVelocityDesired, m_idealVelocity, Constants.kDt);
-
-    m_drivePidController.setReference(m_idealVelocity, ControlType.kVelocity);
+    m_drivePidController.setReference(state.speedMetersPerSecond, ControlType.kVelocity);
 
     if (!state.angle.equals(m_prevAngle)) {
       // Take care to cancel out the encoder offset when setting the position.
