@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
@@ -58,7 +59,7 @@ public class DriveSubsystem extends SubsystemBase {
           DriveConstants.kRearRightEncoderReversed,
           DriveConstants.kRearRightEncoderOffset);
 
-private final SwerveModule m_frontRight = //Q4
+  private final SwerveModule m_frontRight = //Q4
       new SwerveModule(
           DriveConstants.kFrontRightDriveMotorPort,
           DriveConstants.kFrontRightTurningMotorPort,
@@ -68,6 +69,13 @@ private final SwerveModule m_frontRight = //Q4
           DriveConstants.kFrontRightEncoderReversed,
           DriveConstants.kFrontRightEncoderOffset);
 
+  private final SwerveModule[] m_modules = new SwerveModule[]{
+    m_frontLeft,
+    m_rearLeft,
+    m_rearRight,
+    m_frontRight
+  };
+
   // The gyro sensor uses NavX
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
   private double m_pitch0; // Radians
@@ -76,12 +84,9 @@ private final SwerveModule m_frontRight = //Q4
   private CameraSubsystem m_cameraSystem;
 
   private SwerveModulePosition[] getPositions() {
-    SwerveModulePosition[] positions = {
-      m_frontLeft.getPosition(), //Q1
-      m_rearLeft.getPosition(), //Q2
-      m_rearRight.getPosition(), //Q3
-      m_frontRight.getPosition() //Q4
-    };
+    SwerveModulePosition[] positions = Arrays.stream(m_modules)
+      .map(module -> module.getPosition())
+      .toArray(size -> new SwerveModulePosition[size]);
     return positions;
   }
 
@@ -223,19 +228,16 @@ private final SwerveModule m_frontRight = //Q4
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
         desiredStates, Constants.SwerveModuleConstants.kMaxSpeedMetersPerSecond);
-    m_frontLeft.setDesiredState(desiredStates[0]); //Q1
-    m_rearLeft.setDesiredState(desiredStates[1]); //Q2
-    m_rearRight.setDesiredState(desiredStates[2]); //Q3
-    m_frontRight.setDesiredState(desiredStates[3]); //Q4
+
+    for (int i = 0; i < m_modules.length; i++) {
+      m_modules[i].setDesiredState(desiredStates[i]);
+    }
   }
-  
+
   public SwerveModuleState[] getModuleStates() {
-    SwerveModuleState[] states = new SwerveModuleState[]{
-      m_frontLeft.getState(),
-      m_rearLeft.getState(),
-      m_frontRight.getState(),
-      m_rearRight.getState()
-    };
+    SwerveModuleState[] states = Arrays.stream(m_modules)
+      .map(module -> module.getState())
+      .toArray(size -> new SwerveModuleState[size]);
     return states;
   }
 
