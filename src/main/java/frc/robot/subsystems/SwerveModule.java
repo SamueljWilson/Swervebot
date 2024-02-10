@@ -14,12 +14,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 import frc.robot.Constants.SwerveModuleConstants;
@@ -49,16 +46,7 @@ public class SwerveModule {
   private final ValueCache<Double> m_driveVelocityCache;
   private final ValueCache<Double> m_absoluteRotationCache;
   private final ValueCache<Double> m_turningCache;
-
-  // Using a TrapezoidProfile PIDController to allow for smooth turning
-  private final ProfiledPIDController m_turningPIDController =
-    new ProfiledPIDController(
-      SwerveModuleConstants.kTurningPID.p(),
-      SwerveModuleConstants.kTurningPID.i(),
-      SwerveModuleConstants.kTurningPID.d(),
-      new TrapezoidProfile.Constraints(
-        SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond,
-        SwerveModuleConstants.kMaxAngularAccelerationRadiansPerSecondSquared));
+  private Rotation2d m_prevAngle;
 
   /**
    * Constructs a SwerveModule.
@@ -111,9 +99,6 @@ public class SwerveModule {
       : SensorDirectionValue.CounterClockwise_Positive;
     encoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
     turningEncoderConfigurator.apply(encoderConfig);
-    // Limit the PID Controller's input range between -pi and pi and set the input
-    // to be continuous.
-    m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
     m_absoluteRotationCache =
       new ValueCache<Double>(() -> {
         return m_absoluteRotationEncoder.getAbsolutePosition().getValue();
@@ -131,6 +116,7 @@ public class SwerveModule {
     m_turningCache = new ValueCache<Double>(m_turningEncoder::getPosition,
       SwerveModuleConstants.kValueCacheTtlMicroseconds);
     updateTurningEncoderOffset();
+    m_prevAngle = getRotation2d();
 
     m_turningPidController = m_turningMotor.getPIDController();
     m_turningPidController.setFeedbackDevice(m_turningEncoder);
@@ -172,19 +158,14 @@ public class SwerveModule {
     final double driveVelocityDesired = state.speedMetersPerSecond;
     
     m_idealVelocity = SwerveModuleConstants.kVelocityProfile.calculate(driveVelocityDesired, m_idealVelocity, Constants.kDt);
-    
-    // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput =
-        MathUtil.clamp(
-          m_turningPIDController.calculate(getRotation2d().getRadians(),
-          state.angle.getRadians()),
-           -1, 
-           1
-          );
 
     m_drivePidController.setReference(m_idealVelocity, ControlType.kVelocity);
 
-    m_turningMotor.set(turnOutput);
+    if (!state.angle.equals(m_prevAngle)) {
+      // Take care to cancel out the encoder offset when setting the position.
+      m_turningPidController.setReference(state.angle.plus(m_turningEncoderOffset).getRadians(), ControlType.kPosition);
+      m_prevAngle = state.angle;
+    }
   }
 
   private Rotation2d getAbsoluteRotation2d() {
