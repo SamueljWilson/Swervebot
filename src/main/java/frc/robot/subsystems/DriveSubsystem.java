@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -18,6 +19,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -75,6 +77,8 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearRight,
     m_frontRight
   };
+
+  private Translation2d m_idealVelocity = new Translation2d(0.0, 0.0);
 
   // The gyro sensor uses NavX
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
@@ -211,9 +215,13 @@ public class DriveSubsystem extends SubsystemBase {
    */
   @SuppressWarnings("ParameterName")
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    Translation2d velocityDesired = new Translation2d(xSpeed, ySpeed);
+    m_idealVelocity = DriveConstants.kVelocityProfile.calculateTranslation2d(
+      velocityDesired, m_idealVelocity, Constants.kDt);
+
     ChassisSpeeds chassisSpeeds = fieldRelative
-      ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getRotation2d())
-      : new ChassisSpeeds(xSpeed, ySpeed, rot);
+      ? ChassisSpeeds.fromFieldRelativeSpeeds(m_idealVelocity.getX(), m_idealVelocity.getY(), rot, getRotation2d())
+      : new ChassisSpeeds(m_idealVelocity.getX(), m_idealVelocity.getY(), rot);
     var swerveModuleStates =
         DriveConstants.kDriveKinematics.toSwerveModuleStates(
           ChassisSpeeds.discretize(chassisSpeeds, Constants.kDt));
