@@ -6,6 +6,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.TunableConstant;
@@ -23,12 +24,12 @@ public class JoystickTargetNote extends Command {
       SwerveModuleConstants.kTurningPID.i(),
       SwerveModuleConstants.kTurningPID.d(),
       new TrapezoidProfile.Constraints(
-        SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond,
-        SwerveModuleConstants.kMaxAngularAccelerationRadiansPerSecondSquared));
+        DriveConstants.kMaxAngularSpeedRadiansPerSecond,
+        DriveConstants.kMaxAngularAccelerationRadiansPerSecondSquared));
 
   private TunableConstant targetVelocityCoefficient = new TunableConstant("kTargetCoefficient", VisionConstants.kTargetCoefficient);
-  private TunableConstant maxAngularSpeed = new TunableConstant("Max Angular Speed", SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond);
-  private TunableConstant maxAngularAcceleration = new TunableConstant("Max Angular Acceleration", SwerveModuleConstants.kMaxAngularAccelerationRadiansPerSecondSquared);
+  private TunableConstant maxAngularSpeed = new TunableConstant("Max Angular Speed", DriveConstants.kMaxAngularSpeedRadiansPerSecond);
+  private TunableConstant maxAngularAcceleration = new TunableConstant("Max Angular Acceleration", DriveConstants.kMaxAngularAccelerationRadiansPerSecondSquared);
   private TunableConstant p = new TunableConstant("kP", SwerveModuleConstants.kTurningPID.p());
   private TunableConstant i = new TunableConstant("kI", SwerveModuleConstants.kTurningPID.i());
   private TunableConstant d = new TunableConstant("kD", SwerveModuleConstants.kTurningPID.d());

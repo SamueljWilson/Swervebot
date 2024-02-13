@@ -79,6 +79,7 @@ public class DriveSubsystem extends SubsystemBase {
   };
 
   private Translation2d m_idealVelocity = new Translation2d(0.0, 0.0);
+  private double m_idealAngularVelocity = 0.0;
 
   // The gyro sensor uses NavX
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
@@ -208,9 +209,9 @@ public class DriveSubsystem extends SubsystemBase {
   /**
    * Method to drive the robot using joystick info.
    *
-   * @param xSpeed Speed of the robot in the x direction (forward).
-   * @param ySpeed Speed of the robot in the y direction (right).
-   * @param rot Angular rate of the robot.
+   * @param xSpeed Speed of the robot in the x direction (forward), in m/s.
+   * @param ySpeed Speed of the robot in the y direction (right), in m/s.
+   * @param rot Angular velocity of the robot, in rad/s.
    * @param fieldRelative Whether the provided x and y speeds are relative to the field.
    */
   @SuppressWarnings("ParameterName")
@@ -219,9 +220,13 @@ public class DriveSubsystem extends SubsystemBase {
     m_idealVelocity = DriveConstants.kVelocityProfile.calculateTranslation2d(
       velocityDesired, m_idealVelocity, Constants.kDt);
 
+    m_idealAngularVelocity = DriveConstants.kAngularVelocityProfile.calculate(
+      rot, m_idealAngularVelocity, Constants.kDt);
+
     ChassisSpeeds chassisSpeeds = fieldRelative
-      ? ChassisSpeeds.fromFieldRelativeSpeeds(m_idealVelocity.getX(), m_idealVelocity.getY(), rot, getRotation2d())
-      : new ChassisSpeeds(m_idealVelocity.getX(), m_idealVelocity.getY(), rot);
+      ? ChassisSpeeds.fromFieldRelativeSpeeds(
+        m_idealVelocity.getX(), m_idealVelocity.getY(), m_idealAngularVelocity, getRotation2d())
+      : new ChassisSpeeds(m_idealVelocity.getX(), m_idealVelocity.getY(), m_idealAngularVelocity);
     var swerveModuleStates =
         DriveConstants.kDriveKinematics.toSwerveModuleStates(
           ChassisSpeeds.discretize(chassisSpeeds, Constants.kDt));

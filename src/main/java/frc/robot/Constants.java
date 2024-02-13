@@ -84,18 +84,25 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 5.0;
     public static final double kMaxAccelerationMetersPerSecondSquared = 7.5;
     public static final double kMaxDecelerationMetersPerSecondSquared = 15.0;
-    
+
+    public static final double kMaxAngularSpeedRadiansPerSecond = 3.0 * Math.PI;
+    public static final double kMaxAngularAccelerationRadiansPerSecondSquared = 1.5 * Math.PI;
+    public static final double kMaxAngularDecelerationRadiansPerSecondSquared = 3.0 * Math.PI;
+
     public static final TrapezoidalConstraint kVelocityProfile = new TrapezoidalConstraint(
       kMaxSpeedMetersPerSecond,
       kMaxAccelerationMetersPerSecondSquared,
       kMaxDecelerationMetersPerSecondSquared
     );
+
+    public static final TrapezoidalConstraint kAngularVelocityProfile = new TrapezoidalConstraint(
+      kMaxAngularSpeedRadiansPerSecond,
+      kMaxAngularAccelerationRadiansPerSecondSquared,
+      kMaxAngularDecelerationRadiansPerSecondSquared
+    );
   }
 
   public static final class SwerveModuleConstants {
-    public static final double kMaxAngularSpeedRadiansPerSecond = 3.0 * Math.PI;
-    public static final double kMaxAngularAccelerationRadiansPerSecondSquared = 1.5 * Math.PI;
-
     public static final double kMaxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond * 2.0;
 
     public static final double kAbsoluteEncoderCPR = 4096.0;
@@ -136,7 +143,7 @@ public final class Constants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
-    public static final double kMaxRadPerSec = SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond;
+    public static final double kMaxRadPerSec = DriveConstants.kMaxAngularSpeedRadiansPerSecond;
     public static final double kMaxMetersPerSec = DriveConstants.kMaxSpeedMetersPerSecond;
     
     public static final int kA = 1;
