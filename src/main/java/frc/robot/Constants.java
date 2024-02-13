@@ -205,6 +205,7 @@ public final class Constants {
   public static class FieldConstants {
     public static final double kFieldLength = 4.0;
     public static final double kFieldWidth = 3.0;
+    public static final double kMaxX = 16.54;
   }
 
   public static class PhotonVisionConstants {
