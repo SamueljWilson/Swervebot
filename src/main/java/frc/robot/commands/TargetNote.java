@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.DriveSubsystem;
@@ -17,8 +18,8 @@ public class TargetNote extends Command {
       SwerveModuleConstants.kTurningPID.i(),
       SwerveModuleConstants.kTurningPID.d(),
       new TrapezoidProfile.Constraints(
-        SwerveModuleConstants.kMaxAngularSpeedRadiansPerSecond,
-        SwerveModuleConstants.kMaxAngularAccelerationRadiansPerSecondSquared));
+        DriveConstants.kMaxAngularSpeedRadiansPerSecond,
+        DriveConstants.kMaxAngularAccelerationRadiansPerSecondSquared));
 
   public TargetNote (DriveSubsystem drive, Limelight limelight) {
     m_drive = drive;
