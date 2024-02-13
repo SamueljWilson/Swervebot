@@ -8,13 +8,18 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.PhotonVisionConstants;
 import frc.robot.commands.JoystickTargetNote;
@@ -41,8 +46,8 @@ public class RobotContainer {
   // The driver's controller
   GenericHID m_driverController = new GenericHID(OIConstants.kDriverControllerPort);
 
-  // double reverseFactor = getTeam() == Auto.Team.BLUE ? -1 : 1;
-  double reverseFactor = -1.0;
+  double reverseFactor = DriverStation.getAlliance().get() == Alliance.Blue ? -1 : 1;
+  // double reverseFactor = -1.0;
 
   private enum DriveSpeed {
     FAST,
@@ -119,6 +124,26 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_chooser.getSelected();
+    Command selectedCommand = m_chooser.getSelected();
+    
+    if (selectedCommand instanceof PathPlannerAuto) {
+      PathPlannerAuto selectedAuto = (PathPlannerAuto)selectedCommand;
+      Pose2d startingPose = PathPlannerAuto.getStaringPoseFromAutoFile(selectedAuto.getName());
+      Pose2d transformedPose = mirrorPose2d(startingPose);
+      m_robotDrive.initOdometry(transformedPose);
+    }
+
+     return selectedCommand;
+  }
+
+  public Pose2d mirrorPose2d(Pose2d pose) {
+    if (DriverStation.getAlliance().get() == Alliance.Blue) {
+      return pose;
+    }
+    return new Pose2d(
+      FieldConstants.kMaxX - pose.getX(),
+      pose.getY(),
+      new Rotation2d(Math.PI - pose.getRotation().getRadians())
+    );
   }
 }
