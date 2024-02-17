@@ -212,14 +212,10 @@ public final class Constants {
     public static final String kCameraName1 = "camera1";
     public static final String kCameraName2 = "camera2";
     public static final Transform3d kRobotToCamera1Transform = new Transform3d(
-      Units.inchesToMeters(10.75),
-      Units.inchesToMeters(-2.25),
-      Units.inchesToMeters(11.125),
-      new Rotation3d(0.0, Units.degreesToRadians(-19.5), Units.degreesToRadians(0)));
+      0.273, -0.057, 0.283,
+      new Rotation3d(0.0, Units.degreesToRadians(-19.5), 0.0));
     public static final Transform3d kRobotToCamera2Transform = new Transform3d(
-      Units.inchesToMeters(7.5),
-      Units.inchesToMeters(0.625),
-      Units.inchesToMeters(14.0),
-      new Rotation3d(Units.degreesToRadians(-21.9), Units.degreesToRadians(0.0), Units.degreesToRadians(90)));
+      0.191, 0.016, 0.356,
+      new Rotation3d(Units.degreesToRadians(-21.9), 0.0, Units.degreesToRadians(100.0)));
   }
 }
