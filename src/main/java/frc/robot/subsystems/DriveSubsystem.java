@@ -103,7 +103,7 @@ public class DriveSubsystem extends SubsystemBase {
   SwerveDrivePoseEstimator m_odometry =
       new SwerveDrivePoseEstimator(
         DriveConstants.kDriveKinematics,
-        getRotation2d(),
+        getUncorrectedRotation2d(),
         getPositions(),
         m_initialPose,
         DriveConstants.stateStdDeviations,
@@ -152,7 +152,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     // Update the odometry in the periodic block
-    m_odometry.update(getRotation2d(), getPositions());
+    m_odometry.update(getUncorrectedRotation2d(), getPositions());
     
     ArrayList<Optional<EstimatedRobotPose>> photonRobotPoseList = m_cameraSystem.getFieldRelativePoseEstimators();
     photonRobotPoseList.forEach(robotPoseEstimator -> {
@@ -215,7 +215,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void initOdometry(Pose2d initialPose) {
     m_initialPose = initialPose;
-    m_odometry.resetPosition(getRotation2d(), getPositions(), initialPose);
+    m_odometry.resetPosition(getUncorrectedRotation2d(), getPositions(), initialPose);
   }
 
   /**
@@ -237,7 +237,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     ChassisSpeeds chassisSpeeds = fieldRelative
       ? ChassisSpeeds.fromFieldRelativeSpeeds(
-        m_idealVelocity.getX(), m_idealVelocity.getY(), m_idealAngularVelocity, getRotation2d())
+        m_idealVelocity.getX(), m_idealVelocity.getY(), m_idealAngularVelocity, getEstimatedRotation2d())
       : new ChassisSpeeds(m_idealVelocity.getX(), m_idealVelocity.getY(), m_idealAngularVelocity);
     var swerveModuleStates =
         DriveConstants.kDriveKinematics.toSwerveModuleStates(
@@ -282,7 +282,13 @@ public class DriveSubsystem extends SubsystemBase {
     m_roll0 = getRollUncorrected();
   }
 
-  public Rotation2d getRotation2d() {
+  /* Raw rotation, assuming robot's starting rotation precisely matched that of the ideal initial pose. */
+  private Rotation2d getUncorrectedRotation2d() {
     return new Rotation2d(getYaw() + m_initialPose.getRotation().getRadians());
+  }
+
+  /* Estimated rotation, which corrects for imprecision of actual initial pose vs ideal initial pose. */
+  private Rotation2d getEstimatedRotation2d() {
+    return m_odometry.getEstimatedPosition().getRotation();
   }
 }
