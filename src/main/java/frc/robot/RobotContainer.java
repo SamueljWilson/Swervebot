@@ -46,8 +46,7 @@ public class RobotContainer {
   // The driver's controller
   GenericHID m_driverController = new GenericHID(OIConstants.kDriverControllerPort);
 
-  double reverseFactor = DriverStation.getAlliance().get() == Alliance.Blue ? -1 : 1;
-  // double reverseFactor = -1.0;
+  double reverseFactor = DriverStation.getAlliance().get() == Alliance.Blue ? 1 : -1;
 
   private enum DriveSpeed {
     FAST,
