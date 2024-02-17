@@ -64,7 +64,7 @@ public final class Constants {
     public static final double kWheelBase = 0.681; // Distance between front and back wheels on robot
 
     public static final Vector<N3> stateStdDeviations = VecBuilder.fill(0.005, 0.005, Math.toRadians(1));
-    public static final Vector<N3> visionStdDeviations = VecBuilder.fill(0.005, 0.005, Math.toRadians(1));
+    public static final Vector<N3> visionStdDeviations = VecBuilder.fill(0.050, 0.050, Math.toRadians(5));
 
     public static final SwerveDriveKinematics kDriveKinematics =
       new SwerveDriveKinematics(
