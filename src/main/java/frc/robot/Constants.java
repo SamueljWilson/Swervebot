@@ -211,15 +211,15 @@ public final class Constants {
   public static class PhotonVisionConstants {
     public static final String kCameraName1 = "camera1";
     public static final String kCameraName2 = "camera2";
-    public static final Transform3d kCamera1ToRobotOffset = new Transform3d(
-      Units.inchesToMeters(-10.75), 
-      Units.inchesToMeters(2.25), 
-      Units.inchesToMeters(-11.125), 
-      new Rotation3d(0.0, Units.degreesToRadians(19.5), Units.degreesToRadians(0)));
-    public static final Transform3d kCamera2ToRobotOffset = new Transform3d(
-      Units.inchesToMeters(-7.5), 
-      Units.inchesToMeters(.625), 
-      Units.inchesToMeters(-14), 
-      new Rotation3d(0.0, Units.degreesToRadians(21.9), Units.degreesToRadians(90)));
+    public static final Transform3d kRobotToCamera1Transform = new Transform3d(
+      Units.inchesToMeters(10.75),
+      Units.inchesToMeters(-2.25),
+      Units.inchesToMeters(11.125),
+      new Rotation3d(0.0, Units.degreesToRadians(-19.5), Units.degreesToRadians(0)));
+    public static final Transform3d kRobotToCamera2Transform = new Transform3d(
+      Units.inchesToMeters(7.5),
+      Units.inchesToMeters(0.625),
+      Units.inchesToMeters(14.0),
+      new Rotation3d(Units.degreesToRadians(-21.9), Units.degreesToRadians(0.0), Units.degreesToRadians(90)));
   }
 }

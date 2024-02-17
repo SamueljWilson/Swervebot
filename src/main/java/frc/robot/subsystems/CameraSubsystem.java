@@ -44,7 +44,7 @@ public class CameraSubsystem extends SubsystemBase {
       m_aprilTagFieldLayout,
       PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
       m_camera1,
-      PhotonVisionConstants.kCamera1ToRobotOffset
+      PhotonVisionConstants.kRobotToCamera1Transform
     );
     
     m_photonPoseEstimatorCam2 =
@@ -52,7 +52,7 @@ public class CameraSubsystem extends SubsystemBase {
       m_aprilTagFieldLayout,
       PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
       m_camera2,
-      PhotonVisionConstants.kCamera2ToRobotOffset
+      PhotonVisionConstants.kRobotToCamera2Transform
     );
 
     m_photonPoseEstimatorCam1.setTagModel(TargetModel.kAprilTag36h11);
@@ -96,7 +96,7 @@ public class CameraSubsystem extends SubsystemBase {
     return PhotonUtils.estimateFieldToRobotAprilTag(
         target.getBestCameraToTarget(),
         m_aprilTagFieldLayout.getTagPose(target.getFiducialId()).get(),
-        PhotonVisionConstants.kCamera1ToRobotOffset
+        PhotonVisionConstants.kRobotToCamera1Transform
       );
   }
 
