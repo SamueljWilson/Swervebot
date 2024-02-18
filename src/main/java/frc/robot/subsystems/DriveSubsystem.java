@@ -26,15 +26,13 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
-// import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 
 public class DriveSubsystem extends SubsystemBase {
-  // Robot swerve modules
+
   private final SwerveModule m_frontLeft = //Q1
       new SwerveModule(
           DriveConstants.kFrontLeftDriveMotorPort,
@@ -87,8 +85,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   // The gyro sensor uses NavX
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
-  private double m_pitch0; // Radians
-  private double m_roll0; // Radians
   private Pose2d m_initialPose = new Pose2d();
   private CameraSubsystem m_cameraSystem;
 
@@ -151,7 +147,6 @@ public class DriveSubsystem extends SubsystemBase {
       }
     }
 
-    // Update the odometry in the periodic block
     m_odometry.update(getUncorrectedRotation2d(), getPositions());
     
     ArrayList<Optional<EstimatedRobotPose>> photonRobotPoseList = m_cameraSystem.getFieldRelativePoseEstimators();
@@ -160,57 +155,19 @@ public class DriveSubsystem extends SubsystemBase {
         m_odometry.addVisionMeasurement(robotPoseEstimator.get().estimatedPose.toPose2d(), robotPoseEstimator.get().timestampSeconds);
       } 
     });
-
-  //   var pose = getPose();
-  //   SmartDashboard.putData("Field", m_field);
-  //   SmartDashboard.putNumber("X", pose.getX());
-  //   SmartDashboard.putNumber("Y", pose.getY());
-  //   m_field.setRobotPose(pose);
   }
 
-  /**
-   * Returns the currently-estimated pose of the robot.
-   *
-   * @return The pose.
-   */
-  public Pose2d getPose() {
+  private Pose2d getPose() {
     return m_odometry.getEstimatedPosition();
   }
 
-  private double getPitchUncorrected() {
-    return Math.toRadians(-m_gyro.getRoll());
-  }
-
-  private double getRollUncorrected() {
-    return Math.toRadians(m_gyro.getPitch());
-  }
-
-  public double getPitch() {
-    // Corrections for how we mounted our RoboRIO
-    return getPitchUncorrected() - m_pitch0;
-  }
-
-  public double getRoll() {
-    // Corrections for how we mounted our RoboRIO
-    return getRollUncorrected() - m_roll0;
-  }
-
-  public double getYaw() {
+  private double getYaw() {
     // Corrections for how we mounted our RoboRIO
     return Math.toRadians(-m_gyro.getYaw());
   }
 
-  public ChassisSpeeds getSpeeds() {
+  private ChassisSpeeds getSpeeds() {
     return DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
-  }
-
-  public void lock() {
-    SwerveModuleState desiredState0 = new SwerveModuleState(0.0, new Rotation2d(Math.PI/4));
-    SwerveModuleState desiredState1 = new SwerveModuleState(0.0, new Rotation2d((3*Math.PI)/4));
-    m_frontLeft.setDesiredState(desiredState0);
-    m_rearRight.setDesiredState(desiredState0);
-    m_frontRight.setDesiredState(desiredState1);
-    m_rearLeft.setDesiredState(desiredState1);
   }
 
   public void initOdometry(Pose2d initialPose) {
@@ -246,19 +203,14 @@ public class DriveSubsystem extends SubsystemBase {
     setModuleStates(swerveModuleStates);
   }
 
-  public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
+  private void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, Constants.kDt);
 
     SwerveModuleState[] targetStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
     setModuleStates(targetStates);
   }
 
-  /**
-   * Sets the swerve ModuleStates.
-   *
-   * @param desiredStates The desired SwerveModule states.
-   */
-  public void setModuleStates(SwerveModuleState[] desiredStates) {
+  private void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
         desiredStates, Constants.SwerveModuleConstants.kMaxSpeedMetersPerSecond);
 
@@ -267,19 +219,15 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
 
-  public SwerveModuleState[] getModuleStates() {
+  private SwerveModuleState[] getModuleStates() {
     SwerveModuleState[] states = Arrays.stream(m_modules)
       .map(module -> module.getState())
       .toArray(size -> new SwerveModuleState[size]);
     return states;
   }
 
-  /** Zeroes the heading of the robot. */
-  public void zeroGyro() {
+  private void zeroGyro() {
     m_gyro.reset();
-    // Calculates the the offsets we need to apply for the pitch and roll
-    m_pitch0 = getPitchUncorrected();
-    m_roll0 = getRollUncorrected();
   }
 
   /* Raw rotation, assuming robot's starting rotation precisely matched that of the ideal initial pose. */

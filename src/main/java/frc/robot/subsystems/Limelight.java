@@ -66,7 +66,7 @@ public class Limelight extends SubsystemBase {
     return m_filteredY;
   }
 
-  public double getDistance() {
+  private double getDistance() {
     double noteOffsetAngle_Vertical = getY();
     double angleToNoteDegrees = VisionConstants.kLimelightMountDegrees + noteOffsetAngle_Vertical;
     double angleToNoteRadians = Units.degreesToRadians(angleToNoteDegrees);
