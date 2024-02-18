@@ -164,26 +164,11 @@ public final class Constants {
     public static int kRightJoyXAxis = 4;
     public static int kRightJoyYAxis = 5;
 
-    public static final int kCloseAxis = kRightTriggerAxis;
-    public static final int kOpenAxis = kLeftTriggerAxis;
-    public static final int kExtendWristButton = kY;
-    public static final int kRetractWristButton = kA;
-
-    public static final int kHomeButton = kLeftJoy;
-    public static final int kPickOffFloorButton = kA;
-    public static final int k2ndRowButton = kX;
-    public static final int k3rdRowButton = kY;
-    public static final int kHumanStationButton = kB;
-    public static final int kSlowButton = kRightJoy;
-    public static final int kArmAdjustUpButton = kRightBumper;
-    public static final int kArmAdjustDownButton = kLeftBumper;
-
     public static final int kJoystickTargetNoteButton = kY;
 
     public static final double kDebounceSeconds = 0.01;
 
     public static final double kJoystickDeadband = 0.05;
-    public static final double kSlowCoef = 0.375;
   }
 
   public static final class AutoConstants {

@@ -12,7 +12,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,7 +24,6 @@ import frc.robot.Constants.PhotonVisionConstants;
 import frc.robot.commands.JoystickTargetNote;
 import frc.robot.commands.PickupCommand;
 import frc.robot.commands.ShooterCommand;
-import frc.robot.commands.TargetNote;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Limelight;
@@ -37,48 +35,27 @@ import frc.robot.subsystems.Limelight;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems
   public final Limelight m_limelight = new Limelight();
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
   private final CameraSubsystem m_cameraSystem = new CameraSubsystem(PhotonVisionConstants.kCameraName1, PhotonVisionConstants.kCameraName2);
   public final DriveSubsystem m_robotDrive = new DriveSubsystem(m_cameraSystem);
 
-  // The driver's controller
   GenericHID m_driverController = new GenericHID(OIConstants.kDriverControllerPort);
 
   double reverseFactor = DriverStation.getAlliance().get() == Alliance.Blue ? 1 : -1;
 
-  private enum DriveSpeed {
-    FAST,
-    SLOW
-  }
-  private static DriveSpeed m_driveSpeed = DriveSpeed.FAST;
-
-  // Applies deadband and slows down the robot if the m_driveSpeed enum is set to SLOW
   private static double joystickTransform(double value) {
-    double speedCoef;
-    switch (m_driveSpeed) {
-      case SLOW:
-        speedCoef = OIConstants.kSlowCoef;
-        break;
-      default:
-        speedCoef = 1.0;
-    }
     double postDeadbandValue = MathUtil.applyDeadband(value, OIConstants.kJoystickDeadband);
     double postDeadbandValueSquared = postDeadbandValue * Math.abs(postDeadbandValue);
-    return postDeadbandValueSquared*speedCoef;
+    return postDeadbandValueSquared;
   }
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
     NamedCommands.registerCommand("ShooterCommand", new ShooterCommand());
     NamedCommands.registerCommand("PickupCommand", new PickupCommand());
-    // Configure the button bindings
     configureButtonBindings();
-    configureAutoRoutines();
 
-    // Configure default commands
     m_robotDrive.setDefaultCommand(
       // The left stick controls translation of the robot.
       // Turning is controlled by the X axis of the right stick.
@@ -93,19 +70,10 @@ public class RobotContainer {
         )
       );
 
-      m_chooser.setDefaultOption("TargetNote", new TargetNote(m_robotDrive, m_limelight));
-      m_chooser.addOption("Two Note Path", new PathPlannerAuto("two note auto"));
+      m_chooser.setDefaultOption("Two Note Path", new PathPlannerAuto("two note auto"));
       SmartDashboard.putData(m_chooser);
   }
 
-  private void configureAutoRoutines() {}
-
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling passing it to a
-   * {@link JoystickButton}.
-   */
   private void configureButtonBindings() {
     new JoystickButton(m_driverController, OIConstants.kJoystickTargetNoteButton)
       .whileTrue(new JoystickTargetNote(
@@ -115,13 +83,7 @@ public class RobotContainer {
         () -> reverseFactor * joystickTransform(m_driverController.getRawAxis(OIConstants.kLeftJoyXAxis)) * OIConstants.kMaxMetersPerSec
       ));
   }
-   
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
   public Command getAutonomousCommand() {
     Command selectedCommand = m_chooser.getSelected();
     
@@ -135,7 +97,7 @@ public class RobotContainer {
      return selectedCommand;
   }
 
-  public Pose2d mirrorPose2d(Pose2d pose) {
+  private Pose2d mirrorPose2d(Pose2d pose) {
     if (DriverStation.getAlliance().get() == Alliance.Blue) {
       return pose;
     }

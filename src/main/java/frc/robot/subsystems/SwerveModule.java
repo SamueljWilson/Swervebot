@@ -45,16 +45,6 @@ public class SwerveModule {
   private final ValueCache<Double> m_turningCache;
   private Rotation2d m_prevAngle;
 
-  /**
-   * Constructs a SwerveModule.
-   *
-   * @param driveMotorChannel The channel of the drive motor.
-   * @param turningMotorChannel The channel of the turning motor.
-   * @param driveEncoderChannels The channels of the drive encoder.
-   * @param turningEncoderChannels The channels of the turning encoder.
-   * @param driveMotorReversed Whether the drive encoder is reversed.
-   * @param turningEncoderReversed Whether the turning encoder is reversed.
-   */
   public SwerveModule(
       int driveMotorChannel,
       int turningMotorChannel,
@@ -123,11 +113,6 @@ public class SwerveModule {
     m_turningPidController.setFF(0);
   }
 
-  /**
-   * Returns the current state of the module.
-   *
-   * @return The current state of the module.
-   */
   public SwerveModuleState getState() {
     return new SwerveModuleState(
       m_driveVelocityCache.get(),
@@ -142,11 +127,6 @@ public class SwerveModule {
     );
   }
 
-  /**
-   * Sets the desired state for the module.
-   *
-   * @param desiredState Desired state with speed and angle.
-   */
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
     SwerveModuleState state =
