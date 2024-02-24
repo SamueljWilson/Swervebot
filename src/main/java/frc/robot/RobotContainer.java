@@ -70,7 +70,7 @@ public class RobotContainer {
         )
       );
 
-      m_chooser.setDefaultOption("Straight Line", new PathPlannerAuto("zero note C"));
+      m_chooser.setDefaultOption("zero note C", new PathPlannerAuto("zero note C"));
       m_chooser.addOption("Test Auto 0", new PathPlannerAuto("testauto0"));
       m_chooser.addOption("One Note C", new PathPlannerAuto("one note C"));
       m_chooser.addOption("One Note B", new PathPlannerAuto("one note B"));
