@@ -107,7 +107,6 @@ public final class Constants {
   public static final class SwerveModuleConstants {
     public static final double kMaxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond * 2.0;
 
-    public static final double kAbsoluteEncoderCPR = 4096.0;
     public static final double kWheelDiameterMeters = 0.09525;
 
     public static final double kDriveGearRatio = 6.75;
