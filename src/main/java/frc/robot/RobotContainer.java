@@ -51,7 +51,6 @@ public class RobotContainer {
   }
 
   public RobotContainer() {
-
     NamedCommands.registerCommand("ShooterCommand", new ShooterCommand());
     NamedCommands.registerCommand("PickupCommand", new PickupCommand());
     configureButtonBindings();
@@ -76,6 +75,10 @@ public class RobotContainer {
       m_chooser.addOption("One Note B", new PathPlannerAuto("one note B"));
       m_chooser.addOption("Two Note A", new PathPlannerAuto("two note A auto"));
       SmartDashboard.putData(m_chooser);
+  }
+
+  public void setPIDSlotID(int slotID) {
+    m_robotDrive.setPIDSlotID(slotID);
   }
 
   private void configureButtonBindings() {
